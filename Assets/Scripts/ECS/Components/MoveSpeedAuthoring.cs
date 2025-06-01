@@ -7,6 +7,7 @@ using UnityEngine;
 public class MoveSpeedAuthoring : MonoBehaviour
 {
     public float WalkSpeed;
+    public float RotateSpeed;
 
     private class Baker : Baker<MoveSpeedAuthoring>
     {
@@ -16,6 +17,7 @@ public class MoveSpeedAuthoring : MonoBehaviour
             AddComponent(entity, new MoveSpeed
             {
                 WalkSpeed = authoring.WalkSpeed,
+                RotateSpeed = authoring.RotateSpeed,
             });
         }
     }
@@ -25,4 +27,5 @@ public class MoveSpeedAuthoring : MonoBehaviour
 public struct MoveSpeed : IComponentData
 {
     public float WalkSpeed;
+    public float RotateSpeed;
 }

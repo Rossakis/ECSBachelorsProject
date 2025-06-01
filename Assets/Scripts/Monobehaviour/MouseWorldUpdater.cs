@@ -17,6 +17,9 @@ public class MouseWorldUpdater : MonoBehaviour
 
     void Update()
     {
+        if(!Input.GetMouseButtonDown(0))
+            return;
+        
         Vector3 mouseScreen = Input.mousePosition;
         Ray ray = _gameCamera.ScreenPointToRay(mouseScreen);
         
@@ -24,7 +27,7 @@ public class MouseWorldUpdater : MonoBehaviour
         if (groundPlane.Raycast(ray, out float enter))
         {
             Vector3 hit = ray.GetPoint(enter);
-            float3 worldPos = new float3(hit.x, 0f, hit.z); // ignore y-axis
+            float3 worldPos = new float3(hit.x, hit.y, hit.z); // ignore y-axis
             
             if (_entityManager.Exists(_mouseEntity))
             {
