@@ -4,20 +4,24 @@ using UnityEngine;
 /// <summary>
 /// The "Authoring" type of Monobehaviour-derived classes are used to add the equivalent ECS component scripts at runtime (e.g. MoveSpeed)
 /// </summary>
-public class MoveSpeedAuthoring : MonoBehaviour
+public class MovementAuthoring : MonoBehaviour
 {
     public float WalkSpeed;
     public float RotateSpeed;
 
-    private class Baker : Baker<MoveSpeedAuthoring>
+    private class Baker : Baker<MovementAuthoring>
     {
-        public override void Bake(MoveSpeedAuthoring authoring)
+        public override void Bake(MovementAuthoring authoring)
         {
             Entity entity = GetEntity(TransformUsageFlags.Dynamic); //dynamic = entity will move during runtime
             AddComponent(entity, new MoveSpeed
             {
                 WalkSpeed = authoring.WalkSpeed,
                 RotateSpeed = authoring.RotateSpeed,
+            });
+            AddComponent(entity, new MoveStateData
+            {
+                State = MoveStateData.MoveState.Moving
             });
         }
     }

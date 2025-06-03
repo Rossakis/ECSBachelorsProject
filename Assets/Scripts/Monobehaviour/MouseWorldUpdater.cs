@@ -12,7 +12,7 @@ public class MouseWorldUpdater : MonoBehaviour
     {
         _gameCamera = Camera.main;
         _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        _mouseEntity = _entityManager.CreateEntity(typeof(MouseWorldPosition));
+        _mouseEntity = _entityManager.CreateEntity(typeof(MouseWorldPositionData));
     }
 
     void Update()
@@ -20,19 +20,12 @@ public class MouseWorldUpdater : MonoBehaviour
         if(!Input.GetMouseButtonDown(0))
             return;
         
-        Vector3 mouseScreen = Input.mousePosition;
-        Ray ray = _gameCamera.ScreenPointToRay(mouseScreen);
-        
+        Ray ray = _gameCamera.ScreenPointToRay(Input.mousePosition);
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-        if (groundPlane.Raycast(ray, out float enter))
-        {
-            Vector3 hit = ray.GetPoint(enter);
-            float3 worldPos = new float3(hit.x, hit.y, hit.z); // ignore y-axis
-            
-            if (_entityManager.Exists(_mouseEntity))
-            {
-                _entityManager.SetComponentData(_mouseEntity, new MouseWorldPosition { Value = worldPos });
-            }
-        }
+        
+        if (groundPlane.Raycast(ray, out float distance))
+            _entityManager.SetComponentData(_mouseEntity, new MouseWorldPositionData { Value = ray.GetPoint(distance) });
+        else
+            _entityManager.SetComponentData(_mouseEntity, new MouseWorldPositionData { Value = Vector3.zero });
     }
 }
