@@ -29,7 +29,7 @@ public partial struct UnitSpawnSystem : ISystem
         Entity commandEntity = _spawnQuery.GetSingletonEntity();
         var command = state.EntityManager.GetComponentData<UnitSpawnData>(commandEntity);
 
-        var rng = new Unity.Mathematics.Random((uint)(SystemAPI.Time.ElapsedTime * 1000) + 1);
+        var rng = new Random((uint)(SystemAPI.Time.ElapsedTime * 1000) + 1);
         
         for (int i = 0; i < command.Count; i++)
         {

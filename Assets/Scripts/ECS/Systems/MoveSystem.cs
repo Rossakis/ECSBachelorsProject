@@ -24,77 +24,91 @@ public partial struct UnitMoveSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        if (!SystemAPI.TryGetSingleton<MovementSettingsData>(out var movementSettings))
+        if (!SystemAPI.TryGetSingleton<MovementSettingsData>(out var settings) ||
+            !SystemAPI.TryGetSingleton<MouseWorldPositionData>(out var mouse))
             return;
-        if (!SystemAPI.TryGetSingleton<MouseWorldPositionData>(out var mousePosition))
-            return;
 
-        // Unity DOTS recommends to allocate values at runtime due to Burst inline compilation (no heap allocation)
-        float closeEnoughDistance = movementSettings.CloseEnoughDistance;
-        float separationRange = movementSettings.SeparationRange;
-        float separationWeight = movementSettings.SeparationWeight;
-        float3 targetPosition = mousePosition.Value;
+        float deltaTime = SystemAPI.Time.DeltaTime;
 
-        // Get all units and their transforms to calculate local separation later
-        NativeArray<Entity> allUnits = _unitQuery.ToEntityArray(Allocator.Temp);
-        NativeArray<LocalTransform> allTransforms = _unitQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+        float3 targetPosition = mouse.Value;
+        float closeEnoughDistance = settings.CloseEnoughDistance;
+        float separationRange = settings.SeparationRange;
+        float separationWeight = settings.SeparationWeight;
 
-        foreach (var (transform, velocity, moveSpeed, moveTag, entity) in
-                 SystemAPI.Query<RefRW<LocalTransform>, RefRW<PhysicsVelocity>, RefRO<MoveSpeed>, RefRW<MoveStateData>>()
-                          .WithEntityAccess())
+        NativeArray<LocalTransform> allTransforms = _unitQuery.ToComponentDataArray<LocalTransform>(Allocator.TempJob);
+        NativeArray<Entity> allEntities = _unitQuery.ToEntityArray(Allocator.TempJob);
+
+        bool useJob = UIManager.isJobEnabled;
+        
+        if (useJob)
         {
-            float3 unitPos = transform.ValueRO.Position;
-            float3 toTarget = targetPosition - unitPos;
-            float distance = math.length(toTarget);
-
-            if (distance <= closeEnoughDistance)
+            // Run job-based system
+            var job = new MoveJob
             {
-                moveTag.ValueRW.State = MoveStateData.MoveState.Arrived;
-                velocity.ValueRW.Linear = float3.zero;
-                continue;
-            }
+                DeltaTime = deltaTime,
+                TargetPosition = targetPosition,
+                CloseEnoughDistance = closeEnoughDistance,
+                SeparationRange = separationRange,
+                SeparationWeight = separationWeight,
+                AllEntities = allEntities,
+                AllTransforms = allTransforms
+            };
 
-            float3 moveDir = math.normalize(toTarget);
-
-            transform.ValueRW.Rotation = math.slerp(
-                transform.ValueRO.Rotation,
-                quaternion.LookRotation(moveDir, math.up()),
-                SystemAPI.Time.DeltaTime * moveSpeed.ValueRO.RotateSpeed);
-
-            velocity.ValueRW.Linear = moveDir * moveSpeed.ValueRO.WalkSpeed;
-            velocity.ValueRW.Angular = float3.zero;
-
-            // Avoid overlapping with nearby units
-            float3 separation = float3.zero;
-            int neighborCount = 0;
-
-            for (int i = 0; i < allUnits.Length; i++)
+            state.Dependency = job.ScheduleParallel(state.Dependency);
+            state.Dependency.Complete();
+        }
+        else
+        {// Run traditional foreach approach
+            foreach (var (transform, velocity, moveSpeed, moveTag, entity) in
+                     SystemAPI.Query<RefRW<LocalTransform>, RefRW<PhysicsVelocity>, RefRO<MoveSpeed>, RefRW<MoveStateData>>()
+                              .WithEntityAccess())
             {
-                Entity other = allUnits[i];
-                if (other == entity) 
-                    continue;
+                float3 unitPos = transform.ValueRO.Position;
+                float3 toTarget = targetPosition - unitPos;
+                float distance = math.length(toTarget);
 
-                float3 otherPos = allTransforms[i].Position;
-                float3 offset = unitPos - otherPos;
-                float dist = math.length(offset);
-
-                // If another unit is within separation range, push away 
-                if (dist > 0 && dist < separationRange)
+                if (distance <= closeEnoughDistance)
                 {
-                    separation += offset / dist;
-                    neighborCount++;
+                    moveTag.ValueRW.State = MoveStateData.MoveState.Arrived;
+                    velocity.ValueRW.Linear = float3.zero;
+                    continue;
+                }
+
+                float3 moveDir = math.normalize(toTarget);
+
+                transform.ValueRW.Rotation = math.slerp(
+                    transform.ValueRO.Rotation,
+                    quaternion.LookRotation(moveDir, math.up()),
+                    deltaTime * moveSpeed.ValueRO.RotateSpeed);
+
+                velocity.ValueRW.Linear = moveDir * moveSpeed.ValueRO.WalkSpeed;
+                velocity.ValueRW.Angular = float3.zero;
+
+                float3 separation = float3.zero;
+                int neighborCount = 0;
+
+                for (int i = 0; i < allEntities.Length; i++)
+                {
+                    if (allEntities[i] == entity) continue;
+
+                    float3 otherPos = allTransforms[i].Position;
+                    float3 offset = unitPos - otherPos;
+                    float dist = math.length(offset);
+
+                    if (dist > 0 && dist < separationRange)
+                    {
+                        separation += offset / dist;
+                        neighborCount++;
+                    }
+                }
+
+                if (neighborCount > 0)
+                {
+                    separation = separation / neighborCount;
+                    moveDir = math.normalize(moveDir + separation * separationWeight);
                 }
             }
-
-            // Apply average separation to movement direction
-            if (neighborCount > 0)
-            {
-                separation = separation / neighborCount;
-                moveDir = math.normalize(moveDir + separation * separationWeight);
-            }
+            
         }
-
-        allUnits.Dispose();
-        allTransforms.Dispose();
     }
 }

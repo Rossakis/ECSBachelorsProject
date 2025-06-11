@@ -1,19 +1,20 @@
 using ECS.Components.Spawn;
 using TMPro;
 using UnityEngine;
-using UnityEngine;
 using Unity.Entities;
-using Unity.Transforms;
-using UnityEngine.UI;
 
-public class UnitUISpawner : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
-    public TMP_InputField UnitInputField;
-    public float Radius = 100f;
+    //Global values 
+    public static bool isJobEnabled;
+    
+    [SerializeField] private TMP_InputField UnitInputField;
+    [SerializeField] private TMP_Text JobButtonText;
+    [SerializeField] private float Radius = 100f;
 
     private EntityManager entityManager;
     private Entity prefabSingletonEntity;
-
+    
     void Start()
     {
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -62,4 +63,12 @@ public class UnitUISpawner : MonoBehaviour
             Radius = Radius
         });
     }
+    
+    public void SwitchToJobMultithreading()
+    {
+        isJobEnabled = !isJobEnabled;
+        JobButtonText.text = isJobEnabled ? "Job Enabled" : "Job Disabled";
+    }
+
+
 }
