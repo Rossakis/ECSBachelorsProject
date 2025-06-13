@@ -10,7 +10,8 @@ using Unity.Jobs;
 partial struct UnitMoverSystem : ISystem {
 
 
-    public const float REACHED_TARGET_POSITION_DISTANCE_SQ = 2f;
+    // Assume this much difference of length from the final target Position
+    public const float TARGET_POSITION_DIFF_DISTANCE_SQ = 2f;
 
 
 
@@ -99,7 +100,7 @@ public partial struct UnitMoverJob : IJobEntity {
     public void Execute(ref LocalTransform localTransform, ref UnitMover unitMover, ref PhysicsVelocity physicsVelocity) {
         float3 moveDirection = unitMover.targetPosition - localTransform.Position;
 
-        float reachedTargetDistanceSq = UnitMoverSystem.REACHED_TARGET_POSITION_DISTANCE_SQ;
+        float reachedTargetDistanceSq = UnitMoverSystem.TARGET_POSITION_DIFF_DISTANCE_SQ;
         if (math.lengthsq(moveDirection) <= reachedTargetDistanceSq) {
             // Reached the target position
             physicsVelocity.Linear = float3.zero;

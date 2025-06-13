@@ -13,12 +13,12 @@ partial struct BulletMoverSystem : ISystem {
 
         foreach ((
             RefRW<LocalTransform> localTransform,
-            RefRW<Bullet> bullet,
+            RefRW<Fireball> bullet,
             RefRO<Target> target,
             Entity entity)
             in SystemAPI.Query<
                 RefRW<LocalTransform>,
-                RefRW<Bullet>,
+                RefRW<Fireball>,
                 RefRO<Target>>().WithEntityAccess()) {
 
             float3 targetPosition;

@@ -17,7 +17,7 @@ partial struct ShootAttackSystem : ISystem {
 
         foreach ((
             RefRW<LocalTransform> localTransform,
-            RefRW<ShootAttack> shootAttack,
+            RefRW<CastFireball> shootAttack,
             RefRO<Target> target,
             RefRW<TargetPositionPathQueued> targetPositionPathQueued,
             EnabledRefRW<TargetPositionPathQueued> targetPositionPathQueuedEnabled,
@@ -25,7 +25,7 @@ partial struct ShootAttackSystem : ISystem {
             Entity entity)
             in SystemAPI.Query<
                 RefRW<LocalTransform>,
-                RefRW<ShootAttack>,
+                RefRW<CastFireball>,
                 RefRO<Target>,
                 RefRW<TargetPositionPathQueued>,
                 EnabledRefRW<TargetPositionPathQueued>,
@@ -58,12 +58,12 @@ partial struct ShootAttackSystem : ISystem {
 
         foreach ((
             RefRW<LocalTransform> localTransform,
-            RefRW <ShootAttack> shootAttack,
+            RefRW <CastFireball> shootAttack,
             RefRO<Target> target,
             Entity entity)
             in SystemAPI.Query<
                 RefRW<LocalTransform>,
-                RefRW<ShootAttack>,
+                RefRW<CastFireball>,
                 RefRO<Target>>().WithEntityAccess()) {
 
             if (target.ValueRO.targetEntity == Entity.Null) {
@@ -95,11 +95,11 @@ partial struct ShootAttackSystem : ISystem {
                 }
             }
 
-            Entity bulletEntity = state.EntityManager.Instantiate(entitiesReferences.bulletPrefabEntity);
-            float3 bulletSpawnWorldPosition = localTransform.ValueRO.TransformPoint(shootAttack.ValueRO.bulletSpawnLocalPosition);
+            Entity bulletEntity = state.EntityManager.Instantiate(entitiesReferences.fireballPrefabEntity);
+            float3 bulletSpawnWorldPosition = localTransform.ValueRO.TransformPoint(shootAttack.ValueRO.fireballSpawnLocalPosition);
             SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(bulletSpawnWorldPosition));
 
-            RefRW<Bullet> bulletBullet = SystemAPI.GetComponentRW<Bullet>(bulletEntity);
+            RefRW<Fireball> bulletBullet = SystemAPI.GetComponentRW<Fireball>(bulletEntity);
             bulletBullet.ValueRW.damageAmount = shootAttack.ValueRO.damageAmount;
 
             RefRW<Target> bulletTarget = SystemAPI.GetComponentRW<Target>(bulletEntity);

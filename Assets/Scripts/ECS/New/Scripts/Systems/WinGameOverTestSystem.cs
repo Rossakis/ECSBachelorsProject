@@ -14,8 +14,8 @@ partial struct WinGameOverTestSystem : ISystem {
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<GameSceneTag>();
 
-        zombieUnitsEntityQuery = state.GetEntityQuery(typeof(Unit), typeof(Zombie));
-        zombieSpawnerBuildingsEntityQuery = state.GetEntityQuery(typeof(ZombieSpawner));
+        zombieUnitsEntityQuery = state.GetEntityQuery(typeof(Unit), typeof(Knight));
+        zombieSpawnerBuildingsEntityQuery = state.GetEntityQuery(typeof(KnightSpawner));
 
         timer = 10f;
     }
@@ -33,7 +33,7 @@ partial struct WinGameOverTestSystem : ISystem {
             zombieSpawnerBuildingsEntityQuery.CalculateEntityCount() == 0) {
 
             // Win!
-            DOTSEventsManager.Instance.TriggerOnGameWin();
+            DOTSEventsManager.Instance.GameWin();
         }
     }
 

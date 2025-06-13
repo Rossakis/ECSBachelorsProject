@@ -2,6 +2,6 @@ using UnityEngine;
 
 
 public enum FactionType {
-    Friendly,
-    Zombie,
+    Wizard,
+    Knight,
 }

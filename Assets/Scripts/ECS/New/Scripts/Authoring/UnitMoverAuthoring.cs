@@ -3,11 +3,9 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class UnitMoverAuthoring : MonoBehaviour {
-
-
-    public float moveSpeed;
-    public float rotationSpeed;
-
+    
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float rotationSpeed;
 
     public class Baker : Baker<UnitMoverAuthoring> {
 
@@ -24,12 +22,9 @@ public class UnitMoverAuthoring : MonoBehaviour {
 }
 
 public struct UnitMover : IComponentData {
-
-
     public float moveSpeed;
     public float rotationSpeed;
     public float3 targetPosition;
     public bool isMoving;
-
-
+    
 }

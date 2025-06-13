@@ -15,9 +15,6 @@ public class CursorSystemManager : MonoBehaviour {
 
     private void Start() {
         CursorSystem.SetActiveCursorTypeSO(CursorTypeListSO.Instance.arrowBig);
-
-        BuildingPlacementManagerUI_ButtonSingle.OnAnyButtonSingleMouseOut += BuildingPlacementManagerUI_ButtonSingle_OnAnyButtonSingleMouseOut;
-        BuildingPlacementManagerUI_ButtonSingle.OnAnyButtonSingleMouseOver += BuildingPlacementManagerUI_ButtonSingle_OnAnyButtonSingleMouseOver;
     }
 
     private void BuildingPlacementManagerUI_ButtonSingle_OnAnyButtonSingleMouseOver(object sender, EventArgs e) {
@@ -37,31 +34,15 @@ public class CursorSystemManager : MonoBehaviour {
 
         TestIfUnitIsUnderMouse();
 
-        TestIfAttackingZombie();
-
-        if (HasBuildingTypeSelected()) {
-            selectedCursorTypeSO = CursorTypeListSO.Instance.constructionHammer;
-        }
+        TestIfAttackingKnight();
 
         if (isMouseOverButton) {
             selectedCursorTypeSO = CursorTypeListSO.Instance.cursorHandUnClick;
         }
 
-        if (SpecialSkillsManager.Instance.IsAirstrikeButtonActive()) {
-            selectedCursorTypeSO = CursorTypeListSO.Instance.attack;
-        }
-
         if (selectedCursorTypeSO != lastSelectedCursorTypeSO) {
             CursorSystem.SetActiveCursorTypeSO(selectedCursorTypeSO);
         }
-    }
-
-    private bool HasBuildingTypeSelected() {
-        if (BuildingPlacementManager.Instance.GetActiveBuildingTypeSO() != GameAssets.Instance.buildingTypeListSO.none) {
-            // Has some building type selected
-            return true;
-        }
-        return false;
     }
 
     private void TestIfUnitMoveOrder() {
@@ -70,7 +51,7 @@ public class CursorSystemManager : MonoBehaviour {
         }
     }
 
-    private void TestIfAttackingZombie() {
+    private void TestIfAttackingKnight() {
         if (HasAnyUnitSelected()) {
             EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
@@ -84,7 +65,7 @@ public class CursorSystemManager : MonoBehaviour {
                 End = cameraRay.GetPoint(9999f),
                 Filter = new CollisionFilter {
                     BelongsTo = ~0u,
-                    CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u << GameAssets.BUILDINGS_LAYER,
+                    CollidesWith = 1u << GameAssets.UNITS_LAYER,
                     GroupIndex = 0,
                 }
             };
@@ -92,7 +73,7 @@ public class CursorSystemManager : MonoBehaviour {
                 if (entityManager.HasComponent<Faction>(raycastHit.Entity)) {
                     // Hit something with a Faction
                     Faction faction = entityManager.GetComponentData<Faction>(raycastHit.Entity);
-                    if (faction.factionType == FactionType.Zombie) {
+                    if (faction.factionType == FactionType.Knight) {
                         // Right clicking on a Zombie
                         selectedCursorTypeSO = CursorTypeListSO.Instance.attack;
                     }
@@ -129,7 +110,7 @@ public class CursorSystemManager : MonoBehaviour {
             End = cameraRay.GetPoint(9999f),
             Filter = new CollisionFilter {
                 BelongsTo = ~0u,
-                CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u << GameAssets.BUILDINGS_LAYER,
+                CollidesWith = 1u << GameAssets.UNITS_LAYER,
                 GroupIndex = 0,
             }
         };

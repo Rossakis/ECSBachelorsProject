@@ -9,10 +9,9 @@ public class DOTSEventsManager : MonoBehaviour {
     public static DOTSEventsManager Instance { get; private set; }
 
 
-    public event EventHandler OnBarracksUnitQueueChanged;
     public event EventHandler OnGameWin;
-    public event EventHandler OnHQDead;
-    public event EventHandler OnHealthDead;
+    public event EventHandler OnPlayerDefeat;
+    public event EventHandler OnHealthDepleted;
     public event EventHandler OnHordeStartedSpawning;
     public event EventHandler OnHordeStartSpawningSoon;
 
@@ -21,36 +20,29 @@ public class DOTSEventsManager : MonoBehaviour {
         Instance = this;
     }
 
+    public void PlayerDefeat() {
+        OnPlayerDefeat?.Invoke(this, EventArgs.Empty);
+    }
 
-    public void TriggerOnBarracksUnitQueueChanged(NativeList<Entity> entityNativeList) {
+    public void HealthDepleted(NativeList<Entity> entityNativeList) {
         foreach (Entity entity in entityNativeList) {
-            OnBarracksUnitQueueChanged?.Invoke(entity, EventArgs.Empty);
+            OnHealthDepleted?.Invoke(entity, EventArgs.Empty);
         }
     }
 
-    public void TriggerOnHQDead() {
-        OnHQDead?.Invoke(this, EventArgs.Empty);
-    }
-
-    public void TriggerOnHealthDead(NativeList<Entity> entityNativeList) {
-        foreach (Entity entity in entityNativeList) {
-            OnHealthDead?.Invoke(entity, EventArgs.Empty);
-        }
-    }
-
-    public void TriggerOnHordeStartedSpawning(NativeList<Entity> entityNativeList) {
+    public void HordeStartedSpawning(NativeList<Entity> entityNativeList) {
         foreach (Entity entity in entityNativeList) {
             OnHordeStartedSpawning?.Invoke(entity, EventArgs.Empty);
         }
     }
 
-    public void TriggerOnHordeStartSpawningSoon(NativeList<Entity> entityNativeList) {
+    public void HordeStartSpawningSoon(NativeList<Entity> entityNativeList) {
         foreach (Entity entity in entityNativeList) {
             OnHordeStartSpawningSoon?.Invoke(entity, EventArgs.Empty);
         }
     }
 
-    public void TriggerOnGameWin() {
+    public void GameWin() {
         OnGameWin?.Invoke(this, EventArgs.Empty);
     }
 

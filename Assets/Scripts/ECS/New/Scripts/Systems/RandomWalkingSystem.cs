@@ -20,7 +20,7 @@ partial struct RandomWalkingSystem : ISystem {
                 RefRO<LocalTransform>>().WithPresent<TargetPositionPathQueued>()) {
 
 
-            if (math.distancesq(localTransform.ValueRO.Position, randomWalking.ValueRO.targetPosition) < UnitMoverSystem.REACHED_TARGET_POSITION_DISTANCE_SQ) {
+            if (math.distancesq(localTransform.ValueRO.Position, randomWalking.ValueRO.targetPosition) < UnitMoverSystem.TARGET_POSITION_DIFF_DISTANCE_SQ) {
                 // Reached the target distance
                 Random random = randomWalking.ValueRO.random;
 

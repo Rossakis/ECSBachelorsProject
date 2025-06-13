@@ -27,12 +27,6 @@ partial struct AnimationStateSystem : ISystem {
             activeAnimationComponentLookup = activeAnimationComponentLookup,
         };
         aimShootAnimationStateJob.ScheduleParallel();
-
-        activeAnimationComponentLookup.Update(ref state);
-        MeleeAttackAnimationStateJob meleeAttackAnimationStateJob = new MeleeAttackAnimationStateJob {
-            activeAnimationComponentLookup = activeAnimationComponentLookup,
-        };
-        meleeAttackAnimationStateJob.ScheduleParallel();
     }
 
 
@@ -62,30 +56,15 @@ public partial struct AimShootAnimationStateJob : IJobEntity {
 
     [NativeDisableParallelForRestriction] public ComponentLookup<ActiveAnimation> activeAnimationComponentLookup;
 
-    public void Execute(in AnimatedMesh animatedMesh, in ShootAttack shootAttack, in UnitMover unitMover, in Target target, in UnitAnimations unitAnimations) {
+    public void Execute(in AnimatedMesh animatedMesh, in CastFireball castFireball, in UnitMover unitMover, in Target target, in UnitAnimations unitAnimations) {
         if (!unitMover.isMoving && target.targetEntity != Entity.Null) {
             RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
             activeAnimation.ValueRW.nextAnimationType = unitAnimations.aimAnimationType;
         }
 
-        if (shootAttack.onShoot.isTriggered) {
+        if (castFireball.onShoot.isTriggered) {
             RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
             activeAnimation.ValueRW.nextAnimationType = unitAnimations.shootAnimationType;
-        }
-    }
-
-}
-
-
-[BurstCompile]
-public partial struct MeleeAttackAnimationStateJob : IJobEntity {
-
-    [NativeDisableParallelForRestriction] public ComponentLookup<ActiveAnimation> activeAnimationComponentLookup;
-
-    public void Execute(in AnimatedMesh animatedMesh, in MeleeAttack meleeAttack, in UnitAnimations unitAnimations) {
-        if (meleeAttack.onAttacked) {
-            RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
-            activeAnimation.ValueRW.nextAnimationType = unitAnimations.meleeAttackAnimationType;
         }
     }
 

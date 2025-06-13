@@ -5,17 +5,13 @@ public class AnimationDataSO : ScriptableObject {
 
     public enum AnimationType {
         None,
-        SoldierIdle,
-        SoldierWalk,
-        ZombieIdle,
-        ZombieWalk,
-        SoldierAim,
-        SoldierShoot,
-        ZombieAttack,
-        ScoutIdle,
-        ScoutWalk,
-        ScoutShoot,
-        ScoutAim,
+        WizardIdle,
+        WizardWalk,
+        WizardReadyFireball,
+        WizardCastFireball,
+        KnightIdle,
+        KnightWalk,
+        KnightAttack,
     }
 
 
@@ -26,13 +22,9 @@ public class AnimationDataSO : ScriptableObject {
 
 
     public static bool IsAnimationUninterruptible(AnimationType animationType) {
-        switch (animationType) {
-            default:
-                return false;
-            case AnimationType.ScoutShoot:
-            case AnimationType.SoldierShoot:
-            case AnimationType.ZombieAttack:
-                return true;
-        }
+        if(animationType == AnimationType.KnightAttack || animationType == AnimationType.WizardCastFireball)
+            return true;
+        
+        return false;
     }
 }

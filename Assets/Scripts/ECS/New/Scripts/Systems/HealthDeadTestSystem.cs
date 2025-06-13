@@ -22,11 +22,6 @@ partial struct HealthDeadTestSystem : ISystem {
                 // This entity is dead
                 health.ValueRW.onDead = true;
 
-                if (SystemAPI.HasComponent<BuildingConstruction>(entity)) {
-                    BuildingConstruction buildingConstruction = SystemAPI.GetComponent<BuildingConstruction>(entity);
-                    entityCommandBuffer.DestroyEntity(buildingConstruction.visualEntity);
-                }
-
                 entityCommandBuffer.DestroyEntity(entity);
             }
         }

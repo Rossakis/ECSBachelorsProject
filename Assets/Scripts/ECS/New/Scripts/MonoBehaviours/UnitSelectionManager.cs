@@ -25,42 +25,15 @@ public class UnitSelectionManager : MonoBehaviour {
         Instance = this;
     }
 
-    private void Start() {
-        BuildingPlacementManager.Instance.OnActiveBuildingTypeSOChanged += BuildingPlacementManager_OnActiveBuildingTypeSOChanged;
-    }
-
-    private void BuildingPlacementManager_OnActiveBuildingTypeSOChanged(object sender, EventArgs e) {
-        if (BuildingPlacementManager.Instance.GetActiveBuildingTypeSO() != GameAssets.Instance.buildingTypeListSO.none) {
-            // Selected some building
-            DeselectAllUnits();
-        }
-    }
-
     private void Update() {
-        if (!BuildingPlacementManager.Instance.GetActiveBuildingTypeSO().IsNone()) {
-            return;
-        }
 
         if (Input.GetMouseButtonUp(0)) {
-            Vector2 selectionEndMousePosition = Input.mousePosition;
-
             EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().Build(entityManager);
 
             NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
             NativeArray<Selected> selectedArray = entityQuery.ToComponentDataArray<Selected>(Allocator.Temp);
-
-            // Is Barracks selected?
-            if (entityArray.Length == 1 && entityManager.HasComponent<BuildingBarracks>(entityArray[0])) {
-                // Yup it's the barracks that's selected
-                // Is it clicking on the Barracks UI?
-                if (EventSystem.current.IsPointerOverGameObject()) {
-                    // Yes!
-                    // Don't deselect
-                    return;
-                }
-            }
-
+            
             // Deselect all
             for (int i = 0; i < entityArray.Length; i++) {
                 entityManager.SetComponentEnabled<Selected>(entityArray[i], false);
@@ -103,7 +76,7 @@ public class UnitSelectionManager : MonoBehaviour {
                     End = cameraRay.GetPoint(9999f),
                     Filter = new CollisionFilter {
                         BelongsTo = ~0u,
-                        CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u << GameAssets.BUILDINGS_LAYER,
+                        CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u,
                         GroupIndex = 0,
                     }
                 };
@@ -117,31 +90,13 @@ public class UnitSelectionManager : MonoBehaviour {
                     }
                 }
             }
-
-
+            
             OnSelectionAreaEnd?.Invoke(this, EventArgs.Empty);
             OnSelectedEntitiesChanged?.Invoke(this, EventArgs.Empty);
         }
 
         if (EventSystem.current.IsPointerOverGameObject()) {
             return;
-        }
-
-        if (Input.GetMouseButtonDown(0)) {
-            if (SpecialSkillsManager.Instance.IsAirstrikeButtonActive()) {
-                // Aitstrike active, start airstrike
-                UnityEngine.Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(cameraRay, out UnityEngine.RaycastHit raycastHit, 999f)) {
-                    SpecialSkillsManager.Instance.UseAirstrikeSkill(raycastHit.point);
-                }
-            }
-        }
-
-        if (Input.GetMouseButtonDown(1)) {
-            if (SpecialSkillsManager.Instance.IsAirstrikeButtonActive()) {
-                // Aitstrike active, start airstrike
-                SpecialSkillsManager.Instance.SetIsAirstrikeButtonActive(false);
-            }
         }
 
         if (Input.GetMouseButtonDown(0)) {
@@ -165,7 +120,7 @@ public class UnitSelectionManager : MonoBehaviour {
                 End = cameraRay.GetPoint(9999f),
                 Filter = new CollisionFilter {
                     BelongsTo = ~0u,
-                    CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u << GameAssets.BUILDINGS_LAYER,
+                    CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u,
                     GroupIndex = 0,
                 }
             };
@@ -174,8 +129,8 @@ public class UnitSelectionManager : MonoBehaviour {
                 if (entityManager.HasComponent<Faction>(raycastHit.Entity)) {
                     // Hit something with a Faction
                     Faction faction = entityManager.GetComponentData<Faction>(raycastHit.Entity);
-                    if (faction.factionType == FactionType.Zombie) {
-                        // Right clicking on a Zombie
+                    if (faction.factionType == FactionType.Knight) {
+                        // Right clicking on a Knight
                         isAttackingSingleTarget = true;
 
                         entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().WithPresent<TargetOverride>().Build(entityManager);
@@ -202,6 +157,7 @@ public class UnitSelectionManager : MonoBehaviour {
                 NativeArray<TargetOverride> targetOverrideArray = entityQuery.ToComponentDataArray<TargetOverride>(Allocator.Temp);
                 NativeArray<TargetPositionPathQueued> targetPositionPathQueuedArray = entityQuery.ToComponentDataArray<TargetPositionPathQueued>(Allocator.Temp);
                 NativeArray<float3> movePositionArray = GenerateMovePositionArray(mouseWorldPosition, entityArray.Length);
+                
                 for (int i = 0; i < moveOverrideArray.Length; i++) {
                     MoveOverride moveOverride = moveOverrideArray[i];
                     moveOverride.targetPosition = movePositionArray[i];
@@ -224,20 +180,6 @@ public class UnitSelectionManager : MonoBehaviour {
                 entityQuery.CopyFromComponentDataArray(targetOverrideArray);
                 entityQuery.CopyFromComponentDataArray(targetPositionPathQueuedArray);
             }
-
-
-            // Handle Barracks Rally Position
-            entityQuery = 
-                new EntityQueryBuilder(Allocator.Temp).WithAll<Selected, BuildingBarracks, LocalTransform>().Build(entityManager);
-
-            NativeArray<BuildingBarracks> buildingBarracksArray = entityQuery.ToComponentDataArray<BuildingBarracks>(Allocator.Temp);
-            NativeArray<LocalTransform> localTransformArray = entityQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
-            for (int i = 0; i < buildingBarracksArray.Length; i++) {
-                BuildingBarracks buildingBarracks = buildingBarracksArray[i];
-                buildingBarracks.rallyPositionOffset = (float3)mouseWorldPosition - localTransformArray[i].Position;
-                buildingBarracksArray[i] = buildingBarracks;
-            }
-            entityQuery.CopyFromComponentDataArray(buildingBarracksArray);
         }
     }
 

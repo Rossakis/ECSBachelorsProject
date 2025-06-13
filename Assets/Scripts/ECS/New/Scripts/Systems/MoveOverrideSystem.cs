@@ -19,7 +19,7 @@ partial struct MoveOverrideSystem : ISystem {
                 EnabledRefRW<MoveOverride>,
                 RefRW<UnitMover>>()) {
 
-            if (math.distancesq(localTransform.ValueRO.Position, moveOverride.ValueRO.targetPosition) > UnitMoverSystem.REACHED_TARGET_POSITION_DISTANCE_SQ) {
+            if (math.distancesq(localTransform.ValueRO.Position, moveOverride.ValueRO.targetPosition) > UnitMoverSystem.TARGET_POSITION_DIFF_DISTANCE_SQ) {
                 // Move closer
                 unitMover.ValueRW.targetPosition = moveOverride.ValueRO.targetPosition;
             } else {

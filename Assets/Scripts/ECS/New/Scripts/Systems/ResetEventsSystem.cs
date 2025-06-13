@@ -6,8 +6,7 @@ using Unity.Jobs;
 
 [UpdateInGroup(typeof(LateSimulationSystemGroup), OrderLast = true)]
 partial struct ResetEventsSystem : ISystem {
-
-
+    
     private NativeArray<JobHandle> jobHandleNativeArray;
     private NativeList<Entity> onBarracksUnitQueueChangedEntityList;
     private NativeList<Entity> onHealthDeadEntityList;
@@ -25,12 +24,14 @@ partial struct ResetEventsSystem : ISystem {
     }
 
     public void OnUpdate(ref SystemState state) {
-        if (SystemAPI.HasSingleton<BuildingHQ>()) {
-            Health hqHealth = SystemAPI.GetComponent<Health>(SystemAPI.GetSingletonEntity<BuildingHQ>());
-            if (hqHealth.onDead) {
-                DOTSEventsManager.Instance.TriggerOnHQDead();
-            }
-        }
+        
+        //TODO: Change this so that instead of player having HP, we instead look out for all the wizards being dead
+        // if (SystemAPI.HasSingleton<PlayerHP>()) {
+        //     Health hqHealth = SystemAPI.GetComponent<Health>(SystemAPI.GetSingletonEntity<PlayerHP>());
+        //     if (player.onDead) {
+        //         DOTSEventsManager.Instance.PlayerDefeat();
+        //     }
+        // }
 
 
         jobHandleNativeArray[0] = new ResetSelectedEventsJob().ScheduleParallel(state.Dependency);
@@ -44,8 +45,8 @@ partial struct ResetEventsSystem : ISystem {
             onHordeStartSpawningSoonEntityList = onHordeStartSpawningSoonEntityList.AsParallelWriter(),
         }.ScheduleParallel(state.Dependency).Complete();
 
-        DOTSEventsManager.Instance?.TriggerOnHordeStartedSpawning(onHordeStartedSpawningEntityList);
-        DOTSEventsManager.Instance?.TriggerOnHordeStartSpawningSoon(onHordeStartSpawningSoonEntityList);
+        DOTSEventsManager.Instance?.HordeStartedSpawning(onHordeStartedSpawningEntityList);
+        DOTSEventsManager.Instance?.HordeStartSpawningSoon(onHordeStartSpawningSoonEntityList);
 
 
 
@@ -54,17 +55,7 @@ partial struct ResetEventsSystem : ISystem {
             onHealthDeadEntityList = onHealthDeadEntityList.AsParallelWriter(),
         }.ScheduleParallel(state.Dependency).Complete();
 
-        DOTSEventsManager.Instance?.TriggerOnHealthDead(onHealthDeadEntityList);
-
-
-
-        onBarracksUnitQueueChangedEntityList.Clear();
-        new ResetBuildingBarracksEventsJob() {
-            onUnitQueueChangedEntityList = onBarracksUnitQueueChangedEntityList.AsParallelWriter(),
-        }.ScheduleParallel(state.Dependency).Complete();
-
-        DOTSEventsManager.Instance?.TriggerOnBarracksUnitQueueChanged(onBarracksUnitQueueChangedEntityList);
-
+        DOTSEventsManager.Instance?.HealthDepleted(onHealthDeadEntityList);
         state.Dependency = JobHandle.CombineDependencies(jobHandleNativeArray);
     }
 
@@ -74,17 +65,14 @@ partial struct ResetEventsSystem : ISystem {
         onHealthDeadEntityList.Dispose();
         onHordeStartedSpawningEntityList.Dispose();
     }
-
-
-
 }
 
 
 [BurstCompile]
 public partial struct ResetShootAttackEventsJob : IJobEntity {
 
-    public void Execute(ref ShootAttack shootAttack) {
-        shootAttack.onShoot.isTriggered = false;
+    public void Execute(ref CastFireball castFireball) {
+        castFireball.onShoot.isTriggered = false;
     }
 }
 
@@ -133,24 +121,6 @@ public partial struct ResetMeleeAttackEventsJob : IJobEntity {
 }
 
 
-[BurstCompile]
-public partial struct ResetBuildingBarracksEventsJob : IJobEntity {
-
-
-    public NativeList<Entity>.ParallelWriter onUnitQueueChangedEntityList;
-
-
-    public void Execute(ref BuildingBarracks buildingBarracks, Entity entity) {
-        if (buildingBarracks.onUnitQueueChanged) {
-            onUnitQueueChangedEntityList.AddNoResize(entity);
-        }
-
-        buildingBarracks.onUnitQueueChanged = false;
-
-    }
-
-}
-
 
 [BurstCompile]
 public partial struct ResetHordeEventsJob : IJobEntity {
@@ -159,15 +129,15 @@ public partial struct ResetHordeEventsJob : IJobEntity {
     public NativeList<Entity>.ParallelWriter onHordeStartSpawningSoonEntityList;
 
 
-    public void Execute(ref Horde horde, Entity entity) {
-        if (horde.onStartSpawningSoon) {
+    public void Execute(ref KnightArmy knightArmy, Entity entity) {
+        if (knightArmy.onStartSpawningSoon) {
             onHordeStartSpawningSoonEntityList.AddNoResize(entity);
         }
-        if (horde.onStartSpawning) {
+        if (knightArmy.onStartSpawning) {
             onHordeStartedSpawningEntityList.AddNoResize(entity);
         }
-        horde.onStartSpawning = false;
-        horde.onStartSpawningSoon = false;
+        knightArmy.onStartSpawning = false;
+        knightArmy.onStartSpawningSoon = false;
     }
 
 }
