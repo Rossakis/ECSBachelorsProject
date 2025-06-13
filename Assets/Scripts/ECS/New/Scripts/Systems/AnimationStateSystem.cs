@@ -1,12 +1,9 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 [UpdateAfter(typeof(ShootAttackSystem))]
 partial struct AnimationStateSystem : ISystem {
-
-
     private ComponentLookup<ActiveAnimation> activeAnimationComponentLookup;
 
     [BurstCompile]
@@ -23,10 +20,10 @@ partial struct AnimationStateSystem : ISystem {
         idleWalkingAnimationStateJob.ScheduleParallel();
 
         activeAnimationComponentLookup.Update(ref state);
-        AimShootAnimationStateJob aimShootAnimationStateJob = new AimShootAnimationStateJob {
+        ReadySpellAnimationStateJob readySpellAnimationStateJob = new ReadySpellAnimationStateJob {
             activeAnimationComponentLookup = activeAnimationComponentLookup,
         };
-        aimShootAnimationStateJob.ScheduleParallel();
+        readySpellAnimationStateJob.ScheduleParallel();
     }
 
 
@@ -52,19 +49,19 @@ public partial struct IdleWalkingAnimationStateJob : IJobEntity {
 
 
 [BurstCompile]
-public partial struct AimShootAnimationStateJob : IJobEntity {
+public partial struct ReadySpellAnimationStateJob : IJobEntity {
 
     [NativeDisableParallelForRestriction] public ComponentLookup<ActiveAnimation> activeAnimationComponentLookup;
 
     public void Execute(in AnimatedMesh animatedMesh, in CastFireball castFireball, in UnitMover unitMover, in Target target, in UnitAnimations unitAnimations) {
         if (!unitMover.isMoving && target.targetEntity != Entity.Null) {
             RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
-            activeAnimation.ValueRW.nextAnimationType = unitAnimations.aimAnimationType;
+            activeAnimation.ValueRW.nextAnimationType = unitAnimations.readySpellAnimationType;
         }
 
         if (castFireball.onShoot.isTriggered) {
             RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
-            activeAnimation.ValueRW.nextAnimationType = unitAnimations.shootAnimationType;
+            activeAnimation.ValueRW.nextAnimationType = unitAnimations.castFireballAnimationType;
         }
     }
 

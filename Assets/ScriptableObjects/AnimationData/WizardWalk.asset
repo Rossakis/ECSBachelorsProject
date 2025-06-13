@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126d9ac176964a54bb72263070596466, type: 3}
+  m_Name: WizardWalk
+  m_EditorClassIdentifier: 
+  animationType: 2
+  meshArray:
+  - {fileID: 4300000, guid: 07e8ffa9afbdbbc429005bddc01bca02, type: 2}
+  - {fileID: 4300000, guid: 29003f06dbdaf9446895f5899cb5e9bf, type: 2}
+  - {fileID: 4300000, guid: 6875e9b01da68c342b868f4566b5773c, type: 2}
+  - {fileID: 4300000, guid: d31f4844fdeb89e4a88b6a3f570f99d9, type: 2}
+  - {fileID: 4300000, guid: b9eeb96423a8b9f40aaa2615241f5a46, type: 2}
+  - {fileID: 4300000, guid: a2d73e88de1f1a944ad55d7b2b67cf34, type: 2}
+  - {fileID: 4300000, guid: fb507a603576a924092d31953cf09921, type: 2}
+  - {fileID: 4300000, guid: e01a3486dec40da49a1a4a70ef032389, type: 2}
+  - {fileID: 4300000, guid: 9e46019690936984faf03825afba142a, type: 2}
+  - {fileID: 4300000, guid: f6ddd0f97e4144e408ac5b1c787202a1, type: 2}
+  - {fileID: 4300000, guid: fa413816bdc9d364db3c1533752a3c50, type: 2}
+  - {fileID: 4300000, guid: b0fc2ad4177b24b4d9cc45f8e0d10678, type: 2}
+  - {fileID: 4300000, guid: 93ccb484cb4d8894999d56cee990849d, type: 2}
+  - {fileID: 4300000, guid: ebf46f5b0294f584687683b6e990123c, type: 2}
+  - {fileID: 4300000, guid: 5aa390ef42eef2041a9b4ae83efde2fe, type: 2}
+  - {fileID: 4300000, guid: ef5e8627d1dca2c4aae3fb7ab3ed5347, type: 2}
+  - {fileID: 4300000, guid: d702a3db35193f348ae8832f20882b68, type: 2}
+  - {fileID: 4300000, guid: 5f36f1814917e654cb524cee8b37ffde, type: 2}
+  - {fileID: 4300000, guid: b7f0d46860518dc42b775d1ce2efef6c, type: 2}
+  - {fileID: 4300000, guid: b0bfbb94d5c014f4899cb8acacbf9fa7, type: 2}
+  - {fileID: 4300000, guid: e6c0bf49ca80a0944b60958f75471d89, type: 2}
+  - {fileID: 4300000, guid: d529973509bcf064aa4a6420a0370648, type: 2}
+  - {fileID: 4300000, guid: c9d2fb39d069a6e40a5d33db49728529, type: 2}
+  - {fileID: 4300000, guid: 1b0b8bef707a73b43b2095a83915a524, type: 2}
+  - {fileID: 4300000, guid: 353b86b7e967c644fa2b8e509d436ab6, type: 2}
+  - {fileID: 4300000, guid: 038a9924f4b49354484b78d596517555, type: 2}
+  - {fileID: 4300000, guid: 5235c589877a24448a22cae9b20a4354, type: 2}
+  - {fileID: 4300000, guid: 09788866e41830c4a9a44cea36117a08, type: 2}
+  - {fileID: 4300000, guid: f822cc0c31d110f4584687c3d2984f3d, type: 2}
+  - {fileID: 4300000, guid: 8b6fb123779846d4998d4677c8ad0cbf, type: 2}
+  - {fileID: 4300000, guid: d9919e8f0a2eb684ca7237fc2f2d9436, type: 2}
+  - {fileID: 4300000, guid: 52046326374ab5e4fa51da0cff51ddd2, type: 2}
+  - {fileID: 4300000, guid: 452722398222ad64baf5ee9d1c567f4a, type: 2}
+  - {fileID: 4300000, guid: f6c1816d66081c2449a66ad858ee88f2, type: 2}
+  - {fileID: 4300000, guid: beb7f34aedf24a34aac04c5982696cb9, type: 2}
+  - {fileID: 4300000, guid: 162c373fa1892f64e92c3ce83b98a385, type: 2}
+  frameTimerMax: 0.05

@@ -4,25 +4,14 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class CursorSystemManager : MonoBehaviour {
-
-
+    
     private bool isMouseOverButton;
     private CursorTypeSO selectedCursorTypeSO;
 
-
     private void Start() {
         CursorSystem.SetActiveCursorTypeSO(CursorTypeListSO.Instance.arrowBig);
-    }
-
-    private void BuildingPlacementManagerUI_ButtonSingle_OnAnyButtonSingleMouseOver(object sender, EventArgs e) {
-        isMouseOverButton = true;
-    }
-
-    private void BuildingPlacementManagerUI_ButtonSingle_OnAnyButtonSingleMouseOut(object sender, EventArgs e) {
-        isMouseOverButton = false;
     }
 
     private void Update() {
@@ -71,10 +60,9 @@ public class CursorSystemManager : MonoBehaviour {
             };
             if (collisionWorld.CastRay(raycastInput, out Unity.Physics.RaycastHit raycastHit)) {
                 if (entityManager.HasComponent<Faction>(raycastHit.Entity)) {
-                    // Hit something with a Faction
                     Faction faction = entityManager.GetComponentData<Faction>(raycastHit.Entity);
+                    
                     if (faction.factionType == FactionType.Knight) {
-                        // Right clicking on a Zombie
                         selectedCursorTypeSO = CursorTypeListSO.Instance.attack;
                     }
                 }

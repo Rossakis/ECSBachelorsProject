@@ -1,9 +1,7 @@
 using UnityEngine;
 
 public class UnitSelectionManagerUI : MonoBehaviour {
-
-
-
+    
     [SerializeField] private RectTransform selectionAreaRectTransform;
     [SerializeField] private Canvas canvas;
 
@@ -11,8 +9,7 @@ public class UnitSelectionManagerUI : MonoBehaviour {
     private void Start() {
         UnitSelectionManager.Instance.OnSelectionAreaStart += UnitSelectionManager_OnSelectionAreaStart;
         UnitSelectionManager.Instance.OnSelectionAreaEnd += UnitSelectionManager_OnSelectionAreaEnd;
-
-
+        
         selectionAreaRectTransform.gameObject.SetActive(false);
     }
 

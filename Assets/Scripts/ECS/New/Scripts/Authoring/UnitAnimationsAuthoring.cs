@@ -2,12 +2,11 @@ using Unity.Entities;
 using UnityEngine;
 
 public class UnitAnimationsAuthoring : MonoBehaviour {
-
-
+    
     public AnimationDataSO.AnimationType idleAnimationType;
     public AnimationDataSO.AnimationType walkAnimationType;
-    public AnimationDataSO.AnimationType shootAnimationType;
-    public AnimationDataSO.AnimationType aimAnimationType;
+    public AnimationDataSO.AnimationType castFireballAnimationType;
+    public AnimationDataSO.AnimationType readySpellAnimationType;
 
 
     public class Baker : Baker<UnitAnimationsAuthoring> {
@@ -19,8 +18,8 @@ public class UnitAnimationsAuthoring : MonoBehaviour {
             AddComponent(entity, new UnitAnimations {
                 idleAnimationType = authoring.idleAnimationType,
                 walkAnimationType = authoring.walkAnimationType,
-                shootAnimationType = authoring.shootAnimationType,
-                aimAnimationType = authoring.aimAnimationType,
+                castFireballAnimationType = authoring.castFireballAnimationType,
+                readySpellAnimationType = authoring.readySpellAnimationType,
             });
         }
 
@@ -32,7 +31,7 @@ public struct UnitAnimations : IComponentData {
 
     public AnimationDataSO.AnimationType idleAnimationType;
     public AnimationDataSO.AnimationType walkAnimationType;
-    public AnimationDataSO.AnimationType shootAnimationType;
-    public AnimationDataSO.AnimationType aimAnimationType;
+    public AnimationDataSO.AnimationType castFireballAnimationType;
+    public AnimationDataSO.AnimationType readySpellAnimationType;
 
 }

@@ -45,8 +45,8 @@ partial struct ResetEventsSystem : ISystem {
             onHordeStartSpawningSoonEntityList = onHordeStartSpawningSoonEntityList.AsParallelWriter(),
         }.ScheduleParallel(state.Dependency).Complete();
 
-        DOTSEventsManager.Instance?.HordeStartedSpawning(onHordeStartedSpawningEntityList);
-        DOTSEventsManager.Instance?.HordeStartSpawningSoon(onHordeStartSpawningSoonEntityList);
+        DOTSEventsManager.Instance?.KnightArmyStartedSpawning(onHordeStartedSpawningEntityList);
+        DOTSEventsManager.Instance?.KnightArmyStartSpawningSoon(onHordeStartSpawningSoonEntityList);
 
 
 

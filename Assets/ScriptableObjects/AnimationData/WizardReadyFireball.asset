@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126d9ac176964a54bb72263070596466, type: 3}
+  m_Name: WizardReadyFireball
+  m_EditorClassIdentifier: 
+  animationType: 3
+  meshArray:
+  - {fileID: 4300000, guid: 6a5ad6de6235cb140a0230659cd086f1, type: 2}
+  - {fileID: 4300000, guid: 174166fbe556e7341b1b3c720351a55c, type: 2}
+  - {fileID: 4300000, guid: 4e2da6efb5643e24a98dc86a549a7fa1, type: 2}
+  - {fileID: 4300000, guid: 16b9ad0303097ab42ba3151994997f2a, type: 2}
+  - {fileID: 4300000, guid: 5daf22058c5b5634982ba3f5da08fad6, type: 2}
+  - {fileID: 4300000, guid: 231d42968f72a284b8b4b7bbae3a8e3a, type: 2}
+  - {fileID: 4300000, guid: e6b97fdb9975a9649a4cc66591e2c6d0, type: 2}
+  - {fileID: 4300000, guid: 8b40fff248b4142479d7d80063bbfb19, type: 2}
+  - {fileID: 4300000, guid: d504dede538757748b2488870a6cbf97, type: 2}
+  - {fileID: 4300000, guid: 47f5f2e7b62b58d43807f3a55f1c8c9d, type: 2}
+  - {fileID: 4300000, guid: 029c43f62c1130a429499613c26f074e, type: 2}
+  - {fileID: 4300000, guid: 71e2569b32f8a2148a402edbc0a5078c, type: 2}
+  - {fileID: 4300000, guid: e7cebed3a03fd8a4ca30f9d53e6d96bf, type: 2}
+  - {fileID: 4300000, guid: 71042f7be7232024b98ce42c7664fb1d, type: 2}
+  - {fileID: 4300000, guid: 2b2166387b3a3694dbe79a5a4d4676cc, type: 2}
+  - {fileID: 4300000, guid: 1d8ccf45cd8af82418dab3b00b612243, type: 2}
+  frameTimerMax: 0.05

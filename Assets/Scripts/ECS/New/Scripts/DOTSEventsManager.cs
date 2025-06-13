@@ -4,16 +4,14 @@ using Unity.Entities;
 using UnityEngine;
 
 public class DOTSEventsManager : MonoBehaviour {
-
-
+    
     public static DOTSEventsManager Instance { get; private set; }
-
 
     public event EventHandler OnGameWin;
     public event EventHandler OnPlayerDefeat;
     public event EventHandler OnHealthDepleted;
-    public event EventHandler OnHordeStartedSpawning;
-    public event EventHandler OnHordeStartSpawningSoon;
+    public event EventHandler OnKnightArmyStartedSpawning;
+    public event EventHandler OnKnightArmyStartSpawningSoon;
 
 
     private void Awake() {
@@ -30,15 +28,15 @@ public class DOTSEventsManager : MonoBehaviour {
         }
     }
 
-    public void HordeStartedSpawning(NativeList<Entity> entityNativeList) {
+    public void KnightArmyStartedSpawning(NativeList<Entity> entityNativeList) {
         foreach (Entity entity in entityNativeList) {
-            OnHordeStartedSpawning?.Invoke(entity, EventArgs.Empty);
+            OnKnightArmyStartedSpawning?.Invoke(entity, EventArgs.Empty);
         }
     }
 
-    public void HordeStartSpawningSoon(NativeList<Entity> entityNativeList) {
+    public void KnightArmyStartSpawningSoon(NativeList<Entity> entityNativeList) {
         foreach (Entity entity in entityNativeList) {
-            OnHordeStartSpawningSoon?.Invoke(entity, EventArgs.Empty);
+            OnKnightArmyStartSpawningSoon?.Invoke(entity, EventArgs.Empty);
         }
     }
 

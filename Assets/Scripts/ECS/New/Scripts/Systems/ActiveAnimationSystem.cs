@@ -20,16 +20,12 @@ partial struct ActiveAnimationSystem : ISystem {
         };
         activeAnimationJob.ScheduleParallel();
     }
-
-
-
 }
 
 
 [BurstCompile]
 public partial struct ActiveAnimationJob : IJobEntity {
-
-
+    
     public float deltaTime;
     public BlobAssetReference<BlobArray<AnimationData>> animationDataBlobArrayBlobAssetReference;
 
