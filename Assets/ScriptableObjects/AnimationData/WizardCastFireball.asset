@@ -61,4 +61,4 @@ MonoBehaviour:
   - {fileID: 4300000, guid: 59eed85b6859dba47b21d4e724f9ecbf, type: 2}
   - {fileID: 4300000, guid: bfe36ca0f17f58c4eac21378ee9a5877, type: 2}
   - {fileID: 4300000, guid: 1b7c249ea0790474e8e5e5d0a1071c1a, type: 2}
-  frameTimerMax: 0.05
+  frameTimerMax: 0.02

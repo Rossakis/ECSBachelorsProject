@@ -2324,6 +2324,7 @@ MonoBehaviour:
   zoomSpeed: 5
   maxZoomIn: 0
   maxZoomOut: 100
+  tiltSpeed: 3
 --- !u!1 &1981420386
 GameObject:
   m_ObjectHideFlags: 0
