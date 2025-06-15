@@ -24,7 +24,7 @@ partial struct FindTargetSystem : ISystem {
     public void OnUpdate(ref SystemState state) {
         PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
         CollisionWorld collisionWorld = physicsWorldSingleton.CollisionWorld;
-        // NativeList<DistanceHit> distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
+        NativeList<DistanceHit> distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
 
         localTransformComponentLookup.Update(ref state);
         factionComponentLookup.Update(ref state);

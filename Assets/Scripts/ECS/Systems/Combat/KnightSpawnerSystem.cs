@@ -3,6 +3,7 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
 
 partial struct KnightSpawnerSystem : ISystem {
 
@@ -67,13 +68,14 @@ partial struct KnightSpawnerSystem : ISystem {
             Entity knightEntity = state.EntityManager.Instantiate(entitiesReferences.knightPrefabEntity);
             SystemAPI.SetComponent(knightEntity, LocalTransform.FromPosition(localTransform.ValueRO.Position));
 
-            // entityCommandBuffer.AddComponent(knightEntity, new RandomWalking {
-            //     originPosition = localTransform.ValueRO.Position,
-            //     targetPosition = localTransform.ValueRO.Position,
-            //     distanceMin = knightSpawner.ValueRO.randomWalkingDistanceMin,
-            //     distanceMax = knightSpawner.ValueRO.randomWalkingDistanceMax,
-            //     random = new Unity.Mathematics.Random((uint)knightEntity.Index),
-            // });
+            entityCommandBuffer.AddComponent(knightEntity, new RandomWalking {
+                originPosition = localTransform.ValueRO.Position,
+                targetPosition = localTransform.ValueRO.Position,
+                distanceMin = knightSpawner.ValueRO.randomWalkingDistanceMin,
+                distanceMax = knightSpawner.ValueRO.randomWalkingDistanceMax,
+                random = new Unity.Mathematics.Random((uint)knightEntity.Index),
+            });
+            
         }
     }
 

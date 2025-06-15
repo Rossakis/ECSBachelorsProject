@@ -2,84 +2,72 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Physics;
+using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine.InputSystem;
 
-namespace ECS.Systems.Combat
+[BurstCompile]
+public partial struct UnitSpawnerSystem : ISystem
 {
-    public partial struct WizardSpawnerSystem : ISystem
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
     {
-        [BurstCompile]
-    public void OnCreate(ref SystemState state) {
+        state.RequireForUpdate<WizardSpawner>();
         state.RequireForUpdate<EntitiesReferences>();
-        state.RequireForUpdate<PhysicsWorldSingleton>();
-        state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
     }
 
     [BurstCompile]
-    public void OnUpdate(ref SystemState state) {
-        EntitiesReferences entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
+    public void OnUpdate(ref SystemState state)
+    {
+        EntityCommandBuffer ecb = 
+            SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+            .CreateCommandBuffer(state.WorldUnmanaged);
 
-        PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        CollisionWorld collisionWorld = physicsWorldSingleton.CollisionWorld;
-        NativeList<DistanceHit> distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
-
-        EntityCommandBuffer entityCommandBuffer =
-            SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
-
-        foreach ((
-            RefRO<LocalTransform> localTransform,
-            RefRW<WizardSpawner> wizardSpawner)
-            in SystemAPI.Query<
-                RefRO<LocalTransform>,
-                RefRW<WizardSpawner>>()) {
-
-            wizardSpawner.ValueRW.timer -= SystemAPI.Time.DeltaTime;
-            if (wizardSpawner.ValueRO.timer > 0f) {
+        foreach ((RefRW<WizardSpawner> spawner, RefRO<LocalTransform> transform, Entity spawnerEntity) in
+                 SystemAPI.Query<RefRW<WizardSpawner>, RefRO<LocalTransform>>().WithEntityAccess())
+        {
+            if (spawner.ValueRO.hasSpawned)
                 continue;
-            }
-            wizardSpawner.ValueRW.timer = wizardSpawner.ValueRO.timerMax;
 
-            distanceHitList.Clear();
-            CollisionFilter collisionFilter = new CollisionFilter {
-                BelongsTo = ~0u,
-                CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u << GameAssets.PATHFINDING_WALLS,
-                GroupIndex = 0,
-            };
+            EntitiesReferences entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
 
-            int nearbyWizardAmount = 0;
-            if (collisionWorld.OverlapSphere(
-                localTransform.ValueRO.Position,
-                wizardSpawner.ValueRO.nearbyWizardAmountDistance,
-                ref distanceHitList,
-                collisionFilter)) {
+            float3 origin = transform.ValueRO.Position;
+            Random random = Random.CreateFromIndex((uint)origin.GetHashCode());
 
-                foreach (DistanceHit distanceHit in distanceHitList) {
-                    if (!SystemAPI.Exists(distanceHit.Entity)) {
-                        continue;
-                    }
-                    if (SystemAPI.HasComponent<Unit>(distanceHit.Entity) && SystemAPI.HasComponent<Wizard>(distanceHit.Entity)) {
-                        nearbyWizardAmount++;
+            NativeList<float3> spawnPositions = new NativeList<float3>(Allocator.Temp);
+
+            int attempts = 0;
+            int spawnedCount = 0;
+
+            while (spawnedCount < spawner.ValueRO.maxUnitsToSpawn && attempts < 1000)
+            {
+                float2 randomOffset2D = random.NextFloat2Direction() * random.NextFloat(0, spawner.ValueRO.spawnRadius);
+                float3 candidatePos = origin + new float3(randomOffset2D.x, 0, randomOffset2D.y);
+
+                bool isFarEnough = true;
+                foreach (float3 existing in spawnPositions)
+                {
+                    if (math.distance(candidatePos, existing) < spawner.ValueRO.minDistanceBetweenUnits)
+                    {
+                        isFarEnough = false;
+                        break;
                     }
                 }
+
+                if (isFarEnough)
+                {
+                    Entity unit = ecb.Instantiate(entitiesReferences.wizardPrefabGameObject);
+                    ecb.SetComponent(unit, LocalTransform.FromPosition(candidatePos));
+                    spawnPositions.Add(candidatePos);
+                    spawnedCount++;
+                }
+
+                attempts++;
             }
 
-            if (nearbyWizardAmount >= wizardSpawner.ValueRO.nearbyWizardAmountDistance) {
-                continue;
-            }
+            spawner.ValueRW.hasSpawned = true;
 
-            Entity wizardEntity = state.EntityManager.Instantiate(entitiesReferences.wizardPrefabGameObject);
-            SystemAPI.SetComponent(wizardEntity, LocalTransform.FromPosition(localTransform.ValueRO.Position));
-            
-            // entityCommandBuffer.AddComponent(wizardEntity, new RandomWalking {
-            //     originPosition = localTransform.ValueRO.Position,
-            //     targetPosition = localTransform.ValueRO.Position,
-            //     distanceMin = wizardSpawner.ValueRO.randomWalkingDistanceMin,
-            //     distanceMax = wizardSpawner.ValueRO.randomWalkingDistanceMax,
-            //     random = new Unity.Mathematics.Random((uint)wizardEntity.Index),
-            // });
+            // Destroy spawner entity after its job is completed
+            ecb.DestroyEntity(spawnerEntity); 
         }
-    }
     }
 }

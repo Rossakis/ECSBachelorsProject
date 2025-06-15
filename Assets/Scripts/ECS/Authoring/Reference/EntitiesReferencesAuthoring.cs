@@ -12,7 +12,6 @@ public class EntitiesReferencesAuthoring : MonoBehaviour {
     public GameObject wizardPrefabGameObject;
     public GameObject fireballLightPrefabGameObject;
     
-    
     public class Baker : Baker<EntitiesReferencesAuthoring> {
 
 
