@@ -1,3 +1,4 @@
+using ECS.Authoring.Reference;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -9,27 +10,59 @@ partial struct AnimationStateSystem : ISystem {
     [BurstCompile]
     public void OnCreate(ref SystemState state) {
         activeAnimationComponentLookup = state.GetComponentLookup<ActiveAnimation>(false);
+        state.RequireForUpdate<SceneDataReference>();
     }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state) {
         activeAnimationComponentLookup.Update(ref state);
-        IdleWalkingAnimationStateJob idleWalkingAnimationStateJob = new IdleWalkingAnimationStateJob {
-            activeAnimationComponentLookup = activeAnimationComponentLookup,
-        };
-        idleWalkingAnimationStateJob.ScheduleParallel();
 
-        activeAnimationComponentLookup.Update(ref state);
-        ReadySpellAnimationStateJob readySpellAnimationStateJob = new ReadySpellAnimationStateJob {
-            activeAnimationComponentLookup = activeAnimationComponentLookup,
-        };
-        readySpellAnimationStateJob.ScheduleParallel();
-        
-        activeAnimationComponentLookup.Update(ref state);
-        KnightAttackAnimationStateJob meleeAttackAnimationStateJob = new KnightAttackAnimationStateJob() {
-            activeAnimationComponentLookup = activeAnimationComponentLookup,
-        };
-        meleeAttackAnimationStateJob.ScheduleParallel();
+        SceneDataReference sceneData = SystemAPI.GetSingleton<SceneDataReference>();
+
+        if (sceneData.IsJobSystemOn) {
+            var idleJob = new IdleWalkingAnimationStateJob {
+                activeAnimationComponentLookup = activeAnimationComponentLookup,
+            };
+            idleJob.ScheduleParallel();
+
+            activeAnimationComponentLookup.Update(ref state);
+            var readyJob = new ReadySpellAnimationStateJob {
+                activeAnimationComponentLookup = activeAnimationComponentLookup,
+            };
+            readyJob.ScheduleParallel();
+
+            activeAnimationComponentLookup.Update(ref state);
+            var attackJob = new KnightAttackAnimationStateJob {
+                activeAnimationComponentLookup = activeAnimationComponentLookup,
+            };
+            attackJob.ScheduleParallel();
+        }
+        else {
+            foreach (var (animatedMesh, unitMover, unitAnimations) in SystemAPI.Query<AnimatedMesh, UnitMover, UnitAnimations>()) {
+                RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
+                activeAnimation.ValueRW.nextAnimationType = unitMover.isMoving ? unitAnimations.walkAnimationType : unitAnimations.idleAnimationType;
+            }
+
+            activeAnimationComponentLookup.Update(ref state);
+            foreach (var (animatedMesh, castFireball, unitMover, target, unitAnimations) in SystemAPI.Query<AnimatedMesh, CastFireball, UnitMover, Target, UnitAnimations>()) {
+                if (!unitMover.isMoving && target.targetEntity != Entity.Null) {
+                    RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
+                    activeAnimation.ValueRW.nextAnimationType = unitAnimations.readySpellAnimationType;
+                }
+                if (castFireball.onShoot.isTriggered) {
+                    RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
+                    activeAnimation.ValueRW.nextAnimationType = unitAnimations.castFireballAnimationType;
+                }
+            }
+
+            activeAnimationComponentLookup.Update(ref state);
+            foreach (var (animatedMesh, meleeAttack, unitAnimations) in SystemAPI.Query<AnimatedMesh, MeleeAttack, UnitAnimations>()) {
+                if (meleeAttack.onAttacked) {
+                    RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
+                    activeAnimation.ValueRW.nextAnimationType = unitAnimations.knightAttackAnimationType;
+                }
+            }
+        }
     }
 }
 

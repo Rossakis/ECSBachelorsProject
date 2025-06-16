@@ -1,58 +1,95 @@
+using ECS.Authoring.Reference;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Rendering;
-using UnityEngine;
 
 partial struct ActiveAnimationSystem : ISystem {
 
     [BurstCompile]
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<AnimationDataHolder>();
+        state.RequireForUpdate<SceneDataReference>();
     }
 
     [BurstCompile]
-    public void OnUpdate(ref SystemState state) {
-        AnimationDataHolder animationDataHolder = SystemAPI.GetSingleton<AnimationDataHolder>();
+    public void OnUpdate(ref SystemState state)
+    {
+        float deltaTime = SystemAPI.Time.DeltaTime;
+        var animationDataHolder = SystemAPI.GetSingleton<AnimationDataHolder>();
+        var animBlob = animationDataHolder.animationDataBlobArrayBlobAssetReference;
 
-        ActiveAnimationJob activeAnimationJob = new ActiveAnimationJob {
-            deltaTime = SystemAPI.Time.DeltaTime,
-            animationDataBlobArrayBlobAssetReference = animationDataHolder.animationDataBlobArrayBlobAssetReference,
-        };
-        activeAnimationJob.ScheduleParallel();
-    }
-}
+        SceneDataReference sceneData = SystemAPI.GetSingleton<SceneDataReference>();
 
+        if (sceneData.IsJobSystemOn)
+        {
+            var job = new ActiveAnimationJob
+            {
+                deltaTime = deltaTime,
+                animationDataBlobArrayBlobAssetReference = animBlob,
+            };
+            job.ScheduleParallel();
+        }
+        else
+        {
+            foreach (var (activeAnim, meshInfo) in SystemAPI.Query<RefRW<ActiveAnimation>, RefRW<MaterialMeshInfo>>())
+            {
+                ref var animData = ref animBlob.Value[(int)activeAnim.ValueRO.activeAnimationType];
 
-[BurstCompile]
-public partial struct ActiveAnimationJob : IJobEntity {
-    
-    public float deltaTime;
-    public BlobAssetReference<BlobArray<AnimationData>> animationDataBlobArrayBlobAssetReference;
+                activeAnim.ValueRW.frameTimer += deltaTime;
+                if (activeAnim.ValueRO.frameTimer > animData.frameTimerMax)
+                {
+                    activeAnim.ValueRW.frameTimer -= animData.frameTimerMax;
+                    activeAnim.ValueRW.frame = (activeAnim.ValueRO.frame + 1) % animData.frameMax;
+                    meshInfo.ValueRW.Mesh = animData.intMeshIdBlobArray[activeAnim.ValueRO.frame];
 
-
-    public void Execute(ref ActiveAnimation activeAnimation, ref MaterialMeshInfo materialMeshInfo) {
-        ref AnimationData animationData =
-            ref animationDataBlobArrayBlobAssetReference.Value[(int)activeAnimation.activeAnimationType];
-
-        activeAnimation.frameTimer += deltaTime;
-        if (activeAnimation.frameTimer > animationData.frameTimerMax) {
-            activeAnimation.frameTimer -= animationData.frameTimerMax;
-            activeAnimation.frame =
-                (activeAnimation.frame + 1) % animationData.frameMax;
-
-
-            materialMeshInfo.Mesh =
-                animationData.intMeshIdBlobArray[activeAnimation.frame];
-
-
-            if (activeAnimation.frame == 0 &&
-                AnimationDataSO.IsAnimationUninterruptible(activeAnimation.activeAnimationType)) {
-
-                activeAnimation.activeAnimationType = AnimationDataSO.AnimationType.None;
+                    if (activeAnim.ValueRO.frame == 0 &&
+                        AnimationDataSO.IsAnimationUninterruptible(activeAnim.ValueRO.activeAnimationType))
+                    {
+                        activeAnim.ValueRW.activeAnimationType = AnimationDataSO.AnimationType.None;
+                    }
+                }
             }
         }
+    }
 
 
+
+
+    [BurstCompile]
+    public partial struct ActiveAnimationJob : IJobEntity
+    {
+
+        public float deltaTime;
+        public BlobAssetReference<BlobArray<AnimationData>> animationDataBlobArrayBlobAssetReference;
+
+
+        public void Execute(ref ActiveAnimation activeAnimation, ref MaterialMeshInfo materialMeshInfo)
+        {
+            ref AnimationData animationData =
+                ref animationDataBlobArrayBlobAssetReference.Value[(int)activeAnimation.activeAnimationType];
+
+            activeAnimation.frameTimer += deltaTime;
+            if (activeAnimation.frameTimer > animationData.frameTimerMax)
+            {
+                activeAnimation.frameTimer -= animationData.frameTimerMax;
+                activeAnimation.frame =
+                    (activeAnimation.frame + 1) % animationData.frameMax;
+
+
+                materialMeshInfo.Mesh =
+                    animationData.intMeshIdBlobArray[activeAnimation.frame];
+
+
+                if (activeAnimation.frame == 0 &&
+                    AnimationDataSO.IsAnimationUninterruptible(activeAnimation.activeAnimationType))
+                {
+
+                    activeAnimation.activeAnimationType = AnimationDataSO.AnimationType.None;
+                }
+            }
+
+
+        }
     }
 
 }

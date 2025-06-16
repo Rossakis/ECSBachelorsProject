@@ -256,19 +256,6 @@ public partial struct GridSystem : ISystem {
             SystemAPI.SetComponent(state.SystemHandle, gridSystemData);
         }
 
-        /*
-        if (Input.GetMouseButtonDown(0)) {
-            float3 mouseWorldPosition = MouseWorldPosition.Instance.GetPosition();
-            int2 mouseGridPosition = GetGridPosition(mouseWorldPosition, gridSystemData.gridNodeSize);
-            if (IsValidGridPosition(mouseGridPosition, gridSystemData.width, gridSystemData.height)) {
-                /*
-                int index = CalculateIndex(mouseGridPosition.x, mouseGridPosition.y, gridSystemData.width);
-                Entity gridNodeEntity = gridSystemData.gridMap.gridEntityArray[index];
-                RefRW<GridNode> gridNode = SystemAPI.GetComponentRW<GridNode>(gridNodeEntity);
-            }
-        }
-        */
-
 #if GRID_DEBUG
         GridSystemDebug.Instance?.InitializeGrid(gridSystemData);
         GridSystemDebug.Instance?.UpdateGrid(gridSystemData);

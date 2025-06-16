@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace MainMenu
+namespace UI
 {
     public class PanelSwitchManager : MonoBehaviour
     {

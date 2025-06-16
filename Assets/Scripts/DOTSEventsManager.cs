@@ -8,18 +8,20 @@ public class DOTSEventsManager : MonoBehaviour {
     public static DOTSEventsManager Instance { get; private set; }
 
     public event EventHandler OnGameWin;
-    public event EventHandler OnPlayerDefeat;
+    public event EventHandler OnGameOver;
     public event EventHandler OnHealthDepleted;
-    public event EventHandler OnKnightArmyStartedSpawning;
-    public event EventHandler OnKnightArmyStartSpawningSoon;
+    
+    //TODO:
+    public GameObject GameWinPanel;
+    public GameObject GameOverPanel;
 
 
     private void Awake() {
         Instance = this;
     }
 
-    public void PlayerDefeat() {
-        OnPlayerDefeat?.Invoke(this, EventArgs.Empty);
+    public void GameOver() {
+        OnGameOver?.Invoke(this, EventArgs.Empty);
     }
 
     public void HealthDepleted(NativeList<Entity> entityNativeList) {
@@ -27,19 +29,7 @@ public class DOTSEventsManager : MonoBehaviour {
             OnHealthDepleted?.Invoke(entity, EventArgs.Empty);
         }
     }
-
-    public void KnightArmyStartedSpawning(NativeList<Entity> entityNativeList) {
-        foreach (Entity entity in entityNativeList) {
-            OnKnightArmyStartedSpawning?.Invoke(entity, EventArgs.Empty);
-        }
-    }
-
-    public void KnightArmyStartSpawningSoon(NativeList<Entity> entityNativeList) {
-        foreach (Entity entity in entityNativeList) {
-            OnKnightArmyStartSpawningSoon?.Invoke(entity, EventArgs.Empty);
-        }
-    }
-
+    
     public void GameWin() {
         OnGameWin?.Invoke(this, EventArgs.Empty);
     }

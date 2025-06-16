@@ -21,15 +21,6 @@ partial struct ResetEventsSystem : ISystem {
 
     public void OnUpdate(ref SystemState state) {
         
-        //TODO: Change this so that instead of player having HP, we instead look out for all the wizards being dead
-        // if (SystemAPI.HasSingleton<PlayerHP>()) {
-        //     Health hqHealth = SystemAPI.GetComponent<Health>(SystemAPI.GetSingletonEntity<PlayerHP>());
-        //     if (player.onDead) {
-        //         DOTSEventsManager.Instance.PlayerDefeat();
-        //     }
-        // }
-
-
         jobHandleNativeArray[0] = new ResetSelectedEventsJob().ScheduleParallel(state.Dependency);
         jobHandleNativeArray[1] = new ResetFireballAttackEventsJob().ScheduleParallel(state.Dependency);
         jobHandleNativeArray[2] = new ResetMeleeAttackEventsJob().ScheduleParallel(state.Dependency);
@@ -62,10 +53,8 @@ public partial struct ResetFireballAttackEventsJob : IJobEntity {
 
 [BurstCompile]
 public partial struct ResetHealthEventsJob : IJobEntity {
-
-
+    
     public NativeList<Entity>.ParallelWriter onHealthDeadEntityList;
-
 
     public void Execute(ref Health health, Entity entity) {
         if (health.onDead) {

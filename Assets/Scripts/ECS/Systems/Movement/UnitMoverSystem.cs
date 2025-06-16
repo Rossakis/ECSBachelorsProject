@@ -1,3 +1,4 @@
+using ECS.Authoring.Reference;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
@@ -25,6 +26,7 @@ partial struct UnitMoverSystem : ISystem {
     [BurstCompile]
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<GridSystem.GridSystemData>();
+        state.RequireForUpdate<SceneDataReference>();
 
         targetPositionPathQueuedComponentLookup = SystemAPI.GetComponentLookup<TargetPositionPathQueued>(false);
         flowFieldPathRequestComponentLookup = SystemAPI.GetComponentLookup<FlowFieldPathRequest>(false);
@@ -35,7 +37,8 @@ partial struct UnitMoverSystem : ISystem {
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state) {
-        GridSystem.GridSystemData gridSystemData = SystemAPI.GetSingleton<GridSystem.GridSystemData>();
+        var gridSystemData = SystemAPI.GetSingleton<GridSystem.GridSystemData>();
+        var sceneData = SystemAPI.GetSingleton<SceneDataReference>();
 
         targetPositionPathQueuedComponentLookup.Update(ref state);
         flowFieldPathRequestComponentLookup.Update(ref state);
@@ -43,51 +46,192 @@ partial struct UnitMoverSystem : ISystem {
         moveOverrideComponentLookup.Update(ref state);
         gridNodeComponentLookup.Update(ref state);
 
-        PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        CollisionWorld collisionWorld = physicsWorldSingleton.CollisionWorld;
+        var physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
+        var collisionWorld = physicsWorldSingleton.CollisionWorld;
 
+        if (sceneData.IsJobSystemOn)
+        {
+            new TargetPositionPathQueuedJob
+            {
+                collisionWorld = collisionWorld,
+                gridNodeSize = gridSystemData.gridNodeSize,
+                width = gridSystemData.width,
+                height = gridSystemData.height,
+                costMap = gridSystemData.costMap,
+                flowFieldFollowerComponentLookup = flowFieldFollowerComponentLookup,
+                flowFieldPathRequestComponentLookup = flowFieldPathRequestComponentLookup,
+                moveOverrideComponentLookup = moveOverrideComponentLookup,
+                targetPositionPathQueuedComponentLookup = targetPositionPathQueuedComponentLookup
+            }.ScheduleParallel();
 
-        TargetPositionPathQueuedJob targetPositionPathQueuedJob = new TargetPositionPathQueuedJob {
-            collisionWorld = collisionWorld,
-            gridNodeSize = gridSystemData.gridNodeSize,
-            width = gridSystemData.width,
-            height = gridSystemData.height,
-            costMap = gridSystemData.costMap,
-            flowFieldFollowerComponentLookup = flowFieldFollowerComponentLookup,
-            flowFieldPathRequestComponentLookup = flowFieldPathRequestComponentLookup,
-            moveOverrideComponentLookup = moveOverrideComponentLookup,
-            targetPositionPathQueuedComponentLookup = targetPositionPathQueuedComponentLookup
-        };
-        targetPositionPathQueuedJob.ScheduleParallel();
+            new TestCanMoveStraightJob
+            {
+                collisionWorld = collisionWorld,
+                flowFieldFollowerComponentLookup = flowFieldFollowerComponentLookup,
+            }.ScheduleParallel();
 
+            new FlowFieldFollowerJob
+            {
+                width = gridSystemData.width,
+                height = gridSystemData.height,
+                gridNodeSize = gridSystemData.gridNodeSize,
+                gridNodeSizeDouble = gridSystemData.gridNodeSize * 2f,
+                flowFieldFollowerComponentLookup = flowFieldFollowerComponentLookup,
+                totalGridMapEntityArray = gridSystemData.totalGridMapEntityArray,
+                gridNodeComponentLookup = gridNodeComponentLookup,
+            }.ScheduleParallel();
 
-        TestCanMoveStraightJob testCanMoveStraightJob = new TestCanMoveStraightJob {
-            collisionWorld = collisionWorld, 
-            flowFieldFollowerComponentLookup = flowFieldFollowerComponentLookup,
-        };
-        testCanMoveStraightJob.ScheduleParallel();
+            new UnitMoverJob
+            {
+                deltaTime = SystemAPI.Time.DeltaTime,
+            }.ScheduleParallel();
+        }
+        else
+        {
+            foreach (var (unitMover, localTransform, entity) in SystemAPI
+                         .Query<RefRW<UnitMover>, RefRW<LocalTransform>>().WithEntityAccess())
+            {
+                float3 moveDir = unitMover.ValueRW.targetPosition - localTransform.ValueRO.Position;
 
+                if (math.lengthsq(moveDir) <= TARGET_POSITION_DIFF_DISTANCE_SQ)
+                {
+                    unitMover.ValueRW.isMoving = false;
+                    if (SystemAPI.HasComponent<PhysicsVelocity>(entity))
+                    {
+                        SystemAPI.SetComponent(entity,
+                            new PhysicsVelocity { Linear = float3.zero, Angular = float3.zero });
+                    }
 
+                    continue;
+                }
 
-        FlowFieldFollowerJob flowFieldFollowerJob = new FlowFieldFollowerJob {
-            width = gridSystemData.width,
-            height = gridSystemData.height,
-            gridNodeSize = gridSystemData.gridNodeSize,
-            gridNodeSizeDouble = gridSystemData.gridNodeSize * 2f,
-            flowFieldFollowerComponentLookup = flowFieldFollowerComponentLookup,
-            totalGridMapEntityArray = gridSystemData.totalGridMapEntityArray,
-            gridNodeComponentLookup = gridNodeComponentLookup,
-        };
-        flowFieldFollowerJob.ScheduleParallel();
+                moveDir = math.normalize(moveDir);
+                unitMover.ValueRW.isMoving = true;
 
+                quaternion targetRot = quaternion.LookRotation(moveDir, math.up());
+                localTransform.ValueRW.Rotation = math.slerp(localTransform.ValueRO.Rotation, targetRot,
+                    SystemAPI.Time.DeltaTime * unitMover.ValueRO.rotationSpeed);
 
-        UnitMoverJob unitMoverJob = new UnitMoverJob {
-            deltaTime = SystemAPI.Time.DeltaTime,
-        };
-        unitMoverJob.ScheduleParallel();
+                if (SystemAPI.HasComponent<PhysicsVelocity>(entity))
+                {
+                    SystemAPI.SetComponent(entity, new PhysicsVelocity
+                    {
+                        Linear = moveDir * unitMover.ValueRO.moveSpeed,
+                        Angular = float3.zero
+                    });
+                }
+            }
+
+            foreach (var (unitMover, localTransform, entity) in SystemAPI
+                         .Query<RefRW<UnitMover>, RefRO<LocalTransform>>()
+                         .WithAll<TargetPositionPathQueued>()
+                         .WithEntityAccess())
+            {
+                float3 targetPos = targetPositionPathQueuedComponentLookup[entity].targetPosition;
+
+                RaycastInput raycastInput = new RaycastInput
+                {
+                    Start = localTransform.ValueRO.Position,
+                    End = targetPos,
+                    Filter = new CollisionFilter
+                    {
+                        BelongsTo = ~0u,
+                        CollidesWith = 1u << GameAssets.PATHFINDING_WALLS,
+                        GroupIndex = 0
+                    }
+                };
+
+                if (!collisionWorld.CastRay(raycastInput))
+                {
+                    unitMover.ValueRW.targetPosition = targetPos;
+                    SystemAPI.SetComponentEnabled<FlowFieldPathRequest>(entity, false);
+                    SystemAPI.SetComponentEnabled<FlowFieldFollower>(entity, false);
+                }
+                else
+                {
+                    if (moveOverrideComponentLookup.HasComponent(entity))
+                        moveOverrideComponentLookup.SetComponentEnabled(entity, false);
+
+                    if (GridSystem.IsValidWalkableGridPosition(targetPos, gridSystemData.width, gridSystemData.height,
+                            gridSystemData.costMap, gridSystemData.gridNodeSize))
+                    {
+                        var pathRequest = flowFieldPathRequestComponentLookup[entity];
+                        pathRequest.targetPosition = targetPos;
+                        flowFieldPathRequestComponentLookup[entity] = pathRequest;
+                        flowFieldPathRequestComponentLookup.SetComponentEnabled(entity, true);
+                    }
+                    else
+                    {
+                        unitMover.ValueRW.targetPosition = localTransform.ValueRO.Position;
+                        flowFieldPathRequestComponentLookup.SetComponentEnabled(entity, false);
+                        flowFieldFollowerComponentLookup.SetComponentEnabled(entity, false);
+                    }
+                }
+
+                targetPositionPathQueuedComponentLookup.SetComponentEnabled(entity, false);
+            }
+
+            foreach (var (unitMover, localTransform, entity) in SystemAPI
+                         .Query<RefRW<UnitMover>, RefRO<LocalTransform>>()
+                         .WithAll<FlowFieldFollower>()
+                         .WithEntityAccess())
+            {
+                FlowFieldFollower follower = flowFieldFollowerComponentLookup[entity];
+                int2 gridPos = GridSystem.GetGridPosition(localTransform.ValueRO.Position, gridSystemData.gridNodeSize);
+                int index = GridSystem.CalculateIndex(gridPos, gridSystemData.width);
+                int total = gridSystemData.width * gridSystemData.height;
+
+                Entity gridNodeEntity = gridSystemData.totalGridMapEntityArray[total * follower.gridIndex + index];
+                var gridNode = gridNodeComponentLookup[gridNodeEntity];
+                float3 moveVector = GridSystem.GetWorldMovementVector(gridNode.vector);
+
+                if (GridSystem.IsWall(gridNode))
+                    moveVector = follower.lastMoveVector;
+                else
+                    follower.lastMoveVector = moveVector;
+
+                float3 targetPos =
+                    GridSystem.GetWorldCenterPosition(gridPos.x, gridPos.y, gridSystemData.gridNodeSize) +
+                    moveVector * (gridSystemData.gridNodeSize * 2f);
+                unitMover.ValueRW.targetPosition = targetPos;
+
+                if (math.distance(localTransform.ValueRO.Position, follower.targetPosition) <
+                    gridSystemData.gridNodeSize)
+                {
+                    unitMover.ValueRW.targetPosition = localTransform.ValueRO.Position;
+                    flowFieldFollowerComponentLookup.SetComponentEnabled(entity, false);
+                }
+
+                flowFieldFollowerComponentLookup[entity] = follower;
+            }
+
+            foreach (var (unitMover, localTransform, entity) in SystemAPI
+                         .Query<RefRW<UnitMover>, RefRO<LocalTransform>>()
+                         .WithAll<FlowFieldFollower>()
+                         .WithEntityAccess())
+            {
+                FlowFieldFollower follower = flowFieldFollowerComponentLookup[entity];
+
+                RaycastInput raycastInput = new RaycastInput
+                {
+                    Start = localTransform.ValueRO.Position,
+                    End = follower.targetPosition,
+                    Filter = new CollisionFilter
+                    {
+                        BelongsTo = ~0u,
+                        CollidesWith = 1u << GameAssets.PATHFINDING_WALLS,
+                        GroupIndex = 0
+                    }
+                };
+
+                if (!collisionWorld.CastRay(raycastInput))
+                {
+                    unitMover.ValueRW.targetPosition = follower.targetPosition;
+                    flowFieldFollowerComponentLookup.SetComponentEnabled(entity, false);
+                }
+            }
+        }
     }
-
-}
 
 
 [BurstCompile]
@@ -230,7 +374,8 @@ public partial struct TestCanMoveStraightJob : IJobEntity {
 
 [BurstCompile]
 [WithAll(typeof(FlowFieldFollower))]
-public partial struct FlowFieldFollowerJob : IJobEntity {
+public partial struct FlowFieldFollowerJob : IJobEntity
+{
 
 
     [NativeDisableParallelForRestriction] public ComponentLookup<FlowFieldFollower> flowFieldFollowerComponentLookup;
@@ -247,8 +392,9 @@ public partial struct FlowFieldFollowerJob : IJobEntity {
     public void Execute(
         in LocalTransform localTransform,
         ref UnitMover unitMover,
-        Entity entity) {
-        
+        Entity entity)
+    {
+
         FlowFieldFollower flowFieldFollower = flowFieldFollowerComponentLookup[entity];
         int2 gridPosition = GridSystem.GetGridPosition(localTransform.Position, gridNodeSize);
         int index = GridSystem.CalculateIndex(gridPosition, width);
@@ -257,9 +403,12 @@ public partial struct FlowFieldFollowerJob : IJobEntity {
         GridSystem.GridNode gridNode = gridNodeComponentLookup[gridNodeEntity];
         float3 gridNodeMoveVector = GridSystem.GetWorldMovementVector(gridNode.vector);
 
-        if (GridSystem.IsWall(gridNode)) {
+        if (GridSystem.IsWall(gridNode))
+        {
             gridNodeMoveVector = flowFieldFollower.lastMoveVector;
-        } else {
+        }
+        else
+        {
             flowFieldFollower.lastMoveVector = gridNodeMoveVector;
         }
 
@@ -268,7 +417,8 @@ public partial struct FlowFieldFollowerJob : IJobEntity {
             gridNodeMoveVector *
             gridNodeSizeDouble;
 
-        if (math.distance(localTransform.Position, flowFieldFollower.targetPosition) < gridNodeSize) {
+        if (math.distance(localTransform.Position, flowFieldFollower.targetPosition) < gridNodeSize)
+        {
             // Target destination
             unitMover.targetPosition = localTransform.Position;
             flowFieldFollowerComponentLookup.SetComponentEnabled(entity, false);
@@ -276,4 +426,5 @@ public partial struct FlowFieldFollowerJob : IJobEntity {
 
         flowFieldFollowerComponentLookup[entity] = flowFieldFollower;
     }
+}
 }

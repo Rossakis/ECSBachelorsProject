@@ -1,24 +1,44 @@
+using ECS.Authoring.Reference;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Rendering;
 
 [UpdateBefore(typeof(ActiveAnimationSystem))]
 partial struct ChangeAnimationSystem : ISystem {
-
-
+    
     [BurstCompile]
     public void OnCreate(ref SystemState state) {
         state.RequireForUpdate<AnimationDataHolder>();
+        state.RequireForUpdate<SceneDataReference>();
     }
 
     [BurstCompile]
     public void OnUpdate(ref SystemState state) {
-        AnimationDataHolder animationDataHolder = SystemAPI.GetSingleton<AnimationDataHolder>();
+        var animationDataHolder = SystemAPI.GetSingleton<AnimationDataHolder>();
+        var animBlob = animationDataHolder.animationDataBlobArrayBlobAssetReference;
 
-        ChangeAnimationJob changeAnimationJob = new ChangeAnimationJob {
-            animationDataBlobArrayBlobAssetReference = animationDataHolder.animationDataBlobArrayBlobAssetReference,
-        };
-        changeAnimationJob.ScheduleParallel();
+        SceneDataReference sceneData = SystemAPI.GetSingleton<SceneDataReference>();
+
+        if (sceneData.IsJobSystemOn) {
+            var job = new ChangeAnimationJob {
+                animationDataBlobArrayBlobAssetReference = animBlob
+            };
+            job.ScheduleParallel();
+        }
+        else {
+            foreach (var (activeAnim, meshInfo) in SystemAPI.Query<RefRW<ActiveAnimation>, RefRW<MaterialMeshInfo>>()) {
+                if (AnimationDataSO.IsAnimationUninterruptible(activeAnim.ValueRO.activeAnimationType)) continue;
+
+                if (activeAnim.ValueRO.activeAnimationType != activeAnim.ValueRO.nextAnimationType) {
+                    activeAnim.ValueRW.frame = 0;
+                    activeAnim.ValueRW.frameTimer = 0f;
+                    activeAnim.ValueRW.activeAnimationType = activeAnim.ValueRW.nextAnimationType;
+
+                    ref var animData = ref animBlob.Value[(int)activeAnim.ValueRO.activeAnimationType];
+                    meshInfo.ValueRW.Mesh = animData.intMeshIdBlobArray[0];
+                }
+            }
+        }
     }
 
 
