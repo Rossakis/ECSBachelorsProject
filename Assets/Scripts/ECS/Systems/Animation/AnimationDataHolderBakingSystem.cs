@@ -37,12 +37,6 @@ partial struct AnimationDataHolderBakingSystem : ISystem {
             blobAssetDataDictionary[animationDataHolderSubEntity.ValueRO.animationType]
                 [animationDataHolderSubEntity.ValueRO.meshIndex] =
                     materialMeshInfo.ValueRO.Mesh;
-
-            /*
-            Debug.Log(animationDataHolderSubEntity.ValueRO.animationType + 
-                " :: " + animationDataHolderSubEntity.ValueRO.meshIndex + 
-                " = " + materialMeshInfo.ValueRO.Mesh);
-            */
         }
 
 

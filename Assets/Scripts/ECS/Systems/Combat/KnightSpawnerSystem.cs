@@ -40,7 +40,7 @@ partial struct KnightSpawnerSystem : ISystem {
             distanceHitList.Clear();
             CollisionFilter collisionFilter = new CollisionFilter {
                 BelongsTo = ~0u,
-                CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u << GameAssets.PATHFINDING_WALLS,
+                CollidesWith = 1u << GameAssets.UNITS_LAYER,
                 GroupIndex = 0,
             };
 
@@ -68,13 +68,13 @@ partial struct KnightSpawnerSystem : ISystem {
             Entity knightEntity = state.EntityManager.Instantiate(entitiesReferences.knightPrefabEntity);
             SystemAPI.SetComponent(knightEntity, LocalTransform.FromPosition(localTransform.ValueRO.Position));
 
-            // entityCommandBuffer.AddComponent(knightEntity, new RandomWalking {
-            //     originPosition = localTransform.ValueRO.Position,
-            //     targetPosition = localTransform.ValueRO.Position,
-            //     distanceMin = knightSpawner.ValueRO.randomWalkingDistanceMin,
-            //     distanceMax = knightSpawner.ValueRO.randomWalkingDistanceMax,
-            //     random = new Unity.Mathematics.Random((uint)knightEntity.Index),
-            // });
+            entityCommandBuffer.AddComponent(knightEntity, new RandomWalking {
+                originPosition = localTransform.ValueRO.Position,
+                targetPosition = localTransform.ValueRO.Position,
+                distanceMin = knightSpawner.ValueRO.randomWalkingDistanceMin,
+                distanceMax = knightSpawner.ValueRO.randomWalkingDistanceMax,
+                random = new Unity.Mathematics.Random((uint)knightEntity.Index),
+            });
             
         }
     }

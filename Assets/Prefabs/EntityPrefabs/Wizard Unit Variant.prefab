@@ -11,12 +11,17 @@ PrefabInstance:
     - target: {fileID: 1600892676932902699, guid: af8d0caa312f74541b4a546c1872f3b6,
         type: 3}
       propertyPath: range
-      value: 15
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1600892676932902699, guid: af8d0caa312f74541b4a546c1872f3b6,
         type: 3}
       propertyPath: targetFaction
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3155524963276268500, guid: af8d0caa312f74541b4a546c1872f3b6,
+        type: 3}
+      propertyPath: loseTargetDistance
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 3322482028285335940, guid: af8d0caa312f74541b4a546c1872f3b6,
         type: 3}
