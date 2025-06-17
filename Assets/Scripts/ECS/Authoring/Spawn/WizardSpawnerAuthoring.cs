@@ -1,16 +1,13 @@
 ﻿using Unity.Entities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ECS.Authoring.Combat
 {
     public class WizardSpawnerAuthoring : MonoBehaviour
     {
-        public bool HasSpawned;
-        
-        [SerializeField] private int maxUnitsToSpawn;
-        [SerializeField] private float spawnRadius;
-        [SerializeField] private float minDistanceBetweenUnits;
+        public EcsSceneDataSO sceneData;
+        public float spawnRadius;
+        public float minDistanceBetweenUnits;
         
         private class WizardSpawnerAuthoringBaker : Baker<WizardSpawnerAuthoring>
         {
@@ -18,10 +15,10 @@ namespace ECS.Authoring.Combat
             {
                 Entity entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new WizardSpawner() {
-                    maxUnitsToSpawn = authoring.maxUnitsToSpawn,
+                    maxUnitsToSpawn = authoring.sceneData.WizardsAmountToSpawn,
                     spawnRadius = authoring.spawnRadius,
                     minDistanceBetweenUnits = authoring.minDistanceBetweenUnits,
-                    hasSpawned = authoring.HasSpawned
+                    hasSpawned = false
                 });
             }
         }

@@ -1,44 +1,36 @@
-using Unity.Entities;
+﻿using Unity.Entities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-public class KnightSpawnerAuthoring : MonoBehaviour
+namespace ECS.Authoring.Combat
 {
-
-    [SerializeField] private float timer;
-    [SerializeField] private float timerMax;
-    [SerializeField] private float randomWalkingDistanceMin;
-    [SerializeField] private float randomWalkingDistanceMax;
-    [SerializeField] private int nearbyKnightAmountMax;
-    [SerializeField] private float nearbyKnightAmountDistance;
-
-
-    public class Baker : Baker<KnightSpawnerAuthoring> {
-
-        public override void Bake(KnightSpawnerAuthoring authoring) {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new KnightSpawner {
-                timer = authoring.timer,
-                timerMax = authoring.timerMax,
-                randomWalkingDistanceMin = authoring.randomWalkingDistanceMin,
-                randomWalkingDistanceMax = authoring.randomWalkingDistanceMax,
-                nearbyKnightAmountMax = authoring.nearbyKnightAmountMax,
-                nearbyKnightAmountDistance = authoring.nearbyKnightAmountDistance,
-            });
+    public class KnightSpawnerAuthoring : MonoBehaviour
+    {
+        public EcsSceneDataSO sceneData;
+        public float spawnRadius;
+        public float minDistanceBetweenUnits;
+        
+        private class KnightSpawnerAuthoringBaker : Baker<KnightSpawnerAuthoring>
+        {
+            public override void Bake(KnightSpawnerAuthoring authoring)
+            {
+                Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new WizardSpawner() {
+                    maxUnitsToSpawn = authoring.sceneData.KnightsAmountToSpawn,
+                    spawnRadius = authoring.spawnRadius,
+                    minDistanceBetweenUnits = authoring.minDistanceBetweenUnits,
+                    hasSpawned = false
+                });
+            }
         }
     }
-
-
-}
-
-
-public struct KnightSpawner : IComponentData {
-
-    public float timer;
-    public float timerMax;
-    public float randomWalkingDistanceMin;
-    public float randomWalkingDistanceMax;
-    public int nearbyKnightAmountMax;
-    public float nearbyKnightAmountDistance;
-
+    
+    
+    public struct KnightSpawner : IComponentData {
+        
+        public int maxUnitsToSpawn;
+        public float spawnRadius;
+        public float minDistanceBetweenUnits;
+        public bool hasSpawned;
+        
+    }
 }

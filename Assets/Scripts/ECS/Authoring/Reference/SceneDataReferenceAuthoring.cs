@@ -16,8 +16,14 @@ namespace ECS.Authoring.Reference
                 AddComponent(entity, new SceneDataReference {
                     IsJobSystemOn = authoring.ecsSceneDataSO.IsJobSystemOn,
                     IsObjectPoolingOn = authoring.ecsSceneDataSO.IsObjectPoolingOn,
+                    
                     WizardsAmountToSpawn = authoring.ecsSceneDataSO.WizardsAmountToSpawn,
+                    WizardMaxHealth = authoring.ecsSceneDataSO.WizardMaxHealth,
+                    WizardDamage = authoring.ecsSceneDataSO.WizardDamage,
+                    
                     KnightsAmountToSpawn = authoring.ecsSceneDataSO.KnightsAmountToSpawn,
+                    KnightMaxHealth = authoring.ecsSceneDataSO.KnightMaxHealth,
+                    KnightDamage = authoring.ecsSceneDataSO.KnightDamage
                 });
             }
         }
@@ -27,7 +33,13 @@ namespace ECS.Authoring.Reference
     {
         public bool IsJobSystemOn;
         public bool IsObjectPoolingOn;
+        
         public int WizardsAmountToSpawn;
+        public int WizardMaxHealth;
+        public int WizardDamage;
+
         public int KnightsAmountToSpawn;
+        public int KnightMaxHealth;
+        public int KnightDamage;
     }
 }

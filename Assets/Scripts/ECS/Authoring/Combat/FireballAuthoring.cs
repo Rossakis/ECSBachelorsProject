@@ -4,24 +4,19 @@ using UnityEngine;
 
 public class FireballAuthoring : MonoBehaviour {
 
-
-    [SerializeField] private float speed;
-    [SerializeField] private int damageAmount;
-
+    public EcsSceneDataSO sceneData;
+    public float speed;
 
     public class Baker : Baker<FireballAuthoring> {
-
-
+        
         public override void Bake(FireballAuthoring authoring) {
             Entity entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new Fireball {
                 speed = authoring.speed,
-                damageAmount = authoring.damageAmount,
+                damageAmount = authoring.sceneData.WizardDamage,
             });
         }
-
     }
-
 }
 
 

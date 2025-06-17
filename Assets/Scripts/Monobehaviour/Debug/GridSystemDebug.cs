@@ -21,7 +21,7 @@ public class GridSystemDebug : MonoBehaviour {
         Instance = this;
     }
 
-    public void InitializeGrid(GridSystem.GridSystemData gridSystemData) {
+    public void InitializeGrid(ECS.Systems.Navigation.GridSystem.GridSystemData gridSystemData) {
         if (isInit) {
             return;
         }
@@ -39,26 +39,26 @@ public class GridSystemDebug : MonoBehaviour {
         }
     }
 
-    public void UpdateGrid(GridSystem.GridSystemData gridSystemData) {
+    public void UpdateGrid(ECS.Systems.Navigation.GridSystem.GridSystemData gridSystemData) {
         for (int x = 0; x < gridSystemData.width; x++) {
             for (int y = 0; y < gridSystemData.height; y++) {
                 GridSystemDebugSingle gridSystemDebugSingle = gridSystemDebugSingleArray[x, y];
 
                 EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-                int index = GridSystem.CalculateIndex(x, y, gridSystemData.width);
+                int index = ECS.Systems.Navigation.GridSystem.CalculateIndex(x, y, gridSystemData.width);
                 int gridIndex = gridSystemData.nextGridIndex - 1;
                 if (gridIndex < 0) {
                     gridIndex = 0;
                 }
                 Entity gridNodeEntity = gridSystemData.gridMapArray[gridIndex].gridEntityArray[index];
-                GridSystem.GridNode gridNode = entityManager.GetComponentData<GridSystem.GridNode>(gridNodeEntity);
+                ECS.Systems.Navigation.GridSystem.GridNode gridNode = entityManager.GetComponentData<ECS.Systems.Navigation.GridSystem.GridNode>(gridNodeEntity);
 
                 if (gridNode.cost == 0) {
                     // This is the target
                     gridSystemDebugSingle.SetSprite(circleSprite);
                     gridSystemDebugSingle.SetColor(Color.green);
                 } else {
-                    if (gridNode.cost == GridSystem.WALL_COST) {
+                    if (gridNode.cost == ECS.Systems.Navigation.GridSystem.WALL_COST) {
                         gridSystemDebugSingle.SetSprite(circleSprite);
                         gridSystemDebugSingle.SetColor(Color.black);
                     } else {

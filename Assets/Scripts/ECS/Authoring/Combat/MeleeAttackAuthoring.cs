@@ -2,12 +2,10 @@ using Unity.Entities;
 using UnityEngine;
 
 public class MeleeAttackAuthoring : MonoBehaviour {
-
-
+    
+    public EcsSceneDataSO sceneData;
     public float timerMax;
-    public int damageAmount;
     public float colliderSize;
-
 
     public class Baker : Baker<MeleeAttackAuthoring> {
 
@@ -15,7 +13,7 @@ public class MeleeAttackAuthoring : MonoBehaviour {
             Entity entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent(entity, new MeleeAttack {
                 timerMax = authoring.timerMax,
-                damageAmount = authoring.damageAmount,
+                damageAmount = authoring.sceneData.KnightDamage,
                 colliderSize = authoring.colliderSize,
             });
         }

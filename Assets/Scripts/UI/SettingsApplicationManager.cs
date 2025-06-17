@@ -13,8 +13,17 @@ namespace UI
         public EcsSceneDataSO ECSSceneDataSO;
         public Toggle IsJobsSystemOn;
         public Toggle IsObjectPoolingOn;
-        public TMP_InputField ECSWizardsInputField;
+        
+        [Header("ECS Wizards-Settings")]
+        public TMP_InputField ECSWizardsAmountInputField;
+        public TMP_InputField ECSWizardsHPInputField;
+        public TMP_InputField ECSWizardsDamageInputField;
+        
+        [Header("ECS Knights-Settings")]
         public TMP_InputField ECSKnightsInputField;
+        public TMP_InputField ECSKnightsHPInputField;
+        public TMP_InputField ECSKnightsDamageInputField;
+
     
         [Header("Mono Settings")]
         public MonoSceneDataSO MonoSceneDataSO;
@@ -32,31 +41,67 @@ namespace UI
 
         public void ApplyECSSettings()
         {
-            if (!int.TryParse(ECSWizardsInputField.text, out int wizards) || wizards <= 0)
+            // Wizards
+            if (!int.TryParse(ECSWizardsAmountInputField.text, out int wizardAmount) || wizardAmount <= 0)
             {
                 string errorMsg = "Number of Wizards must be greater than zero.";
                 panelSwitchManager.SwitchToErrorPanel(errorMsg);
                 return;
             }
+            
+            if (!int.TryParse(ECSWizardsHPInputField.text, out int wizardHP) || wizardHP <= 0)
+            {
+                string errorMsg = "Health of  Wizards must be greater than zero.";
+                panelSwitchManager.SwitchToErrorPanel(errorMsg);
+                return;
+            }
+            
+            if (!int.TryParse(ECSWizardsDamageInputField.text, out int wizardDamage) || wizardDamage <= 0)
+            {
+                string errorMsg = "Damage of Wizards must be greater than zero.";
+                panelSwitchManager.SwitchToErrorPanel(errorMsg);
+                return;
+            }
 
-            if (!int.TryParse(ECSKnightsInputField.text, out int knights) || knights <= 0)
+            // Knights
+            if (!int.TryParse(ECSKnightsInputField.text, out int knightsAmount) || knightsAmount <= 0)
             {
                 string errorMsg = "Number of Knights must be greater than zero.";
+                panelSwitchManager.SwitchToErrorPanel(errorMsg);
+                return;
+            }
+            
+            if (!int.TryParse(ECSKnightsHPInputField.text, out int knightsHP) || knightsHP <= 0)
+            {
+                string errorMsg = "Health of  Wizards must be greater than zero.";
+                panelSwitchManager.SwitchToErrorPanel(errorMsg);
+                return;
+            }
+            
+            if (!int.TryParse(ECSKnightsDamageInputField.text, out int knightsDamage) || knightsDamage <= 0)
+            {
+                string errorMsg = "Damage of Wizards must be greater than zero.";
                 panelSwitchManager.SwitchToErrorPanel(errorMsg);
                 return;
             }
 
             ECSSceneDataSO.IsJobSystemOn = IsJobsSystemOn.isOn;
             ECSSceneDataSO.IsObjectPoolingOn = IsObjectPoolingOn.isOn;
-            ECSSceneDataSO.WizardsAmountToSpawn = wizards;
-            ECSSceneDataSO.KnightsAmountToSpawn = knights;
+            
+            ECSSceneDataSO.WizardsAmountToSpawn = wizardAmount;
+            ECSSceneDataSO.WizardMaxHealth = wizardHP;
+            ECSSceneDataSO.WizardDamage = knightsAmount;
+            
+            ECSSceneDataSO.KnightsAmountToSpawn = knightsAmount;
+            ECSSceneDataSO.KnightMaxHealth = knightsHP;
+            ECSSceneDataSO.KnightDamage = knightsDamage;
 
             sceneLoader.LoadEcsScene();
         }
     
         public void ApplyMonoSettings()
         {
-            if (!int.TryParse(ECSWizardsInputField.text, out int wizards) || wizards <= 0)
+            if (!int.TryParse(ECSWizardsAmountInputField.text, out int wizards) || wizards <= 0)
             {
                 string errorMsg = "Number of Wizards must be greater than zero.";
                 panelSwitchManager.SwitchToErrorPanel(errorMsg);

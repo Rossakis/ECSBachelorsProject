@@ -1,85 +1,86 @@
-using UnityEngine;
-using Unity.Burst;
-using Unity.Entities;
-using Unity.Rendering;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.Entities;
+using Unity.Rendering;
 
-[WorldSystemFilter(WorldSystemFilterFlags.BakingSystem)]
-[UpdateInGroup(typeof(PostBakingSystemGroup))]
-partial struct AnimationDataHolderBakingSystem : ISystem {
+namespace ECS.Systems.Animation
+{
+    [WorldSystemFilter(WorldSystemFilterFlags.BakingSystem)]
+    [UpdateInGroup(typeof(PostBakingSystemGroup))]
+    partial struct AnimationDataHolderBakingSystem : ISystem {
 
 
-    public void OnCreate(ref SystemState state) {
-        state.RequireForUpdate<AnimationDataHolderObjectData>();
-    }
-
-    public void OnUpdate(ref SystemState state) {
-        AnimationDataListSO animationDataListSO = null;
-        foreach (RefRO<AnimationDataHolderObjectData> animationDataHolderObjectData in SystemAPI.Query<RefRO<AnimationDataHolderObjectData>>()) {
-            animationDataListSO = animationDataHolderObjectData.ValueRO.animationDataListSO.Value;
+        public void OnCreate(ref SystemState state) {
+            state.RequireForUpdate<AnimationDataHolderObjectData>();
         }
 
-        Dictionary<AnimationDataSO.AnimationType, int[]> blobAssetDataDictionary = new Dictionary<AnimationDataSO.AnimationType, int[]>();
-
-        foreach (AnimationDataSO.AnimationType animationType in System.Enum.GetValues(typeof(AnimationDataSO.AnimationType))) {
-            AnimationDataSO animationDataSO = animationDataListSO.GetAnimationDataSO(animationType);
-            blobAssetDataDictionary[animationType] = new int[animationDataSO.meshArray.Length];
-        }
-
-        foreach ((
-            RefRO<AnimationDataHolderSubEntity> animationDataHolderSubEntity,
-            RefRO<MaterialMeshInfo> materialMeshInfo)
-            in SystemAPI.Query<
-                RefRO<AnimationDataHolderSubEntity>,
-                RefRO<MaterialMeshInfo>>()) {
-
-            blobAssetDataDictionary[animationDataHolderSubEntity.ValueRO.animationType]
-                [animationDataHolderSubEntity.ValueRO.meshIndex] =
-                    materialMeshInfo.ValueRO.Mesh;
-        }
-
-
-        foreach (RefRW<AnimationDataHolder> animationDataHolder in SystemAPI.Query<RefRW<AnimationDataHolder>>()) {
-
-            BlobBuilder blobBuilder = new BlobBuilder(Allocator.Temp);
-            ref BlobArray<AnimationData> animationDataBlobArray = ref blobBuilder.ConstructRoot<BlobArray<AnimationData>>();
-
-            BlobBuilderArray<AnimationData> animationDataBlobBuilderArray =
-                blobBuilder.Allocate<AnimationData>(ref animationDataBlobArray, System.Enum.GetValues(typeof(AnimationDataSO.AnimationType)).Length);
-
-
-            int index = 0;
-            foreach (AnimationDataSO.AnimationType animationType in System.Enum.GetValues(typeof(AnimationDataSO.AnimationType))) {
-                AnimationDataSO animationDataSO = animationDataListSO.GetAnimationDataSO(animationType);
-
-                BlobBuilderArray<int> blobBuilderArray =
-                    blobBuilder.Allocate<int>(ref animationDataBlobBuilderArray[index].intMeshIdBlobArray, 
-                        animationDataSO.meshArray.Length);
-
-                animationDataBlobBuilderArray[index].frameTimerMax = animationDataSO.frameTimerMax;
-                animationDataBlobBuilderArray[index].frameMax = animationDataSO.meshArray.Length;
-
-                for (int i = 0; i < animationDataSO.meshArray.Length; i++) {
-                    blobBuilderArray[i] = blobAssetDataDictionary[animationType][i];
-                }
-
-                index++;
+        public void OnUpdate(ref SystemState state) {
+            AnimationDataListSO animationDataListSO = null;
+            foreach (RefRO<AnimationDataHolderObjectData> animationDataHolderObjectData in SystemAPI.Query<RefRO<AnimationDataHolderObjectData>>()) {
+                animationDataListSO = animationDataHolderObjectData.ValueRO.animationDataListSO.Value;
             }
 
-            animationDataHolder.ValueRW.animationDataBlobArrayBlobAssetReference = 
-                blobBuilder.CreateBlobAssetReference<BlobArray<AnimationData>>(Allocator.Persistent);
+            Dictionary<AnimationDataSO.AnimationType, int[]> blobAssetDataDictionary = new Dictionary<AnimationDataSO.AnimationType, int[]>();
 
-            blobBuilder.Dispose();
+            foreach (AnimationDataSO.AnimationType animationType in System.Enum.GetValues(typeof(AnimationDataSO.AnimationType))) {
+                AnimationDataSO animationDataSO = animationDataListSO.GetAnimationDataSO(animationType);
+                blobAssetDataDictionary[animationType] = new int[animationDataSO.meshArray.Length];
+            }
+
+            foreach ((
+                         RefRO<AnimationDataHolderSubEntity> animationDataHolderSubEntity,
+                         RefRO<MaterialMeshInfo> materialMeshInfo)
+                     in SystemAPI.Query<
+                         RefRO<AnimationDataHolderSubEntity>,
+                         RefRO<MaterialMeshInfo>>()) {
+
+                blobAssetDataDictionary[animationDataHolderSubEntity.ValueRO.animationType]
+                        [animationDataHolderSubEntity.ValueRO.meshIndex] =
+                    materialMeshInfo.ValueRO.Mesh;
+            }
+
+
+            foreach (RefRW<AnimationDataHolder> animationDataHolder in SystemAPI.Query<RefRW<AnimationDataHolder>>()) {
+
+                BlobBuilder blobBuilder = new BlobBuilder(Allocator.Temp);
+                ref BlobArray<AnimationData> animationDataBlobArray = ref blobBuilder.ConstructRoot<BlobArray<AnimationData>>();
+
+                BlobBuilderArray<AnimationData> animationDataBlobBuilderArray =
+                    blobBuilder.Allocate<AnimationData>(ref animationDataBlobArray, System.Enum.GetValues(typeof(AnimationDataSO.AnimationType)).Length);
+
+
+                int index = 0;
+                foreach (AnimationDataSO.AnimationType animationType in System.Enum.GetValues(typeof(AnimationDataSO.AnimationType))) {
+                    AnimationDataSO animationDataSO = animationDataListSO.GetAnimationDataSO(animationType);
+
+                    BlobBuilderArray<int> blobBuilderArray =
+                        blobBuilder.Allocate<int>(ref animationDataBlobBuilderArray[index].intMeshIdBlobArray, 
+                            animationDataSO.meshArray.Length);
+
+                    animationDataBlobBuilderArray[index].frameTimerMax = animationDataSO.frameTimerMax;
+                    animationDataBlobBuilderArray[index].frameMax = animationDataSO.meshArray.Length;
+
+                    for (int i = 0; i < animationDataSO.meshArray.Length; i++) {
+                        blobBuilderArray[i] = blobAssetDataDictionary[animationType][i];
+                    }
+
+                    index++;
+                }
+
+                animationDataHolder.ValueRW.animationDataBlobArrayBlobAssetReference = 
+                    blobBuilder.CreateBlobAssetReference<BlobArray<AnimationData>>(Allocator.Persistent);
+
+                blobBuilder.Dispose();
+            }
         }
-    }
 
 
 
-    public void OnDestroy(ref SystemState state) {
-        foreach (RefRW<AnimationDataHolder> animationDataHolder in SystemAPI.Query<RefRW<AnimationDataHolder>>()) {
-            animationDataHolder.ValueRW.animationDataBlobArrayBlobAssetReference.Dispose();
+        public void OnDestroy(ref SystemState state) {
+            foreach (RefRW<AnimationDataHolder> animationDataHolder in SystemAPI.Query<RefRW<AnimationDataHolder>>()) {
+                animationDataHolder.ValueRW.animationDataBlobArrayBlobAssetReference.Dispose();
+            }
         }
-    }
 
+    }
 }

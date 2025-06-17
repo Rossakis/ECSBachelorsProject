@@ -14,7 +14,7 @@ public class GridSystemDebugSingle : MonoBehaviour {
         this.x = x;
         this.y = y;
 
-        transform.position = GridSystem.GetWorldPosition(x, y, gridNodeSize);
+        transform.position = ECS.Systems.Navigation.GridSystem.GetWorldPosition(x, y, gridNodeSize);
     }
 
 
