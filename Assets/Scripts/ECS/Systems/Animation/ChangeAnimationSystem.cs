@@ -49,10 +49,8 @@ namespace ECS.Systems.Animation
 
     [BurstCompile]
     public partial struct ChangeAnimationJob : IJobEntity {
-
-
+        
         public BlobAssetReference<BlobArray<AnimationData>> animationDataBlobArrayBlobAssetReference;
-
 
         public void Execute(ref ActiveAnimation activeAnimation, ref MaterialMeshInfo materialMeshInfo) {
             if (AnimationDataSO.IsAnimationUninterruptible(activeAnimation.activeAnimationType)) {

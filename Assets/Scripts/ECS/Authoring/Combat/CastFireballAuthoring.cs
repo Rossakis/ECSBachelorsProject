@@ -3,13 +3,11 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class CastFireballAuthoring : MonoBehaviour {
-
-
+    
     public float timerMax;
     public int damageAmount;
     public float attackDistance;
-    public Transform bulletspawnPositionTransform;
-
+    public Transform fireballSpawnPositionTransform;
 
     public class Baker : Baker<CastFireballAuthoring> {
         public override void Bake(CastFireballAuthoring authoring) {
@@ -18,16 +16,11 @@ public class CastFireballAuthoring : MonoBehaviour {
                 timerMax = authoring.timerMax,
                 damageAmount = authoring.damageAmount,
                 attackDistance = authoring.attackDistance,
-                fireballSpawnLocalPosition = authoring.bulletspawnPositionTransform.localPosition,
+                fireballSpawnLocalPosition = authoring.fireballSpawnPositionTransform.localPosition,
             });
         }
-
-
     }
-
-
 }
-
 
 
 public struct CastFireball : IComponentData {

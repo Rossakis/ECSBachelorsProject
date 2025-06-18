@@ -28,7 +28,7 @@ namespace ECS.Systems.Animation
                 idleJob.ScheduleParallel();
 
                 activeAnimationComponentLookup.Update(ref state);
-                var readyJob = new ReadySpellAnimationStateJob {
+                var readyJob = new CastFireballAnimationStateJob {
                     activeAnimationComponentLookup = activeAnimationComponentLookup,
                 };
                 readyJob.ScheduleParallel();
@@ -44,24 +44,30 @@ namespace ECS.Systems.Animation
                     RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
                     activeAnimation.ValueRW.nextAnimationType = unitMover.isMoving ? unitAnimations.walkAnimationType : unitAnimations.idleAnimationType;
                 }
-
                 activeAnimationComponentLookup.Update(ref state);
-                foreach (var (animatedMesh, castFireball, unitMover, target, unitAnimations) in SystemAPI.Query<AnimatedMesh, CastFireball, UnitMover, Target, UnitAnimations>()) {
-                    if (!unitMover.isMoving && target.targetEntity != Entity.Null) {
-                        RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
-                        activeAnimation.ValueRW.nextAnimationType = unitAnimations.readySpellAnimationType;
-                    }
+                
+                foreach (var (animatedMesh, castFireball, unitAnimations) in SystemAPI.Query<AnimatedMesh, CastFireball, UnitAnimations>()) {
                     if (castFireball.onShoot.isTriggered) {
                         RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
                         activeAnimation.ValueRW.nextAnimationType = unitAnimations.castFireballAnimationType;
                     }
                 }
-
                 activeAnimationComponentLookup.Update(ref state);
-                foreach (var (animatedMesh, meleeAttack, unitAnimations) in SystemAPI.Query<AnimatedMesh, MeleeAttack, UnitAnimations>()) {
-                    if (meleeAttack.onAttacked) {
+                
+                foreach (var (animatedMesh, meleeAttack, unitAnimations) in SystemAPI.Query<AnimatedMesh, RefRW<MeleeAttack>, UnitAnimations>()) {
+                    if (meleeAttack.ValueRO.OnAttack) {
                         RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
+                        
+                        // Animation finished, reset OnAttack
+                        if (activeAnimation.ValueRO.activeAnimationType == AnimationDataSO.AnimationType.KnightAttack &&
+                            activeAnimation.ValueRO.frame == meleeAttack.ValueRO.lastFrameAttack && // Animation looped back to start
+                            AnimationDataSO.IsAnimationUninterruptible(activeAnimation.ValueRO.activeAnimationType))
+                        {
+                            meleeAttack.ValueRW.OnAttack = false;
+                        }
+                        
                         activeAnimation.ValueRW.nextAnimationType = unitAnimations.knightAttackAnimationType;
+                        activeAnimationComponentLookup.Update(ref state);
                     }
                 }
             }
@@ -86,16 +92,11 @@ namespace ECS.Systems.Animation
 
 
     [BurstCompile]
-    public partial struct ReadySpellAnimationStateJob : IJobEntity {
+    public partial struct CastFireballAnimationStateJob : IJobEntity {
 
         [NativeDisableParallelForRestriction] public ComponentLookup<ActiveAnimation> activeAnimationComponentLookup;
 
         public void Execute(in AnimatedMesh animatedMesh, in CastFireball castFireball, in UnitMover unitMover, in Target target, in UnitAnimations unitAnimations) {
-            if (!unitMover.isMoving && target.targetEntity != Entity.Null) {
-                RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
-                activeAnimation.ValueRW.nextAnimationType = unitAnimations.readySpellAnimationType;
-            }
-
             if (castFireball.onShoot.isTriggered) {
                 RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
                 activeAnimation.ValueRW.nextAnimationType = unitAnimations.castFireballAnimationType;
@@ -110,9 +111,18 @@ namespace ECS.Systems.Animation
 
         [NativeDisableParallelForRestriction] public ComponentLookup<ActiveAnimation> activeAnimationComponentLookup;
 
-        public void Execute(in AnimatedMesh animatedMesh, in MeleeAttack meleeAttack, in UnitAnimations unitAnimations) {
-            if (meleeAttack.onAttacked) {
+        public void Execute(in AnimatedMesh animatedMesh, ref MeleeAttack meleeAttack, in UnitAnimations unitAnimations) {
+            if (meleeAttack.OnAttack) {
                 RefRW<ActiveAnimation> activeAnimation = activeAnimationComponentLookup.GetRefRW(animatedMesh.meshEntity);
+                
+                // Animation finished, reset OnAttack
+                if (activeAnimation.ValueRO.activeAnimationType == AnimationDataSO.AnimationType.KnightAttack &&
+                    activeAnimation.ValueRO.frame == meleeAttack.lastFrameAttack && // Animation looped back to start
+                    AnimationDataSO.IsAnimationUninterruptible(activeAnimation.ValueRO.activeAnimationType))
+                {
+                    meleeAttack.OnAttack = false;
+                }
+                
                 activeAnimation.ValueRW.nextAnimationType = unitAnimations.knightAttackAnimationType;
             }
         }

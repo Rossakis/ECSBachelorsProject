@@ -19,9 +19,7 @@ public class FunctionTimer {
 
 
     private static List<FunctionTimer> timerList; // Holds a reference to all active timers
-
-    private static GameObject
-        initGameObject; // Global game object used for initializing class, is destroyed on scene change
+    private static GameObject initGameObject; // Global game object used for initializing class, is destroyed on scene change
 
     private static void InitIfNeeded()
     {
@@ -146,10 +144,10 @@ public class FunctionTimer {
         }
     }
 
-
-    /*
-     * Class to trigger Actions manually without creating a GameObject
-     * */
+    
+    /// <summary>
+    /// Class to trigger Actions manually without creating a GameObject
+    /// </summary>
     public class FunctionTimerObject
     {
         private float timer;
@@ -181,7 +179,7 @@ public class FunctionTimer {
         }
     }
 
-    // Create a Object that must be manually updated through Update();
+    // Create an Object that must be manually updated through Update();
     public static FunctionTimerObject CreateObject(Action callback, float timer)
     {
         return new FunctionTimerObject(callback, timer);

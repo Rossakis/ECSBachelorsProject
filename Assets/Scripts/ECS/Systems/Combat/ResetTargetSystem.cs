@@ -8,12 +8,9 @@ namespace ECS.Systems.Combat
 {
     [UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true)]
     partial struct ResetTargetSystem : ISystem {
-
-
         private ComponentLookup<LocalTransform> localTransformComponentLookup;
         private EntityStorageInfoLookup entityStorageInfoLookup;
-
-
+        
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             localTransformComponentLookup = state.GetComponentLookup<LocalTransform>(true);
@@ -66,11 +63,8 @@ namespace ECS.Systems.Combat
 
     [BurstCompile]
     public partial struct ResetTargetJob : IJobEntity {
-
-
         [ReadOnly] public ComponentLookup<LocalTransform> localTransformComponentLookup;
         [ReadOnly] public EntityStorageInfoLookup entityStorageInfoLookup;
-
 
         public void Execute(ref Target target) {
             if (target.targetEntity != Entity.Null) {
@@ -86,8 +80,7 @@ namespace ECS.Systems.Combat
     public partial struct ResetTargetOverrideJob : IJobEntity {
         [ReadOnly] public ComponentLookup<LocalTransform> localTransformComponentLookup;
         [ReadOnly] public EntityStorageInfoLookup entityStorageInfoLookup;
-
-
+        
         public void Execute(ref TargetOverride targetOverride) {
             if (targetOverride.targetEntity != Entity.Null) {
                 if (!entityStorageInfoLookup.Exists(targetOverride.targetEntity) || !localTransformComponentLookup.HasComponent(targetOverride.targetEntity)) {

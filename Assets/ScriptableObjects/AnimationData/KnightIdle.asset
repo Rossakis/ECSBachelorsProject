@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126d9ac176964a54bb72263070596466, type: 3}
   m_Name: KnightIdle
   m_EditorClassIdentifier: 
-  animationType: 5
+  animationType: 4
   meshArray:
   - {fileID: 4300000, guid: 1393431d294f3b940a7a9425e69f0db0, type: 2}
   - {fileID: 4300000, guid: a57ff0565e2003d4e8f478fb50a01f8e, type: 2}
@@ -20,42 +20,4 @@ MonoBehaviour:
   - {fileID: 4300000, guid: ced467f8b3070144883ebd7a67e261ee, type: 2}
   - {fileID: 4300000, guid: 566b0ce41fdda2f40a7a014af67c02b5, type: 2}
   - {fileID: 4300000, guid: 82949a05c521cdc49913ca5cb12795b5, type: 2}
-  - {fileID: 4300000, guid: 9e1e3011efbd3f543bc9f0479a7763be, type: 2}
-  - {fileID: 4300000, guid: 0688530635b8e124da699090215f7e8c, type: 2}
-  - {fileID: 4300000, guid: edc1522b0e00e634ba2b20e19cde5c1f, type: 2}
-  - {fileID: 4300000, guid: 1f08f490010a6ce4bac8f380ecb046e2, type: 2}
-  - {fileID: 4300000, guid: edd59b17868eac049a4a6525b7efecbe, type: 2}
-  - {fileID: 4300000, guid: 7e04a5991e5492e4fa3964e61ae508cf, type: 2}
-  - {fileID: 4300000, guid: 86ac8f0ba232ee64090b2683ee916bb5, type: 2}
-  - {fileID: 4300000, guid: 5b7e129c712841843ab25c07fa666b6e, type: 2}
-  - {fileID: 4300000, guid: c42b29629e3146942a97fb30011751a2, type: 2}
-  - {fileID: 4300000, guid: f1c05c7c054c4104dade90a4f7a4950d, type: 2}
-  - {fileID: 4300000, guid: 7fc567b11bca3544d9c7d744fa779dac, type: 2}
-  - {fileID: 4300000, guid: 6856d91edd6d0a241b41d1e3cdea7a68, type: 2}
-  - {fileID: 4300000, guid: c58000d562f9d3249bc9fa0b4d356e4a, type: 2}
-  - {fileID: 4300000, guid: c5ac1b6d0f51b3f4bbd4eaca7942b723, type: 2}
-  - {fileID: 4300000, guid: 0890f3fbb4725d64db31a78b7eaf98eb, type: 2}
-  - {fileID: 4300000, guid: 21bb888ee3190fb4ab764fc25bd54ae6, type: 2}
-  - {fileID: 4300000, guid: 2c2d10fd7a347eb46aea3b2b3a10fd45, type: 2}
-  - {fileID: 4300000, guid: b63ad619ea34bfb429e375529ad71221, type: 2}
-  - {fileID: 4300000, guid: 05803233dd9142d4395335a44f6f0ddd, type: 2}
-  - {fileID: 4300000, guid: 7417e1ded5b6eec4599aaa2b32c8acdb, type: 2}
-  - {fileID: 4300000, guid: fd94cfbd53fb9274eaf23bde5f93ca82, type: 2}
-  - {fileID: 4300000, guid: c2061320abf01744bab6394b6fff2d8a, type: 2}
-  - {fileID: 4300000, guid: 8abe215b44dc6e4449b4660c03b92e54, type: 2}
-  - {fileID: 4300000, guid: 26d068325b1aa2242a7a17e4fb3e931b, type: 2}
-  - {fileID: 4300000, guid: 47d9991e1df9d054d9cb58861840e3b5, type: 2}
-  - {fileID: 4300000, guid: 6a79e94286b3e9c4fb5aa372e1c0f264, type: 2}
-  - {fileID: 4300000, guid: f9eb85697ea98e048a0897c8267d36b1, type: 2}
-  - {fileID: 4300000, guid: f0096acd72fae3c43a66af8a9893bea5, type: 2}
-  - {fileID: 4300000, guid: 90f8cd02c5abd9f48b4421502bb7d075, type: 2}
-  - {fileID: 4300000, guid: d98a3cbe6cb06234799d974a1f7d6e23, type: 2}
-  - {fileID: 4300000, guid: 6a45a26fea1ed7c4d9a7956a28e5f8ce, type: 2}
-  - {fileID: 4300000, guid: 5bba35c8b43d51844ae890f8efc7decb, type: 2}
-  - {fileID: 4300000, guid: 2d83a8b4aa93b8d4fa886275eb002932, type: 2}
-  - {fileID: 4300000, guid: 13f3e609d3c662e4c897c5d9b7a2d244, type: 2}
-  - {fileID: 4300000, guid: 009905862378d914c806183af3493cd1, type: 2}
-  - {fileID: 4300000, guid: c7eb4e00e5fcbfb4582f2cff49f666f6, type: 2}
-  - {fileID: 4300000, guid: 876054cfe338c2e42b56356c2e95fa9f, type: 2}
-  - {fileID: 4300000, guid: 605eda6e79dd85e43bd653d013c7e84a, type: 2}
-  frameTimerMax: 0.02
+  frameTimerMax: 0.05

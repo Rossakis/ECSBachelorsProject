@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126d9ac176964a54bb72263070596466, type: 3}
   m_Name: WizardCastFireball
   m_EditorClassIdentifier: 
-  animationType: 4
+  animationType: 3
   meshArray:
   - {fileID: 4300000, guid: 96e5ee4dc72fbf643bf1a7e9cb58a5bf, type: 2}
   - {fileID: 4300000, guid: d32ede5c9ceebad4cafdb5af6ef6b93d, type: 2}

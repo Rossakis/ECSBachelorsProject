@@ -9,14 +9,12 @@ namespace ECS.Systems.Events
     partial struct ResetEventsSystem : ISystem {
     
         private NativeArray<JobHandle> jobHandleNativeArray;
-        private NativeList<Entity> onBarracksUnitQueueChangedEntityList;
         private NativeList<Entity> onHealthDeadEntityList;
 
 
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             jobHandleNativeArray = new NativeArray<JobHandle>(3, Allocator.Persistent);
-            onBarracksUnitQueueChangedEntityList = new NativeList<Entity>(Allocator.Persistent);
             onHealthDeadEntityList = new NativeList<Entity>(64, Allocator.Persistent);
         }
 
@@ -24,7 +22,6 @@ namespace ECS.Systems.Events
         
             jobHandleNativeArray[0] = new ResetSelectedEventsJob().ScheduleParallel(state.Dependency);
             jobHandleNativeArray[1] = new ResetFireballAttackEventsJob().ScheduleParallel(state.Dependency);
-            jobHandleNativeArray[2] = new ResetMeleeAttackEventsJob().ScheduleParallel(state.Dependency);
         
             onHealthDeadEntityList.Clear();
             new ResetHealthEventsJob() {
@@ -37,7 +34,6 @@ namespace ECS.Systems.Events
 
         public void OnDestroy(ref SystemState state) {
             jobHandleNativeArray.Dispose();
-            onBarracksUnitQueueChangedEntityList.Dispose();
             onHealthDeadEntityList.Dispose();
         }
     }
@@ -73,22 +69,10 @@ namespace ECS.Systems.Events
     [BurstCompile]
     [WithOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
     public partial struct ResetSelectedEventsJob : IJobEntity {
-
-
+        
         public void Execute(ref Selected selected) {
             selected.onSelected = false;
             selected.onDeselected = false;
-        }
-
-    }
-
-
-    [BurstCompile]
-    public partial struct ResetMeleeAttackEventsJob : IJobEntity {
-
-
-        public void Execute(ref MeleeAttack meleeAttack) {
-            meleeAttack.onAttacked = false;
         }
 
     }

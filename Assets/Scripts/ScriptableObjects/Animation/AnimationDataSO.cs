@@ -7,7 +7,6 @@ public class AnimationDataSO : ScriptableObject {
         None,
         WizardIdle,
         WizardWalk,
-        WizardReadyFireball,
         WizardCastFireball,
         KnightIdle,
         KnightWalk,
@@ -20,11 +19,11 @@ public class AnimationDataSO : ScriptableObject {
     public float frameTimerMax;
 
 
-
-    public static bool IsAnimationUninterruptible(AnimationType animationType) {
-        if(animationType == AnimationType.KnightAttack || animationType == AnimationType.WizardCastFireball)
-            return true;
+    public static bool IsAnimationUninterruptible(AnimationType animationType)
+    {
+         if(animationType == AnimationType.KnightAttack || animationType == AnimationType.WizardCastFireball)
+             return true;
         
-        return false;
+         return false;
     }
 }

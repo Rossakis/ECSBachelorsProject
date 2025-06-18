@@ -4,12 +4,18 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
+using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace ECS.Systems.Combat
 {
     partial struct MeleeAttackSystem : ISystem {
 
-
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<PhysicsWorldSingleton>();
+        }
+        
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
@@ -32,14 +38,13 @@ namespace ECS.Systems.Combat
                 if (target.ValueRO.targetEntity == Entity.Null) {
                     continue;
                 }
-
-
+                
                 LocalTransform targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity);
-                float meleeAttackDistanceSq = 2f;
-                bool isCloseEnoughToAttack = math.distancesq(localTransform.ValueRO.Position, targetLocalTransform.Position) < meleeAttackDistanceSq;
-
+                bool isCloseEnoughToAttack = math.distancesq(localTransform.ValueRO.Position, targetLocalTransform.Position) < meleeAttack.ValueRO.attackDistance;
                 bool isTouchingTarget = false;
-                if (!isCloseEnoughToAttack) {
+                
+                if (!isCloseEnoughToAttack) 
+                {
                     float3 dirToTarget = targetLocalTransform.Position - localTransform.ValueRO.Position;
                     dirToTarget = math.normalize(dirToTarget);
                     float distanceExtraToTestRaycast = .4f;
@@ -48,7 +53,7 @@ namespace ECS.Systems.Combat
                         End = localTransform.ValueRO.Position + dirToTarget * (meleeAttack.ValueRO.colliderSize + distanceExtraToTestRaycast),
                         Filter = new CollisionFilter {
                             BelongsTo = ~0u,
-                            CollidesWith = 1u << GameAssets.UNITS_LAYER | 1u,
+                            CollidesWith = 1u << GameAssets.UNITS_LAYER,
                             GroupIndex = 0,
                         },
                     };
@@ -64,12 +69,15 @@ namespace ECS.Systems.Combat
                     }
                 }
 
-                if (!isCloseEnoughToAttack && !isTouchingTarget) {
-                    // Target is too far
+                // Target is too far
+                if (!isCloseEnoughToAttack && !isTouchingTarget) 
+                {
                     targetPositionPathQueued.ValueRW.targetPosition = targetLocalTransform.Position;
                     targetPositionPathQueuedEnabled.ValueRW = true;
-                } else {
-                    // Target is close enough to attack
+                } 
+                // Target is close enough to attack
+                else 
+                {
                     targetPositionPathQueued.ValueRW.targetPosition = localTransform.ValueRO.Position;
                     targetPositionPathQueuedEnabled.ValueRW = true;
 
@@ -84,10 +92,8 @@ namespace ECS.Systems.Combat
                     targetHealth.ValueRW.onHealthChanged = true;
                     targetHealth.ValueRW.onTookDamage = true;
 
-                    meleeAttack.ValueRW.onAttacked = true;
+                    meleeAttack.ValueRW.OnAttack = true;
                 }
-            
-                raycastHitList.Dispose();
             }
         }
 

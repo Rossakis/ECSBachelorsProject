@@ -14,6 +14,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 35367ddac073a0e4bb9c134de317f2a5,
         type: 2}
+    - target: {fileID: 1395423932392642092, guid: 7be1f9f2ed6316a4c8020480728e0085,
+        type: 3}
+      propertyPath: attackAnimation
+      value: 
+      objectReference: {fileID: 11400000, guid: 775b5979b8b8b0749ae1598ef05de07f,
+        type: 2}
     - target: {fileID: 1600892676932902699, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
       propertyPath: range
@@ -27,7 +33,7 @@ PrefabInstance:
     - target: {fileID: 3155524963276268500, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
       propertyPath: loseTargetDistance
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3322482028285335940, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
@@ -78,6 +84,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4540725370135664291, guid: 7be1f9f2ed6316a4c8020480728e0085,
+        type: 3}
+      propertyPath: idleAnimationType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4540725370135664291, guid: 7be1f9f2ed6316a4c8020480728e0085,
+        type: 3}
+      propertyPath: walkAnimationType
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4540725370135664291, guid: 7be1f9f2ed6316a4c8020480728e0085,
+        type: 3}
+      propertyPath: knightAttackAnimationType
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4726026043245154819, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
