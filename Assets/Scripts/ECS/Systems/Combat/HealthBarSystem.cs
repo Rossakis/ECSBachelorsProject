@@ -25,12 +25,12 @@ namespace ECS.Systems.Combat
         }
 
         public void OnUpdate(ref SystemState state) {
+            
             Vector3 cameraForward = Vector3.zero;
             if (Camera.main != null) {
                 cameraForward = Camera.main.transform.forward;
             }
-
-
+            
             localTransformComponentLookup.Update(ref state);
             healthComponentLookup.Update(ref state);
             postTransformMatrixComponentLookup.Update(ref state);

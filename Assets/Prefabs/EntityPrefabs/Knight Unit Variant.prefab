@@ -87,18 +87,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4540725370135664291, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
-      propertyPath: idleAnimationType
-      value: 4
-      objectReference: {fileID: 0}
+      propertyPath: deathAnimation
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c32ae701aa8daf4e87d314dddbd256c,
+        type: 2}
     - target: {fileID: 4540725370135664291, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
-      propertyPath: walkAnimationType
+      propertyPath: idleAnimationType
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4540725370135664291, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
-      propertyPath: knightAttackAnimationType
+      propertyPath: walkAnimationType
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4540725370135664291, guid: 7be1f9f2ed6316a4c8020480728e0085,
+        type: 3}
+      propertyPath: knightAttackAnimation
+      value: 
+      objectReference: {fileID: 11400000, guid: 775b5979b8b8b0749ae1598ef05de07f,
+        type: 2}
+    - target: {fileID: 4540725370135664291, guid: 7be1f9f2ed6316a4c8020480728e0085,
+        type: 3}
+      propertyPath: knightAttackAnimationType
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4726026043245154819, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
@@ -120,6 +132,12 @@ PrefabInstance:
       propertyPath: healthAmount
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 8025824774023758594, guid: 7be1f9f2ed6316a4c8020480728e0085,
+        type: 3}
+      propertyPath: deathAnimation
+      value: 
+      objectReference: {fileID: 11400000, guid: 6c32ae701aa8daf4e87d314dddbd256c,
+        type: 2}
     - target: {fileID: 8025824774023758594, guid: 7be1f9f2ed6316a4c8020480728e0085,
         type: 3}
       propertyPath: healthAmountMax

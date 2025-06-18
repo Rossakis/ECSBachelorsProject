@@ -85,6 +85,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4540725370135664291, guid: af8d0caa312f74541b4a546c1872f3b6,
         type: 3}
+      propertyPath: deathAnimation
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ec6fc3067946bc45b410bb9a99df78f,
+        type: 2}
+    - target: {fileID: 4540725370135664291, guid: af8d0caa312f74541b4a546c1872f3b6,
+        type: 3}
+      propertyPath: knightAttackAnimation
+      value: 
+      objectReference: {fileID: 11400000, guid: 37c2d3b6160ae93438beefc642447e96,
+        type: 2}
+    - target: {fileID: 4540725370135664291, guid: af8d0caa312f74541b4a546c1872f3b6,
+        type: 3}
       propertyPath: castFireballAnimationType
       value: 3
       objectReference: {fileID: 0}
@@ -113,6 +125,12 @@ PrefabInstance:
       propertyPath: healthAmount
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 8025824774023758594, guid: af8d0caa312f74541b4a546c1872f3b6,
+        type: 3}
+      propertyPath: deathAnimation
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ec6fc3067946bc45b410bb9a99df78f,
+        type: 2}
     - target: {fileID: 8025824774023758594, guid: af8d0caa312f74541b4a546c1872f3b6,
         type: 3}
       propertyPath: healthAmountMax

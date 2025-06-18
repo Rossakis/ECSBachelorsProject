@@ -1,3 +1,5 @@
+using ECS.Authoring.Reference;
+using ECS.ECS.Utility.ECS.Utility;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -7,15 +9,22 @@ namespace ECS.Systems.Combat
 {
     partial struct FireballMoverSystem : ISystem {
 
+        [BurstCompile]
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+            state.RequireForUpdate<SceneDataReference>();
+        }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             EntityCommandBuffer entityCommandBuffer =
                 SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+            SceneDataReference sceneData = SystemAPI.GetSingleton<SceneDataReference>();
 
             foreach ((
                          RefRW<LocalTransform> localTransform,
-                         RefRW<Fireball> bullet,
+                         RefRW<Fireball> fireball,
                          RefRO<Target> target,
                          Entity entity)
                      in SystemAPI.Query<
@@ -27,7 +36,7 @@ namespace ECS.Systems.Combat
 
                 if (target.ValueRO.targetEntity == Entity.Null) {
                     // Has no target
-                    targetPosition = bullet.ValueRO.lastTargetPosition;
+                    targetPosition = fireball.ValueRO.lastTargetPosition;
                 } else {
                     // Has target
                     LocalTransform targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity);
@@ -35,14 +44,14 @@ namespace ECS.Systems.Combat
                     targetPosition = targetLocalTransform.TransformPoint(targetShootVictim.hitLocalPosition);
                 }
 
-                bullet.ValueRW.lastTargetPosition = targetPosition;
+                fireball.ValueRW.lastTargetPosition = targetPosition;
 
                 float distanceBeforeSq = math.distancesq(localTransform.ValueRO.Position, targetPosition);
 
                 float3 moveDirection = targetPosition - localTransform.ValueRO.Position;
                 moveDirection = math.normalize(moveDirection);
 
-                localTransform.ValueRW.Position += moveDirection * bullet.ValueRO.speed * SystemAPI.Time.DeltaTime;
+                localTransform.ValueRW.Position += moveDirection * fireball.ValueRO.speed * SystemAPI.Time.DeltaTime;
 
                 float distanceAfterSq = math.distancesq(localTransform.ValueRO.Position, targetPosition);
 
@@ -56,12 +65,14 @@ namespace ECS.Systems.Combat
                     // Close enough to damage target
                     if (target.ValueRO.targetEntity != Entity.Null) {
                         RefRW<Health> targetHealth = SystemAPI.GetComponentRW<Health>(target.ValueRO.targetEntity);
-                        targetHealth.ValueRW.healthAmount -= bullet.ValueRO.damageAmount;
+                        targetHealth.ValueRW.healthAmount -= fireball.ValueRO.damageAmount;
                         targetHealth.ValueRW.onHealthChanged = true;
-                        targetHealth.ValueRW.onTookDamage = true;
                     }
-
-                    entityCommandBuffer.DestroyEntity(entity);
+                    
+                    if(sceneData.IsObjectPoolingOn) // Don't destroy fireball if pooling is on
+                        FireballPoolUtility.ReturnToPool(entityCommandBuffer, entity);
+                    else 
+                        entityCommandBuffer.DestroyEntity(entity);
                 }
             }
         }

@@ -90,7 +90,6 @@ namespace ECS.Systems.Combat
                     RefRW<Health> targetHealth = SystemAPI.GetComponentRW<Health>(target.ValueRO.targetEntity);
                     targetHealth.ValueRW.healthAmount -= meleeAttack.ValueRO.damageAmount;
                     targetHealth.ValueRW.onHealthChanged = true;
-                    targetHealth.ValueRW.onTookDamage = true;
 
                     meleeAttack.ValueRW.OnAttack = true;
                 }

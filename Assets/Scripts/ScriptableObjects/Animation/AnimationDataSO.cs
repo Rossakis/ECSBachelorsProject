@@ -8,9 +8,11 @@ public class AnimationDataSO : ScriptableObject {
         WizardIdle,
         WizardWalk,
         WizardCastFireball,
+        WizardDeath,
         KnightIdle,
         KnightWalk,
         KnightAttack,
+        KnightDeath,
     }
 
 
@@ -21,7 +23,7 @@ public class AnimationDataSO : ScriptableObject {
 
     public static bool IsAnimationUninterruptible(AnimationType animationType)
     {
-         if(animationType == AnimationType.KnightAttack || animationType == AnimationType.WizardCastFireball)
+         if(animationType == AnimationType.KnightAttack || animationType == AnimationType.WizardCastFireball) // || animationType == AnimationType.WizardDeath || animationType == AnimationType.KnightDeath)
              return true;
         
          return false;

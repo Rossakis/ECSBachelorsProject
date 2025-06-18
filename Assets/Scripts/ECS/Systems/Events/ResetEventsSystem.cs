@@ -10,8 +10,7 @@ namespace ECS.Systems.Events
     
         private NativeArray<JobHandle> jobHandleNativeArray;
         private NativeList<Entity> onHealthDeadEntityList;
-
-
+        
         [BurstCompile]
         public void OnCreate(ref SystemState state) {
             jobHandleNativeArray = new NativeArray<JobHandle>(3, Allocator.Persistent);
@@ -60,7 +59,6 @@ namespace ECS.Systems.Events
 
             health.onHealthChanged = false;
             health.onDead = false;
-            health.onTookDamage = false;
         }
 
     }

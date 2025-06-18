@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126d9ac176964a54bb72263070596466, type: 3}
   m_Name: KnightWalk
   m_EditorClassIdentifier: 
-  animationType: 5
+  animationType: 6
   meshArray:
   - {fileID: 4300000, guid: d061770aaa45c5c4590142b520a7aa6e, type: 2}
   - {fileID: 4300000, guid: 94a6a8109452bce44be7658b4bca43de, type: 2}

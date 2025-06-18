@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -20,8 +21,7 @@ public class FireballAuthoring : MonoBehaviour {
 }
 
 
-
-public struct Fireball : IComponentData {
+public struct Fireball : IComponentData, IEnableableComponent {
     
     public float speed;
     public int damageAmount;

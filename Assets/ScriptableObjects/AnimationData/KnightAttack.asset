@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126d9ac176964a54bb72263070596466, type: 3}
   m_Name: KnightAttack
   m_EditorClassIdentifier: 
-  animationType: 6
+  animationType: 7
   meshArray:
   - {fileID: 4300000, guid: a093a4ff9741f624683ed2e8fb3dadc0, type: 2}
   - {fileID: 4300000, guid: f9b75293d03e73f4aada48505ec5425a, type: 2}

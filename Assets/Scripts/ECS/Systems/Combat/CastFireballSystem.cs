@@ -1,3 +1,6 @@
+using ECS.Authoring.Combat;
+using ECS.Authoring.Reference;
+using ECS.ECS.Utility.ECS.Utility;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -7,30 +10,37 @@ namespace ECS.Systems.Combat
 {
     partial struct CastFireballSystem : ISystem {
 
-        [BurstCompile]
+        private bool isFirstUpdate;
+        private EntityQuery fireballQuery;
+        
         public void OnCreate(ref SystemState state) {
             state.RequireForUpdate<EntitiesReferences>();
+            state.RequireForUpdate<SceneDataReference>();
+            
+            fireballQuery = state.GetEntityQuery(
+                ComponentType.ReadOnly<Fireball>(),
+                ComponentType.ReadOnly<FireballPool>());
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             EntitiesReferences entitiesReferences = SystemAPI.GetSingleton<EntitiesReferences>();
-
+            SceneDataReference sceneData = SystemAPI.GetSingleton<SceneDataReference>();
+            
             foreach ((
                          RefRW<LocalTransform> localTransform,
                          RefRW<CastFireball> shootAttack,
                          RefRO<Target> target,
                          RefRW<TargetPositionPathQueued> targetPositionPathQueued,
                          EnabledRefRW<TargetPositionPathQueued> targetPositionPathQueuedEnabled,
-                         RefRW <UnitMover> unitMover,
-                         Entity entity)
+                         RefRW <UnitMover> unitMover)
                      in SystemAPI.Query<
                          RefRW<LocalTransform>,
                          RefRW<CastFireball>,
                          RefRO<Target>,
                          RefRW<TargetPositionPathQueued>,
                          EnabledRefRW<TargetPositionPathQueued>,
-                         RefRW<UnitMover>>().WithDisabled<MoveOverride>().WithPresent<TargetPositionPathQueued>().WithEntityAccess()) {
+                         RefRW<UnitMover>>().WithDisabled<MoveOverride>().WithPresent<TargetPositionPathQueued>()) {
 
                 if (target.ValueRO.targetEntity == Entity.Null) {
                     continue;
@@ -59,7 +69,7 @@ namespace ECS.Systems.Combat
 
             foreach ((
                          RefRW<LocalTransform> localTransform,
-                         RefRW <CastFireball> shootAttack,
+                         RefRW <CastFireball> fireballAttack,
                          RefRO<Target> target,
                          Entity entity)
                      in SystemAPI.Query<
@@ -73,7 +83,7 @@ namespace ECS.Systems.Combat
 
                 LocalTransform targetLocalTransform = SystemAPI.GetComponent<LocalTransform>(target.ValueRO.targetEntity);
 
-                if (math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position) > shootAttack.ValueRO.attackDistance) {
+                if (math.distance(localTransform.ValueRO.Position, targetLocalTransform.Position) > fireballAttack.ValueRO.attackDistance) {
                     // Target is too far
                     continue;
                 }
@@ -83,11 +93,11 @@ namespace ECS.Systems.Combat
                     continue;
                 }
 
-                shootAttack.ValueRW.timer -= SystemAPI.Time.DeltaTime;
-                if (shootAttack.ValueRO.timer > 0f) {
+                fireballAttack.ValueRW.timer -= SystemAPI.Time.DeltaTime;
+                if (fireballAttack.ValueRO.timer > 0f) {
                     continue;
                 }
-                shootAttack.ValueRW.timer = shootAttack.ValueRO.timerMax;
+                fireballAttack.ValueRW.timer = fireballAttack.ValueRO.timerMax;
 
                 if (SystemAPI.HasComponent<TargetOverride>(target.ValueRO.targetEntity)) {
                     RefRW<TargetOverride> enemyTargetOverride = SystemAPI.GetComponentRW<TargetOverride>(target.ValueRO.targetEntity);
@@ -96,18 +106,30 @@ namespace ECS.Systems.Combat
                     }
                 }
 
-                Entity bulletEntity = state.EntityManager.Instantiate(entitiesReferences.fireballPrefabEntity);
-                float3 bulletSpawnWorldPosition = localTransform.ValueRO.TransformPoint(shootAttack.ValueRO.fireballSpawnLocalPosition);
-                SystemAPI.SetComponent(bulletEntity, LocalTransform.FromPosition(bulletSpawnWorldPosition));
+                Entity fireballEntity;
+                float3 fireballSpawnPos; 
+                
+                if (sceneData.IsObjectPoolingOn) 
+                {
+                    fireballEntity = FireballPoolUtility.GetInactiveFireball(state.EntityManager, fireballQuery);
+                    fireballSpawnPos = localTransform.ValueRO.TransformPoint(fireballAttack.ValueRO.fireballSpawnLocalPosition);
+                    SystemAPI.SetComponent(fireballEntity, LocalTransform.FromPosition(fireballSpawnPos));
+                }
+                else
+                {
+                    fireballEntity = state.EntityManager.Instantiate(entitiesReferences.fireballPrefabEntity);
+                    fireballSpawnPos = localTransform.ValueRO.TransformPoint(fireballAttack.ValueRO.fireballSpawnLocalPosition);
+                    SystemAPI.SetComponent(fireballEntity, LocalTransform.FromPosition(fireballSpawnPos));
+                }
 
-                RefRW<Fireball> bulletBullet = SystemAPI.GetComponentRW<Fireball>(bulletEntity);
-                bulletBullet.ValueRW.damageAmount = shootAttack.ValueRO.damageAmount;
+                RefRW<Fireball> fireballObj = SystemAPI.GetComponentRW<Fireball>(fireballEntity);
+                fireballObj.ValueRW.damageAmount = fireballAttack.ValueRO.damageAmount;
 
-                RefRW<Target> bulletTarget = SystemAPI.GetComponentRW<Target>(bulletEntity);
-                bulletTarget.ValueRW.targetEntity = target.ValueRO.targetEntity;
+                RefRW<Target> fireballTarget = SystemAPI.GetComponentRW<Target>(fireballEntity);
+                fireballTarget.ValueRW.targetEntity = target.ValueRO.targetEntity;
 
-                shootAttack.ValueRW.onShoot.isTriggered = true;
-                shootAttack.ValueRW.onShoot.shootFromPosition = bulletSpawnWorldPosition;
+                fireballAttack.ValueRW.onShoot.isTriggered = true;
+                fireballAttack.ValueRW.onShoot.shootFromPosition = fireballSpawnPos;
             }
         }
 
