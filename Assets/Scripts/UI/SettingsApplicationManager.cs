@@ -20,6 +20,7 @@ namespace UI
         public TMP_InputField ECSWizardsDamageInputField;
         
         [Header("ECS Knights-Settings")]
+        public Toggle InfiniteKnightSpawnOn;
         public TMP_InputField ECSKnightsInputField;
         public TMP_InputField ECSKnightsHPInputField;
         public TMP_InputField ECSKnightsDamageInputField;
@@ -92,6 +93,7 @@ namespace UI
             ECSSceneDataSO.WizardMaxHealth = wizardHP;
             ECSSceneDataSO.WizardDamage = knightsAmount;
             
+            ECSSceneDataSO.IsKnightSpawnInfinite = InfiniteKnightSpawnOn.isOn;
             ECSSceneDataSO.KnightsAmountToSpawn = knightsAmount;
             ECSSceneDataSO.KnightMaxHealth = knightsHP;
             ECSSceneDataSO.KnightDamage = knightsDamage;

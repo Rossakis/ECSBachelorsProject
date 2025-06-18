@@ -21,6 +21,7 @@ namespace ECS.Authoring.Reference
                     WizardMaxHealth = authoring.ecsSceneDataSO.WizardMaxHealth,
                     WizardDamage = authoring.ecsSceneDataSO.WizardDamage,
                     
+                    IsKnightInfiniteSpawnOn = authoring.ecsSceneDataSO.IsKnightSpawnInfinite,
                     KnightsAmountToSpawn = authoring.ecsSceneDataSO.KnightsAmountToSpawn,
                     KnightMaxHealth = authoring.ecsSceneDataSO.KnightMaxHealth,
                     KnightDamage = authoring.ecsSceneDataSO.KnightDamage
@@ -38,6 +39,7 @@ namespace ECS.Authoring.Reference
         public int WizardMaxHealth;
         public int WizardDamage;
 
+        public bool IsKnightInfiniteSpawnOn;
         public int KnightsAmountToSpawn;
         public int KnightMaxHealth;
         public int KnightDamage;
