@@ -29,7 +29,6 @@ namespace ECS.Systems.Spawn
             {
                 PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
                 CollisionWorld collisionWorld = physicsWorldSingleton.CollisionWorld;
-                NativeList<DistanceHit> distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
 
                 foreach ((RefRO<LocalTransform> localTransform, RefRW<KnightSpawner> knightSpawner)
                          in SystemAPI.Query<RefRO<LocalTransform>, RefRW<KnightSpawner>>())
@@ -39,8 +38,9 @@ namespace ECS.Systems.Spawn
                         continue;
 
                     knightSpawner.ValueRW.timer = knightSpawner.ValueRO.timerMax;
-                    distanceHitList.Clear();
 
+                    // Count nearby knights using collision world
+                    var distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
                     CollisionFilter collisionFilter = new CollisionFilter
                     {
                         BelongsTo = ~0u,
@@ -49,7 +49,6 @@ namespace ECS.Systems.Spawn
                     };
 
                     int nearbyKnightAmount = 0;
-
                     if (collisionWorld.OverlapSphere(
                             localTransform.ValueRO.Position,
                             knightSpawner.ValueRO.nearbyKnightAmountDistance,
@@ -63,15 +62,60 @@ namespace ECS.Systems.Spawn
                                 nearbyKnightAmount++;
                         }
                     }
+                    distanceHitList.Dispose();
 
                     if (nearbyKnightAmount >= knightSpawner.ValueRO.nearbyKnightAmountMax)
                         continue;
 
-                    Entity knightEntity = state.EntityManager.Instantiate(entitiesReferences.knightPrefabEntity);
-                    SystemAPI.SetComponent(knightEntity, LocalTransform.FromPosition(localTransform.ValueRO.Position));
-                }
+                    // Try to find a good spawn position
+                    float3 origin = localTransform.ValueRO.Position;
+                    Random random = Random.CreateFromIndex((uint)origin.GetHashCode() + (uint)UnityEngine.Random.Range(1, 100000));
 
-                distanceHitList.Dispose();
+                    NativeList<float3> existingPositions = new NativeList<float3>(Allocator.Temp);
+                    int attempts = 0;
+                    float3 spawnPosition = float3.zero;
+                    bool positionFound = false;
+
+                    while (attempts < 100)
+                    {
+                        float radius = knightSpawner.ValueRO.spawnRadiusMultiplier * sceneData.KnightsAmountToSpawn / 100f; 
+                        if (radius < knightSpawner.ValueRO.minSpawnRadius)
+                        {
+                            radius = knightSpawner.ValueRO.minSpawnRadius;
+                        }
+                        
+                        float2 offset2D = random.NextFloat2Direction() * random.NextFloat(0, radius);
+                        float3 candidate = origin + new float3(offset2D.x, 0f, offset2D.y);
+
+                        bool isFarEnough = true;
+                        foreach (float3 pos in existingPositions)
+                        {
+                            if (math.distance(candidate, pos) < knightSpawner.ValueRO.minDistanceBetweenUnits)
+                            {
+                                isFarEnough = false;
+                                break;
+                            }
+                        }
+
+                        if (isFarEnough)
+                        {
+                            spawnPosition = candidate;
+                            existingPositions.Add(candidate);
+                            positionFound = true;
+                            break;
+                        }
+
+                        attempts++;
+                    }
+
+                    if (positionFound)
+                    {
+                        Entity knightEntity = ecb.Instantiate(entitiesReferences.knightPrefabEntity);
+                        ecb.SetComponent(knightEntity, LocalTransform.FromPosition(spawnPosition));
+                    }
+
+                    existingPositions.Dispose();
+                }
             }
             else
             {
