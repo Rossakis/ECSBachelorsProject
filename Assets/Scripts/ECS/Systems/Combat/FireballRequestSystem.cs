@@ -1,11 +1,12 @@
-﻿using ECS.Authoring.Reference;
+﻿using ECS.Authoring.Combat;
+using ECS.Authoring.Reference;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Authoring.Combat
+namespace ECS.Systems.Combat
 {
     public partial struct FireballRequestSystem : ISystem
 {
@@ -58,10 +59,9 @@ namespace ECS.Authoring.Combat
             {
                 var fireballData = SystemAPI.GetComponentRW<Fireball>(fireball);
                 fireballData.ValueRW.damageAmount = cast.ValueRO.damageAmount;
+                cast.ValueRW.onShoot.isTriggered = true;
+                cast.ValueRW.onShoot.shootFromPosition = spawnPos;
             }
-
-            cast.ValueRW.onShoot.isTriggered = true;
-            cast.ValueRW.onShoot.shootFromPosition = spawnPos;
         }
 
         ecb.Playback(state.EntityManager);

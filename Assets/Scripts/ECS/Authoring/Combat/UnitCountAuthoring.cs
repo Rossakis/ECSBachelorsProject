@@ -14,10 +14,11 @@ namespace ECS.Authoring.Combat
             }
         }
     }
-    
+
     public struct UnitCount : IComponentData
     {
         public int KnightCount;
         public int WizardCount;
     }
+
 }

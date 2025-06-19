@@ -13,6 +13,7 @@ namespace UI
         public EcsSceneDataSO ECSSceneDataSO;
         public Toggle IsJobsSystemOn;
         public Toggle IsObjectPoolingOn;
+        public Toggle IsVsyncOn;
         
         [Header("ECS Wizards-Settings")]
         public TMP_InputField ECSWizardsAmountInputField;
@@ -24,7 +25,6 @@ namespace UI
         public TMP_InputField ECSKnightsInputField;
         public TMP_InputField ECSKnightsHPInputField;
         public TMP_InputField ECSKnightsDamageInputField;
-
     
         [Header("Mono Settings")]
         public MonoSceneDataSO MonoSceneDataSO;
@@ -38,8 +38,10 @@ namespace UI
         {
             panelSwitchManager = GetComponent<PanelSwitchManager>();
             sceneLoader = GetComponent<SceneLoader>();
+            Application.targetFrameRate = -1; // uncapped framerate
         }
 
+        #region ECS
         public void ApplyECSSettings()
         {
             // Wizards
@@ -97,9 +99,54 @@ namespace UI
             ECSSceneDataSO.KnightsAmountToSpawn = knightsAmount;
             ECSSceneDataSO.KnightMaxHealth = knightsHP;
             ECSSceneDataSO.KnightDamage = knightsDamage;
+            
+            // VSync Off/On
+            if (IsVsyncOn.isOn)
+            {
+                QualitySettings.vSyncCount = 1; // Enable 
+            }
+            else
+            {
+                QualitySettings.vSyncCount = 0; // Disable
+            }
 
+            
             sceneLoader.LoadEcsScene();
         }
+        
+        public void LoadDefaultECSSettings()
+        {
+            //Ui changes
+            IsJobsSystemOn.isOn = true;
+            IsObjectPoolingOn.isOn = true;
+            
+            ECSWizardsAmountInputField.text = "100";
+            ECSWizardsHPInputField.text = "25";
+            ECSWizardsDamageInputField.text = "20";
+
+            InfiniteKnightSpawnOn.isOn = false;
+            ECSKnightsInputField.text = "300";
+            ECSKnightsHPInputField.text = "100";
+            ECSKnightsDamageInputField.text = "5";
+            
+            //SceneData changes
+            ECSSceneDataSO.IsJobSystemOn = true;
+            ECSSceneDataSO.IsObjectPoolingOn = true;
+            
+            ECSSceneDataSO.WizardsAmountToSpawn = 100;
+            ECSSceneDataSO.WizardMaxHealth = 25;
+            ECSSceneDataSO.WizardDamage = 20;
+            
+            ECSSceneDataSO.IsKnightSpawnInfinite = InfiniteKnightSpawnOn.isOn;
+            ECSSceneDataSO.KnightsAmountToSpawn = 300;
+            ECSSceneDataSO.KnightMaxHealth = 100;
+            ECSSceneDataSO.KnightDamage = 5;
+        }
+        
+
+        #endregion
+
+        
     
         public void ApplyMonoSettings()
         {

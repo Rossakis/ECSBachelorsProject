@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 
 public class UnitSelectionManager : MonoBehaviour {
 
-
+    public float ringSize = 1f;
     public static UnitSelectionManager Instance { get; private set; }
 
 
@@ -212,7 +212,6 @@ public class UnitSelectionManager : MonoBehaviour {
             return positionArray;
         }
 
-        float ringSize = 2.2f;
         int ring = 0;
         int positionIndex = 1;
 

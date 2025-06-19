@@ -1,5 +1,5 @@
 using ECS.Authoring.Reference;
-using ECS.ECS.Utility.ECS.Utility;
+using ECS.Utility;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -18,10 +18,10 @@ namespace ECS.Systems.Combat
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
-            EntityCommandBuffer entityCommandBuffer =
-                SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             SceneDataReference sceneData = SystemAPI.GetSingleton<SceneDataReference>();
-
+            var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.WorldUnmanaged);
+            
             foreach ((
                          RefRW<LocalTransform> localTransform,
                          RefRW<Fireball> fireball,
@@ -62,6 +62,7 @@ namespace ECS.Systems.Combat
 
                 float destroyDistanceSq = .2f;
                 if (math.distancesq(localTransform.ValueRO.Position, targetPosition) < destroyDistanceSq) {
+                    
                     // Close enough to damage target
                     if (target.ValueRO.targetEntity != Entity.Null) {
                         RefRW<Health> targetHealth = SystemAPI.GetComponentRW<Health>(target.ValueRO.targetEntity);
@@ -69,8 +70,8 @@ namespace ECS.Systems.Combat
                         targetHealth.ValueRW.onHealthChanged = true;
                     }
                     
-                    if(sceneData.IsObjectPoolingOn) // Don't destroy fireball if pooling is on
-                        FireballPoolUtility.ReturnToPool(entityCommandBuffer, entity);
+                    if(sceneData.IsObjectPoolingOn)
+                        FireballPoolUtility.ResetAndDisableFireball(state.EntityManager, entity);
                     else 
                         entityCommandBuffer.DestroyEntity(entity);
                 }

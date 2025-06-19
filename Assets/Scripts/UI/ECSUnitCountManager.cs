@@ -30,11 +30,26 @@ public class ECSUnitCountManager : MonoBehaviour
 
     void Update()
     {
-        if (_singletonEntity != Entity.Null && _entityManager.Exists(_singletonEntity))
+        if (_singletonEntity == Entity.Null)
+        {
+            var query = _entityManager.CreateEntityQuery(typeof(UnitCount));
+
+            if (query.CalculateEntityCount() == 1)
+            {
+                _singletonEntity = query.GetSingletonEntity();
+            }
+            else
+            {
+                // Still not created; wait for next frame
+                return;
+            }
+        }
+
+        if (_entityManager.Exists(_singletonEntity))
         {
             UnitCount countData = _entityManager.GetComponentData<UnitCount>(_singletonEntity);
-            wizardsText.text = "Wizards:" + countData.WizardCount;
-            knightsText.text = "Knights:" + countData.KnightCount;
+            wizardsText.text = "Wizards: " + countData.WizardCount;
+            knightsText.text = "Knights: " + countData.KnightCount;
         }
     }
 }

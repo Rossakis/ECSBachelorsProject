@@ -7,12 +7,17 @@ namespace UI
     {
         public EcsSceneDataSO ECSSceneDataSO;
         public Toggle IsJobsSystemOn;
-        public Toggle IsObjectPoolingOn;
+        public Toggle IsInfiniteKnightSpawnOn;
+
+        private void Start()
+        {
+            ECSDebugValuesChanged();
+        }
         
         public void ECSDebugValuesChanged()
         {
             ECSSceneDataSO.IsJobSystemOn = IsJobsSystemOn.isOn;
-            ECSSceneDataSO.IsObjectPoolingOn = IsObjectPoolingOn.isOn;
+            ECSSceneDataSO.IsKnightSpawnInfinite = IsInfiniteKnightSpawnOn.isOn;
         }
     }
 }

@@ -9,7 +9,7 @@ using Unity.Transforms;
 namespace ECS.Systems.Combat
 {
     [UpdateInGroup(typeof(InitializationSystemGroup))]
-    public partial struct FireballPoolSystem : ISystem
+    public partial struct FireballPoolInitSystem : ISystem
     {
         [BurstCompile]
         public void OnCreate(ref SystemState state)

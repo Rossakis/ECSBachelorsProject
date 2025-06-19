@@ -101,8 +101,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a3ecd8441dcf0447889f284d76f216d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneData: {fileID: 11400000, guid: 35367ddac073a0e4bb9c134de317f2a5, type: 2}
   speed: 40
-  damageAmount: 20
 --- !u!114 &2443664650453955564
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,23 +1,26 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class FPSCounter : MonoBehaviour
+public class FPSManager : MonoBehaviour
 {
-    public float updateInterval = 0.5f;
+    public float updateInterval = 0.1f;
     public TMP_Text fpsText;
+    public TMP_Text vsyncText;
+    public Toggle VsyncToggle;
 
     private float accumulated = 0f;
     private int frames = 0;
     private float timeLeft;
     private float fps;
 
-    void Start()
+    void Awake()
     {
         timeLeft = updateInterval;
 
         if (fpsText == null)
         {
-            Debug.LogError("FPSCounterTMP: TextMeshProUGUI reference not set!");
+            Debug.LogError("FPSManager: TextMeshProUGUI reference not set!");
             enabled = false;
         }
     }
@@ -36,5 +39,13 @@ public class FPSCounter : MonoBehaviour
             accumulated = 0f;
             frames = 0;
         }
+    }
+
+    public void ToggleVsync()
+    {
+        QualitySettings.vSyncCount = VsyncToggle.isOn ? 1 : 0;
+        
+        if(vsyncText != null) // Text update is not necessary
+            vsyncText.text = QualitySettings.vSyncCount == 1 ? "VSync: On" : "VSync: Off";
     }
 }

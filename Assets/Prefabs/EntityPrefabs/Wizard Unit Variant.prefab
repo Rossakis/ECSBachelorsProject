@@ -241,6 +241,11 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: e9f1bf923e99c034eb3463754f2a4e54, type: 2}
+    - target: {fileID: 1550003001943190849, guid: 95b152f5993db7141b948a0a463aff6d,
+        type: 3}
+      propertyPath: m_Name
+      value: BarMesh
+      objectReference: {fileID: 0}
     - target: {fileID: 2334246072372790274, guid: 95b152f5993db7141b948a0a463aff6d,
         type: 3}
       propertyPath: m_Name

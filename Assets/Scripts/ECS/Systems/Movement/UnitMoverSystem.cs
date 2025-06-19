@@ -9,13 +9,9 @@ using Unity.Transforms;
 namespace ECS.Systems.Movement
 {
     partial struct UnitMoverSystem : ISystem {
-
-
         // Assume this much difference of length from the final target Position
         public const float TARGET_POSITION_DIFF_DISTANCE_SQ = 2f;
-
-
-
+        
         public ComponentLookup<TargetPositionPathQueued> targetPositionPathQueuedComponentLookup;
         public ComponentLookup<FlowFieldPathRequest> flowFieldPathRequestComponentLookup;
         public ComponentLookup<FlowFieldFollower> flowFieldFollowerComponentLookup;

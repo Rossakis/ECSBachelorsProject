@@ -5,8 +5,11 @@ using Unity.Transforms;
 namespace ECS.Systems.Movement
 {
     partial struct SetupUnitMoverDefaultPositionSystem : ISystem {
-
-
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+        
         [BurstCompile]
         public void OnUpdate(ref SystemState state) {
             EntityCommandBuffer entityCommandBuffer =

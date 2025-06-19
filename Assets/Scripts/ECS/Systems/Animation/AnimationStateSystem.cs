@@ -5,7 +5,7 @@ using Unity.Entities;
 
 namespace ECS.Systems.Animation
 {
-    [UpdateAfter(typeof(Combat.CastFireballSystem))]
+    [UpdateAfter(typeof(Combat.FireballInstantiateSystem))]
     partial struct AnimationStateSystem : ISystem {
         private ComponentLookup<ActiveAnimation> activeAnimationComponentLookup;
 
