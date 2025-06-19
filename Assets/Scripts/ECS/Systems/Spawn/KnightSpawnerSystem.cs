@@ -5,6 +5,8 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
+using Random = Unity.Mathematics.Random;
 
 namespace ECS.Systems.Spawn
 {
@@ -13,6 +15,7 @@ namespace ECS.Systems.Spawn
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<EntitiesReferences>();
             state.RequireForUpdate<SceneDataReference>();
         }
@@ -152,7 +155,7 @@ namespace ECS.Systems.Spawn
                                 break;
                             }
                         }
-
+    
                         if (isFarEnough)
                         {
                             Entity knight = ecb.Instantiate(entitiesReferences.knightPrefabEntity);

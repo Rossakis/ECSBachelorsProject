@@ -1,9 +1,7 @@
+using ScriptableObjects.Scene;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class MonoSceneDataSO : ScriptableObject
+public class MonoSceneDataSO : SceneDataSO
 {
-    [Header("Gameplay Settings")] 
-    public int WizardsAmountToSpawn;
-    public int KnightsAmountToSpawn;
 }

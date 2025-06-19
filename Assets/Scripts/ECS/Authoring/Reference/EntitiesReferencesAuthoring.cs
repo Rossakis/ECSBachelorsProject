@@ -9,7 +9,6 @@ public class EntitiesReferencesAuthoring : MonoBehaviour {
     public GameObject knightPrefabGameObject;
     public GameObject wizardPrefabGameObject;
     public GameObject fireballPrefabGameObject;
-    public GameObject fireballLightPrefabGameObject;
 
     public class Baker : Baker<EntitiesReferencesAuthoring> {
 
@@ -20,7 +19,6 @@ public class EntitiesReferencesAuthoring : MonoBehaviour {
                 knightPrefabEntity = GetEntity(authoring.knightPrefabGameObject, TransformUsageFlags.Dynamic),
                 wizardPrefabGameObject = GetEntity(authoring.wizardPrefabGameObject, TransformUsageFlags.Dynamic),
                 fireballPrefabEntity = GetEntity(authoring.fireballPrefabGameObject, TransformUsageFlags.Dynamic),
-                fireballLightPrefabEntity = GetEntity(authoring.fireballLightPrefabGameObject, TransformUsageFlags.Dynamic),
             });
         }
 
@@ -34,6 +32,5 @@ public struct EntitiesReferences : IComponentData {
     public Entity fireballPrefabEntity;
     public Entity knightPrefabEntity;
     public Entity wizardPrefabGameObject;
-    public Entity fireballLightPrefabEntity;
 
 }

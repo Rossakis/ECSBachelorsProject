@@ -1,15 +1,16 @@
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class KnightSpawnerAuthoring : MonoBehaviour
 {
 
+    [Header("Infinite Spawn Settings")]
     [SerializeField] private float timer;
     [SerializeField] private float timerMax;
     [SerializeField] private int nearbyKnightAmountMax;
     [SerializeField] private float nearbyKnightAmountDistance;
     
+    [Header("One-shot Spawn Settings")]
     [SerializeField] private float minDistanceBetweenUnits;
     [SerializeField] private float spawnRadiusMultiplier = 10;
     [SerializeField] private float minSpawnRadius = 1;

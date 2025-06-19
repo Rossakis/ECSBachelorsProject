@@ -515,19 +515,7 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_IsOn: 1
 --- !u!1 &142670364
 GameObject:
@@ -3418,19 +3406,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ECSSceneDataSO: {fileID: 11400000, guid: 35367ddac073a0e4bb9c134de317f2a5, type: 2}
-  IsJobsSystemOn: {fileID: 1697560359}
-  IsObjectPoolingOn: {fileID: 831152323}
-  IsVsyncOn: {fileID: 538562521}
+  ECSIsJobsSystemOn: {fileID: 1697560359}
+  ECSIsObjectPoolingOn: {fileID: 831152323}
+  ECSIsVsyncOn: {fileID: 538562521}
   ECSWizardsAmountInputField: {fileID: 1260966720}
   ECSWizardsHPInputField: {fileID: 67601549}
   ECSWizardsDamageInputField: {fileID: 881498952}
-  InfiniteKnightSpawnOn: {fileID: 71838524}
+  ECSIsInfiniteKnightSpawnOn: {fileID: 71838524}
   ECSKnightsInputField: {fileID: 1972183287}
   ECSKnightsHPInputField: {fileID: 441649732}
   ECSKnightsDamageInputField: {fileID: 1738220432}
-  MonoSceneDataSO: {fileID: 11400000, guid: 7cfa0e00b140a704b94155409a3103c0, type: 2}
-  MonoWizardsInputField: {fileID: 1968862949}
-  MonoKnightsInputField: {fileID: 142670366}
+  MonoSceneDataSO: {fileID: 0}
+  MonoIsJobsSystemOn: {fileID: 0}
+  MonoIsObjectPoolingOn: {fileID: 0}
+  MonoIsVsyncOn: {fileID: 0}
+  MonoAmountInputField: {fileID: 0}
+  MonoHPInputField: {fileID: 0}
+  MonoDamageInputField: {fileID: 0}
+  MonoIsInfiniteKnightSpawnOn: {fileID: 0}
+  MonoKnightsInputField: {fileID: 0}
+  MonoKnightsHPInputField: {fileID: 0}
+  MonoKnightsDamageInputField: {fileID: 0}
 --- !u!114 &722054235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4074,7 +4070,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.4431152, y: -647}
+  m_AnchoredPosition: {x: 3.4431152, y: -744}
   m_SizeDelta: {x: 400, y: 174.70508}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &879683605
@@ -7083,7 +7079,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.4430542, y: -905}
+  m_AnchoredPosition: {x: 3.4430542, y: -208}
   m_SizeDelta: {x: 400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1209228105
@@ -8399,7 +8395,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.4431152, y: -189}
+  m_AnchoredPosition: {x: 3.4431152, y: -286}
   m_SizeDelta: {x: 400, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1523779049

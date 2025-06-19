@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: EcsSceneData
   m_EditorClassIdentifier: 
   IsJobSystemOn: 1
-  IsObjectPoolingOn: 0
+  IsObjectPoolingOn: 1
   WizardsAmountToSpawn: 100
-  WizardMaxHealth: 100
-  WizardDamage: 20
-  IsKnightSpawnInfinite: 1
-  KnightsAmountToSpawn: 200
-  KnightMaxHealth: 70
+  WizardMaxHealth: 25
+  WizardDamage: 300
+  IsKnightSpawnInfinite: 0
+  KnightsAmountToSpawn: 300
+  KnightMaxHealth: 100
   KnightDamage: 5
