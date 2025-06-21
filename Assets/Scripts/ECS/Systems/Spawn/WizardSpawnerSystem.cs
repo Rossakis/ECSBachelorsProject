@@ -1,11 +1,12 @@
-﻿using ECS.Authoring.Combat;
+﻿using Assets.Scripts.ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Authoring.Spawn;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Systems.Spawn
+namespace Assets.Scripts.ECS.Systems.Spawn
 {
     [BurstCompile]
     public partial struct UnitSpawnerSystem : ISystem

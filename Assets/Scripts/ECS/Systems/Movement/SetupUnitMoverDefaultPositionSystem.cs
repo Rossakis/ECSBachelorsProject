@@ -1,8 +1,9 @@
+using Assets.Scripts.ECS.Authoring.Movement;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
 
-namespace ECS.Systems.Movement
+namespace Assets.Scripts.ECS.Systems.Movement
 {
     partial struct SetupUnitMoverDefaultPositionSystem : ISystem {
         public void OnCreate(ref SystemState state)

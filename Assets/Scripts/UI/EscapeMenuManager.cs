@@ -1,7 +1,6 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace UI
+namespace Assets.Scripts.UI
 {
     /// <summary>
     /// Enables/disables the Escape ui panel

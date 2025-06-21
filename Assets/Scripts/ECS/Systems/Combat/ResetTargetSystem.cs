@@ -1,10 +1,11 @@
-using ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Authoring.Movement;
+using Assets.Scripts.ECS.Authoring.Reference;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
 
-namespace ECS.Systems.Combat
+namespace Assets.Scripts.ECS.Systems.Combat
 {
     [UpdateInGroup(typeof(SimulationSystemGroup), OrderFirst = true)]
     partial struct ResetTargetSystem : ISystem {

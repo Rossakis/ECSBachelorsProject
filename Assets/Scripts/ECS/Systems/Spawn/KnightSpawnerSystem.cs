@@ -1,14 +1,16 @@
-using ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Authoring.Spawn;
+using Assets.Scripts.Monobehaviour.Assets;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
-namespace ECS.Systems.Spawn
+namespace Assets.Scripts.ECS.Systems.Spawn
 {
     partial struct KnightSpawnerSystem : ISystem
     {

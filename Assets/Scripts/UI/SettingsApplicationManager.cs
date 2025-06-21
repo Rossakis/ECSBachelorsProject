@@ -1,8 +1,9 @@
+using Assets.Scripts.ScriptableObjects.Scene;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace Assets.Scripts.UI
 {
     /// <summary>
     /// Handles the application of user settings for each scene data SO (e.g. IsJobsSystemOn for the EcsSceneData scriptable object) 

@@ -1,4 +1,7 @@
-using ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Authoring.Movement;
+using Assets.Scripts.ECS.Authoring.Navigation;
+using Assets.Scripts.ECS.Authoring.Reference;
+using Assets.Scripts.Monobehaviour.Assets;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,7 +9,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
-namespace ECS.Systems.Movement
+namespace Assets.Scripts.ECS.Systems.Movement
 {
     partial struct UnitMoverSystem : ISystem {
         // Assume this much difference of length from the final target Position

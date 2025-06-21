@@ -1,27 +1,30 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class AnimatedMeshAuthoring : MonoBehaviour {
+namespace Assets.Scripts.ECS.Authoring.Animation
+{
+    public class AnimatedMeshAuthoring : MonoBehaviour {
 
 
-    public GameObject meshGameObject;
+        public GameObject meshGameObject;
 
 
-    public class Baker : Baker<AnimatedMeshAuthoring> {
+        public class Baker : Baker<AnimatedMeshAuthoring> {
 
 
-        public override void Bake(AnimatedMeshAuthoring authoring) {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new AnimatedMesh {
-                meshEntity = GetEntity(authoring.meshGameObject, TransformUsageFlags.Dynamic),
-            });
+            public override void Bake(AnimatedMeshAuthoring authoring) {
+                Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new AnimatedMesh {
+                    meshEntity = GetEntity(authoring.meshGameObject, TransformUsageFlags.Dynamic),
+                });
+            }
         }
     }
-}
 
 
-public struct AnimatedMesh : IComponentData {
+    public struct AnimatedMesh : IComponentData {
 
-    public Entity meshEntity;
+        public Entity meshEntity;
 
+    }
 }

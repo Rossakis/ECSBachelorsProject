@@ -1,5 +1,8 @@
 
-public enum FactionType {
-    Wizard,
-    Knight,
+namespace Assets.Scripts
+{
+    public enum FactionType {
+        Wizard,
+        Knight,
+    }
 }

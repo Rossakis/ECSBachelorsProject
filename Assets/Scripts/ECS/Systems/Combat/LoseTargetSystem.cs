@@ -1,9 +1,11 @@
+using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Movement;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Systems.Combat
+namespace Assets.Scripts.ECS.Systems.Combat
 {
     partial struct LoseTargetSystem : ISystem {
 

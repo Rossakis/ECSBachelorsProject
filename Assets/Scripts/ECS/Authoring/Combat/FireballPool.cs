@@ -1,6 +1,6 @@
 ﻿using Unity.Entities;
 
-namespace ECS.Authoring.Combat
+namespace Assets.Scripts.ECS.Authoring.Combat
 {
     public struct FireballPool : IComponentData
     {

@@ -1,7 +1,10 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct MouseWorldPositionData : IComponentData
+namespace Assets.Scripts.ECS.Authoring.Input
 {
-    public float3 Value;
+    public struct MouseWorldPositionData : IComponentData
+    {
+        public float3 Value;
+    }
 }

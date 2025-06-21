@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ScriptableObjects.Scene
+namespace Assets.Scripts.ScriptableObjects.Scene
 {
     public class SceneDataSO : ScriptableObject
     {

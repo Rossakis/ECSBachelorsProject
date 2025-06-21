@@ -1,7 +1,8 @@
-﻿using Unity.Entities;
+﻿using Assets.Scripts.ScriptableObjects.Scene;
+using Unity.Entities;
 using UnityEngine;
 
-namespace ECS.Authoring.Reference
+namespace Assets.Scripts.ECS.Authoring.Reference
 {
     public class SceneDataReferenceAuthoring : MonoBehaviour
     {

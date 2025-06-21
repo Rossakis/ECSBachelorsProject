@@ -1,5 +1,7 @@
 //#define GRID_DEBUG
 
+using Assets.Scripts.ECS.Authoring.Navigation;
+using Assets.Scripts.Monobehaviour.Assets;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,7 +9,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Physics;
 
-namespace ECS.Systems.Navigation
+namespace Assets.Scripts.ECS.Systems.Navigation
 {
     public partial struct GridSystem : ISystem {
 

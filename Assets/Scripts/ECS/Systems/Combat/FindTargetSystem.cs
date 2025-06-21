@@ -1,4 +1,7 @@
-using ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Movement;
+using Assets.Scripts.ECS.Authoring.Reference;
+using Assets.Scripts.Monobehaviour.Assets;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -6,7 +9,7 @@ using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
 
-namespace ECS.Systems.Combat
+namespace Assets.Scripts.ECS.Systems.Combat
 {
     partial struct FindTargetSystem : ISystem {
 
@@ -77,7 +80,7 @@ namespace ECS.Systems.Combat
                     CollisionFilter collisionFilter = new CollisionFilter
                     {
                         BelongsTo = ~0u,
-                        CollidesWith = 1u << GameAssets.UNITS_LAYER,
+                        CollidesWith = 1u << GameAssets.UNITS_LAYER ,
                         GroupIndex = 0,
                     };
 

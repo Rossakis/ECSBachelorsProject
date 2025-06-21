@@ -1,7 +1,8 @@
+using Assets.Scripts.ECS.Authoring.Combat;
 using Unity.Burst;
 using Unity.Entities;
 
-namespace ECS.Systems.Combat
+namespace Assets.Scripts.ECS.Systems.Combat
 {
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     partial struct HealthDeadTestSystem : ISystem {

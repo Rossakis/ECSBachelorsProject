@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Assets.Scripts.ECS.Authoring.Animation;
+using Assets.Scripts.ScriptableObjects.Animation;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Rendering;
 
-namespace ECS.Systems.Animation
+namespace Assets.Scripts.ECS.Systems.Animation
 {
     [WorldSystemFilter(WorldSystemFilterFlags.BakingSystem)]
     [UpdateInGroup(typeof(PostBakingSystemGroup))]

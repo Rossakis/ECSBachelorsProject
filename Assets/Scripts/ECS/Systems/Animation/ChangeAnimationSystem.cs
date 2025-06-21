@@ -1,9 +1,11 @@
-using ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Authoring.Animation;
+using Assets.Scripts.ECS.Authoring.Reference;
+using Assets.Scripts.ScriptableObjects.Animation;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Rendering;
 
-namespace ECS.Systems.Animation
+namespace Assets.Scripts.ECS.Systems.Animation
 {
     [UpdateBefore(typeof(ActiveAnimationSystem))]
     partial struct ChangeAnimationSystem : ISystem {

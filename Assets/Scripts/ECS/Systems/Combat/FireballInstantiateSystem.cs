@@ -1,12 +1,13 @@
-using ECS.Authoring.Combat;
-using ECS.Authoring.Reference;
-using ECS.Utility;
+using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Movement;
+using Assets.Scripts.ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Utility;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Systems.Combat
+namespace Assets.Scripts.ECS.Systems.Combat
 {
     partial struct FireballInstantiateSystem : ISystem
     {

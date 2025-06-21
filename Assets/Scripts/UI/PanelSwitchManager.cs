@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace UI
+namespace Assets.Scripts.UI
 {
     public class PanelSwitchManager : MonoBehaviour
     {

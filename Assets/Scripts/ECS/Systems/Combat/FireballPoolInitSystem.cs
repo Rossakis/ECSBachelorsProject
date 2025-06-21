@@ -1,12 +1,12 @@
-﻿using ECS.Authoring.Combat;
-using ECS.Authoring.Reference;
+﻿using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Reference;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Systems.Combat
+namespace Assets.Scripts.ECS.Systems.Combat
 {
     [UpdateInGroup(typeof(InitializationSystemGroup))]
     public partial struct FireballPoolInitSystem : ISystem

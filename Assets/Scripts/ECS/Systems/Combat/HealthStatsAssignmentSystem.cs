@@ -1,9 +1,10 @@
-﻿using ECS.Authoring.Reference;
+﻿using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Reference;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace ECS.Systems.Combat
+namespace Assets.Scripts.ECS.Systems.Combat
 {
     /// <summary>
     /// Because Knights and Wizard have different HP (while having same Health component), we need to assign it with a system's logic at runtime

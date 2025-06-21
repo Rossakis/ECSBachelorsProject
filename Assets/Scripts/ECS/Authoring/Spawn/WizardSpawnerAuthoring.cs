@@ -1,7 +1,8 @@
-﻿using Unity.Entities;
+﻿using Assets.Scripts.ScriptableObjects.Scene;
+using Unity.Entities;
 using UnityEngine;
 
-namespace ECS.Authoring.Combat
+namespace Assets.Scripts.ECS.Authoring.Spawn
 {
     public class WizardSpawnerAuthoring : MonoBehaviour
     {

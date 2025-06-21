@@ -1,8 +1,9 @@
+using Assets.Scripts.ECS.Authoring.Movement;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
 
-namespace ECS.Systems.UI
+namespace Assets.Scripts.ECS.Systems.UI
 {
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     [UpdateBefore(typeof(Events.ResetEventsSystem))]

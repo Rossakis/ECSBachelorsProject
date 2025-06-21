@@ -1,9 +1,11 @@
+using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Movement;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Jobs;
 
-namespace ECS.Systems.Events
+namespace Assets.Scripts.ECS.Systems.Events
 {
     [UpdateInGroup(typeof(LateSimulationSystemGroup), OrderLast = true)]
     partial struct ResetEventsSystem : ISystem {

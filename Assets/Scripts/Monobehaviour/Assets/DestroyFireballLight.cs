@@ -1,16 +1,19 @@
 using UnityEngine;
 
-public class DestroyFireballLight : MonoBehaviour {
+namespace Assets.Scripts.Monobehaviour.Assets
+{
+    public class DestroyFireballLight : MonoBehaviour {
 
 
-    [SerializeField] private float timer = 0.05f;
+        [SerializeField] private float timer = 0.05f;
 
 
-    private void Update() {
-        timer -= Time.deltaTime;
-        if (timer <= 0f) {
-            Destroy(gameObject);
+        private void Update() {
+            timer -= Time.deltaTime;
+            if (timer <= 0f) {
+                Destroy(gameObject);
+            }
         }
-    }
 
+    }
 }

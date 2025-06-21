@@ -1,19 +1,22 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class KnightAuthoring : MonoBehaviour {
+namespace Assets.Scripts.ECS.Authoring.Combat
+{
+    public class KnightAuthoring : MonoBehaviour {
     
-    public class Baker : Baker<KnightAuthoring> {
+        public class Baker : Baker<KnightAuthoring> {
         
-        public override void Bake(KnightAuthoring authoring) {
-            Entity entity = GetEntity(TransformUsageFlags.Dynamic);
-            AddComponent(entity, new Knight());
+            public override void Bake(KnightAuthoring authoring) {
+                Entity entity = GetEntity(TransformUsageFlags.Dynamic);
+                AddComponent(entity, new Knight());
+            }
         }
     }
-}
 
 
 
 
-public struct Knight : IComponentData {
+    public struct Knight : IComponentData {
+    }
 }

@@ -1,9 +1,10 @@
-﻿using Unity.Collections;
+﻿using Assets.Scripts.ECS.Authoring.Combat;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Utility
+namespace Assets.Scripts.ECS.Utility
 {
     public static class FireballPoolUtility
     {

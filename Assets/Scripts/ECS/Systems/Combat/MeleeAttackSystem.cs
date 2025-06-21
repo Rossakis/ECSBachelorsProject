@@ -1,13 +1,15 @@
+using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Movement;
+using Assets.Scripts.Monobehaviour.Assets;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 using RaycastHit = Unity.Physics.RaycastHit;
 
-namespace ECS.Systems.Combat
+namespace Assets.Scripts.ECS.Systems.Combat
 {
     partial struct MeleeAttackSystem : ISystem {
 
@@ -48,6 +50,7 @@ namespace ECS.Systems.Combat
                     float3 dirToTarget = targetLocalTransform.Position - localTransform.ValueRO.Position;
                     dirToTarget = math.normalize(dirToTarget);
                     float distanceExtraToTestRaycast = .4f;
+
                     RaycastInput raycastInput = new RaycastInput {
                         Start = localTransform.ValueRO.Position,
                         End = localTransform.ValueRO.Position + dirToTarget * (meleeAttack.ValueRO.colliderSize + distanceExtraToTestRaycast),
@@ -57,6 +60,7 @@ namespace ECS.Systems.Combat
                             GroupIndex = 0,
                         },
                     };
+
                     raycastHitList.Clear();
                     if (collisionWorld.CastRay(raycastInput, ref raycastHitList)) {
                         foreach (RaycastHit raycastHit in raycastHitList) {

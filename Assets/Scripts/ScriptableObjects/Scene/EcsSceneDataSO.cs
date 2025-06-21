@@ -1,7 +1,9 @@
-using ScriptableObjects.Scene;
 using UnityEngine;
 
-[CreateAssetMenu()]
-public class EcsSceneDataSO : SceneDataSO
+namespace Assets.Scripts.ScriptableObjects.Scene
 {
+    [CreateAssetMenu()]
+    public class EcsSceneDataSO : SceneDataSO
+    {
+    }
 }

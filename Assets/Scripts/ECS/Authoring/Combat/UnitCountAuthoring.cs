@@ -1,7 +1,7 @@
 ﻿using Unity.Entities;
 using UnityEngine;
 
-namespace ECS.Authoring.Combat
+namespace Assets.Scripts.ECS.Authoring.Combat
 {
     public class UnitCountAuthoring : MonoBehaviour
     {

@@ -1,9 +1,10 @@
+using Assets.Scripts.ECS.Authoring.Movement;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace ECS.Systems.Movement
+namespace Assets.Scripts.ECS.Systems.Movement
 {
     partial struct RandomWalkingSystem : ISystem {
 

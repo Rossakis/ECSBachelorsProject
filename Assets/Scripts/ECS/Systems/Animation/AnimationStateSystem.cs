@@ -1,9 +1,13 @@
-using ECS.Authoring.Reference;
+using Assets.Scripts.ECS.Authoring.Animation;
+using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Movement;
+using Assets.Scripts.ECS.Authoring.Reference;
+using Assets.Scripts.ScriptableObjects.Animation;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace ECS.Systems.Animation
+namespace Assets.Scripts.ECS.Systems.Animation
 {
     [UpdateAfter(typeof(Combat.FireballInstantiateSystem))]
     partial struct AnimationStateSystem : ISystem {
