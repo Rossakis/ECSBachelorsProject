@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.ECS.UI
+namespace Assets.Scripts.UI
 {
     public class ResetPositionUI : MonoBehaviour {
 

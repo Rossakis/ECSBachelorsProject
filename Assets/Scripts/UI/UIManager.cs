@@ -11,7 +11,6 @@ namespace Assets.Scripts.UI
     
         [SerializeField] private TMP_InputField UnitInputField;
         [SerializeField] private TMP_Text JobButtonText;
-        [SerializeField] private float Radius = 100f;
 
         private EntityManager entityManager;
         private Entity prefabSingletonEntity;

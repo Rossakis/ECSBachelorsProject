@@ -5,7 +5,6 @@ namespace Assets.Scripts.ScriptableObjects.Scene
     public class SceneDataSO : ScriptableObject
     {
         [Header("Performance Settings")]
-        public bool IsJobSystemOn = true;
         public bool IsObjectPoolingOn = true;
 
         [Header("Wizard Settings")] 

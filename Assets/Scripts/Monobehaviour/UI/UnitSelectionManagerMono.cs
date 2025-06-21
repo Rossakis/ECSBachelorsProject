@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Monobehaviour.Combat.Assets.Scripts.Monobehaviour.Combat;
+using Assets.Scripts.Monobehaviour.Combat;
 using Assets.Scripts.Monobehaviour.Input;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,7 +14,7 @@ namespace Assets.Scripts.Monobehaviour.UI
         public LayerMask unitLayerMask;
         public static UnitSelectionManagerMono Instance { get; private set; }
 
-        public List<UnitMono> selectedUnits = new List<UnitMono>();
+        public List<WizardMono> selectedUnits = new List<WizardMono>();
 
         private Vector2 selectionStartMousePosition;
         private const float MultipleSelectionSizeMin = 40f;
@@ -51,7 +51,7 @@ namespace Assets.Scripts.Monobehaviour.UI
 
                 if (isMultipleSelection)
                 {
-                    foreach (var unit in Object.FindObjectsByType<UnitMono>(FindObjectsSortMode.None))
+                    foreach (var unit in Object.FindObjectsByType<WizardMono>(FindObjectsSortMode.None))
                     {
                         Vector2 screenPos = UnityEngine.Camera.main.WorldToScreenPoint(unit.transform.position);
                         if (selectionRect.Contains(screenPos))
@@ -66,7 +66,7 @@ namespace Assets.Scripts.Monobehaviour.UI
                     Ray ray = UnityEngine.Camera.main.ScreenPointToRay(UnityEngine.Input.mousePosition);
                     if (Physics.Raycast(ray, out RaycastHit hit, 1000f, unitLayerMask))
                     {
-                        var unit = hit.collider.GetComponentInParent<UnitMono>();
+                        var unit = hit.collider.GetComponentInParent<WizardMono>();
                         if (unit != null)
                         {
                             selectedUnits.Add(unit);
@@ -88,6 +88,7 @@ namespace Assets.Scripts.Monobehaviour.UI
                     var targetUnit = hit.collider.GetComponentInParent<UnitMono>();
                     if (targetUnit != null && IsEnemy(targetUnit))
                     {
+                        //TODO: Attack override
                         // Attack command
                         foreach (var unit in selectedUnits)
                         {
@@ -103,8 +104,7 @@ namespace Assets.Scripts.Monobehaviour.UI
 
                 for (int i = 0; i < selectedUnits.Count; i++)
                 {
-                    selectedUnits[i].SetTargetPosition(positions[i]);
-                    selectedUnits[i].Move();
+                    UnitMoveManagerMono.Instance.MoveUnitToPosition(selectedUnits[i], positions[i]);
                 }
             }
         }
@@ -112,11 +112,8 @@ namespace Assets.Scripts.Monobehaviour.UI
         //TODO:
         private bool IsEnemy(UnitMono targetUnit)
         {
-            // Implement your own logic to determine if the target is an enemy.
-            // For example, compare factions or tags.
-            // Example:
             // return targetUnit.faction != selectedUnits[0].faction;
-            return true; // Placeholder: treat all as enemies for now
+            return true;
         }
 
         private void DeselectAllUnits()

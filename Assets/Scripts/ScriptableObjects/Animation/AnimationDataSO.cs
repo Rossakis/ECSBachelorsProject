@@ -17,7 +17,6 @@ namespace Assets.Scripts.ScriptableObjects.Animation
             KnightDeath,
         }
 
-
         public AnimationType animationType;
         public Mesh[] meshArray;
         public float frameTimerMax;

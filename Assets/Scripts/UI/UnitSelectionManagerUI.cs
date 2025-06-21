@@ -1,8 +1,7 @@
 using Assets.Scripts.Monobehaviour.UI;
-using Assets.Scripts.UI;
 using UnityEngine;
 
-namespace Assets.Scripts.ECS.UI
+namespace Assets.Scripts.UI
 {
     public class UnitSelectionManagerUI : MonoBehaviour {
     

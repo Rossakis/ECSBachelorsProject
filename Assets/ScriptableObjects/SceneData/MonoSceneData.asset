@@ -12,3 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1153bd7990279bc46b79852b6f0c5ed0, type: 3}
   m_Name: MonoSceneData
   m_EditorClassIdentifier: 
+  IsObjectPoolingOn: 1
+  WizardsAmountToSpawn: 100
+  WizardMaxHealth: 25
+  WizardDamage: 20
+  IsKnightSpawnInfinite: 0
+  KnightsAmountToSpawn: 100
+  KnightMaxHealth: 100
+  KnightDamage: 5

@@ -1,4 +1,4 @@
-using Assets.Scripts.Monobehaviour.Combat.Assets.Scripts.Monobehaviour.Combat;
+using Assets.Scripts.ScriptableObjects.Animation;
 using UnityEngine;
 
 namespace Assets.Scripts.Monobehaviour.Combat
@@ -9,7 +9,9 @@ namespace Assets.Scripts.Monobehaviour.Combat
 
         void Start()
         {
-        
+            currentHealth = sceneData.WizardMaxHealth;
+            damage = sceneData.WizardDamage;
+            AnimationController.RequestAnimation(AnimationDataSO.AnimationType.WizardIdle);
         }
 
         void Update()
