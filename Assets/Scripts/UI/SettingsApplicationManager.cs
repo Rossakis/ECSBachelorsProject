@@ -1,4 +1,4 @@
-using Assets.Scripts.ScriptableObjects.Scene;
+﻿using Assets.Scripts.ScriptableObjects.Scene;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +14,6 @@ namespace Assets.Scripts.UI
         public EcsSceneDataSO ECSSceneDataSO;
         public Toggle ECSIsJobsSystemOn;
         public Toggle ECSIsObjectPoolingOn;
-        public Toggle ECSIsVsyncOn;
         
         [Header("ECS Wizards-Settings")]
         public TMP_InputField ECSWizardsAmountInputField;
@@ -29,9 +28,7 @@ namespace Assets.Scripts.UI
     
         [Header("Mono Settings")]
         public MonoSceneDataSO MonoSceneDataSO;
-        public Toggle MonoIsJobsSystemOn;
         public Toggle MonoIsObjectPoolingOn;
-        public Toggle MonoIsVsyncOn;
         
         [Header("Mono Wizards-Settings")]
         public TMP_InputField MonoAmountInputField;
@@ -52,6 +49,7 @@ namespace Assets.Scripts.UI
             panelSwitchManager = GetComponent<PanelSwitchManager>();
             sceneLoader = GetComponent<SceneLoader>();
             Application.targetFrameRate = -1; // uncapped framerate
+            QualitySettings.vSyncCount = 0; // Disable VSync
         }
 
         #region ECS
@@ -146,27 +144,94 @@ namespace Assets.Scripts.UI
         }
         #endregion
 
-        
+        #region Monobehaviour Settings
         public void ApplyMonoSettings()
         {
-            if (!int.TryParse(ECSWizardsAmountInputField.text, out int wizards) || wizards <= 0)
+            // Wizards
+            if (!int.TryParse(MonoAmountInputField.text, out int wizardAmount) || wizardAmount <= 0)
             {
                 string errorMsg = "Number of Wizards must be greater than zero.";
                 panelSwitchManager.SwitchToErrorPanel(errorMsg);
                 return;
             }
 
-            if (!int.TryParse(ECSKnightsInputField.text, out int knights) || knights <= 0)
+            if (!int.TryParse(MonoHPInputField.text, out int wizardHP) || wizardHP <= 0)
+            {
+                string errorMsg = "Health of Wizards must be greater than zero.";
+                panelSwitchManager.SwitchToErrorPanel(errorMsg);
+                return;
+            }
+
+            if (!int.TryParse(MonoDamageInputField.text, out int wizardDamage) || wizardDamage <= 0)
+            {
+                string errorMsg = "Damage of Wizards must be greater than zero.";
+                panelSwitchManager.SwitchToErrorPanel(errorMsg);
+                return;
+            }
+
+            // Knights
+            if (!int.TryParse(MonoKnightsInputField.text, out int knightAmount) || knightAmount <= 0)
             {
                 string errorMsg = "Number of Knights must be greater than zero.";
                 panelSwitchManager.SwitchToErrorPanel(errorMsg);
                 return;
             }
 
-            MonoSceneDataSO.WizardsAmountToSpawn = wizards;
-            MonoSceneDataSO.KnightsAmountToSpawn = knights;
+            if (!int.TryParse(MonoKnightsHPInputField.text, out int knightHP) || knightHP <= 0)
+            {
+                string errorMsg = "Health of Knights must be greater than zero.";
+                panelSwitchManager.SwitchToErrorPanel(errorMsg);
+                return;
+            }
 
-            sceneLoader.LoadEcsScene();
+            if (!int.TryParse(MonoKnightsDamageInputField.text, out int knightDamage) || knightDamage <= 0)
+            {
+                string errorMsg = "Damage of Knights must be greater than zero.";
+                panelSwitchManager.SwitchToErrorPanel(errorMsg);
+                return;
+            }
+
+            MonoSceneDataSO.IsObjectPoolingOn = MonoIsObjectPoolingOn.isOn;
+
+            MonoSceneDataSO.WizardsAmountToSpawn = wizardAmount;
+            MonoSceneDataSO.WizardMaxHealth = wizardHP;
+            MonoSceneDataSO.WizardDamage = wizardDamage;
+
+            MonoSceneDataSO.IsKnightSpawnInfinite = MonoIsInfiniteKnightSpawnOn.isOn;
+            MonoSceneDataSO.KnightsAmountToSpawn = knightAmount;
+            MonoSceneDataSO.KnightMaxHealth = knightHP;
+            MonoSceneDataSO.KnightDamage = knightDamage;
+
+            sceneLoader.LoadMonoScene();
         }
+
+        public void LoadDefaultMonoSettings()
+        {
+            // UI changes
+            MonoIsObjectPoolingOn.isOn = true;
+
+            MonoAmountInputField.text = "100";
+            MonoHPInputField.text = "25";
+            MonoDamageInputField.text = "20";
+
+            MonoIsInfiniteKnightSpawnOn.isOn = false;
+            MonoKnightsInputField.text = "300";
+            MonoKnightsHPInputField.text = "100";
+            MonoKnightsDamageInputField.text = "5";
+
+            // SceneData changes
+            MonoSceneDataSO.IsObjectPoolingOn = true;
+
+            MonoSceneDataSO.WizardsAmountToSpawn = 100;
+            MonoSceneDataSO.WizardMaxHealth = 25;
+            MonoSceneDataSO.WizardDamage = 20;
+
+            MonoSceneDataSO.IsKnightSpawnInfinite = false;
+            MonoSceneDataSO.KnightsAmountToSpawn = 300;
+            MonoSceneDataSO.KnightMaxHealth = 100;
+            MonoSceneDataSO.KnightDamage = 5;
+        }
+
+        #endregion
     }
 }

@@ -7,6 +7,7 @@ namespace Assets.Scripts.UI
     public class FPSManager : MonoBehaviour
     {
         public static float CurrentFPS { get; private set; }
+        public static bool IsVsyncOn => QualitySettings.vSyncCount > 0;
 
         public float updateInterval = 0.1f;
         public TMP_Text fpsText;
@@ -19,7 +20,7 @@ namespace Assets.Scripts.UI
         private float fps;
 
 
-        void Awake()
+        void Start()
         {
             timeLeft = updateInterval;
 
@@ -28,6 +29,8 @@ namespace Assets.Scripts.UI
                 Debug.LogError("FPSManager: TextMeshProUGUI reference not set!");
                 enabled = false;
             }
+
+            SynchronizeVsync();
         }
 
         void Update()
@@ -48,11 +51,16 @@ namespace Assets.Scripts.UI
             CurrentFPS = fps;
         }
 
+        private void SynchronizeVsync()
+        {
+            VsyncToggle.isOn = QualitySettings.vSyncCount > 0;
+        }
+
         public void ToggleVsync()
         {
             QualitySettings.vSyncCount = VsyncToggle.isOn ? 1 : 0;
         
-            if(vsyncText != null) // Text update is not necessary
+            if(vsyncText != null)
                 vsyncText.text = QualitySettings.vSyncCount == 1 ? "VSync: On" : "VSync: Off";
         }
     }

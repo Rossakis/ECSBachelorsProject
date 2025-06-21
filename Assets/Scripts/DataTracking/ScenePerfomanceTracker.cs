@@ -66,7 +66,9 @@ namespace Assets.Scripts.DataTracking
 
         private void ExportData()
         {
-            if (frameCount == 0) return;
+            //If Vsync is enabled, ignore export
+            if (frameCount == 0 || QualitySettings.vSyncCount > 0) 
+                return;
 
             float averageFPS = totalFPS / frameCount;
 
