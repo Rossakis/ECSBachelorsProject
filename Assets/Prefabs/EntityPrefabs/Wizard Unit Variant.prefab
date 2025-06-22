@@ -135,6 +135,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7918217998536588503, guid: af8d0caa312f74541b4a546c1872f3b6,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 8025824774023758594, guid: af8d0caa312f74541b4a546c1872f3b6,
         type: 3}
       propertyPath: healthAmount

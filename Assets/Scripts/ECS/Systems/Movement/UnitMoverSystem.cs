@@ -111,6 +111,12 @@ namespace Assets.Scripts.ECS.Systems.Movement
                     localTransform.ValueRW.Rotation = math.slerp(localTransform.ValueRO.Rotation, targetRot,
                         SystemAPI.Time.DeltaTime * unitMover.ValueRO.rotationSpeed);
 
+                    // Force rotation to only affect Y axis
+                    float3 euler = math.Euler(localTransform.ValueRW.Rotation);
+                    euler.x = 0f;
+                    euler.z = 0f;
+                    localTransform.ValueRW.Rotation = quaternion.Euler(euler);
+
                     if (SystemAPI.HasComponent<PhysicsVelocity>(entity))
                     {
                         SystemAPI.SetComponent(entity, new PhysicsVelocity
@@ -260,6 +266,12 @@ namespace Assets.Scripts.ECS.Systems.Movement
                     math.slerp(localTransform.Rotation,
                         quaternion.LookRotation(moveDirection, math.up()),
                         deltaTime * unitMover.rotationSpeed);
+
+                // Force rotation to only affect Y axis
+                float3 euler = math.Euler(localTransform.Rotation);
+                euler.x = 0f;
+                euler.z = 0f;
+                localTransform.Rotation = quaternion.Euler(euler);
 
                 physicsVelocity.Linear = moveDirection * unitMover.moveSpeed;
                 physicsVelocity.Angular = float3.zero;
