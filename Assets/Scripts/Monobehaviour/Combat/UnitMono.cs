@@ -1,4 +1,5 @@
 using Assets.Scripts.Monobehaviour.Animation;
+using Assets.Scripts.Monobehaviour.Movement;
 using Assets.Scripts.ScriptableObjects.Animation;
 using Assets.Scripts.ScriptableObjects.Scene;
 using UnityEngine;
@@ -10,13 +11,10 @@ namespace Assets.Scripts.Monobehaviour.Combat
         public MonoSceneDataSO sceneData;
 
         [Header("Unit Stats")]
+        public FactionType FactionType = FactionType.Wizard;
         protected int damage;
         public float moveSpeed = 5f;
         public float rotationSpeed = 10f;
-        public FactionType FactionType = FactionType.Wizard;
-
-        [Header("Visuals")]
-        public GameObject selectionRing;
 
         [Header("Runtime State")]
         public int currentHealth;
@@ -27,6 +25,14 @@ namespace Assets.Scripts.Monobehaviour.Combat
         [HideInInspector] 
         public AnimationControllerMono AnimationController;
 
+        [Header("Target Params")]
+        public UnitMono currentTarget;
+        public UnitMono overrideTarget;
+        public float loseTargetDistance = 20f;
+        public float findTargetRange = 15f;
+        public FactionType targetFaction = FactionType.Knight;
+        public float findTargetInterval = 1f;
+        [HideInInspector] public float findTargetTimer = 0f;
 
         protected virtual void Awake()
         {
@@ -88,12 +94,6 @@ namespace Assets.Scripts.Monobehaviour.Combat
 
         public virtual void Attack(UnitMono target)
         {
-        }
-
-        public virtual void SetSelected(bool selected)
-        {
-            if (selectionRing != null)
-                selectionRing.SetActive(selected);
         }
     }
 }

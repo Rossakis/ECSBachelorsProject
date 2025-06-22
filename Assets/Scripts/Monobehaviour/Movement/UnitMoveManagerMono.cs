@@ -1,9 +1,9 @@
-using Assets.Scripts.Monobehaviour.Animation;
-using Assets.Scripts.ScriptableObjects.Animation;
 using System.Collections.Generic;
+using Assets.Scripts.Monobehaviour.Combat;
+using Assets.Scripts.ScriptableObjects.Animation;
 using UnityEngine;
 
-namespace Assets.Scripts.Monobehaviour.Combat
+namespace Assets.Scripts.Monobehaviour.Movement
 {
     public class UnitMoveManagerMono : MonoBehaviour
     { 

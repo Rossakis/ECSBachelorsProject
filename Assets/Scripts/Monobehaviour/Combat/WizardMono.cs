@@ -6,6 +6,7 @@ namespace Assets.Scripts.Monobehaviour.Combat
     public class WizardMono : UnitMono
     {
         public GameObject fireballPrefab;
+        public GameObject selectionRing;
 
         void Start()
         {
@@ -21,11 +22,16 @@ namespace Assets.Scripts.Monobehaviour.Combat
 
         public override void Attack(UnitMono target)
         {
-            // Cast fireball at target
+            //TODO:
             if (fireballPrefab != null && target != null)
             {
-                // Instantiate fireball, set its target, etc.
+               
             }
+        }
+        public virtual void SetSelected(bool selected)
+        {
+            if (selectionRing != null)
+                selectionRing.SetActive(selected);
         }
     }
 }

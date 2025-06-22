@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 3760494758900731996}
   - component: {fileID: 1012888930593792487}
   - component: {fileID: 7143805738313151664}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 2407758165674937122}
   - component: {fileID: 4090656049963161521}
   - component: {fileID: 7339440479138642296}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: SelectionCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3653690423717908098}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FireballSpawnPosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -499,7 +499,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.5, y: 1.9191554, z: 0.5}
-  m_Center: {x: 1.7512454e-16, y: 0.7, z: -7.0049815e-16}
+  m_Center: {x: 0, y: 0.7, z: -7.0049815e-16}
 --- !u!54 &5196471561936673722
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -540,14 +540,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneData: {fileID: 11400000, guid: 7cfa0e00b140a704b94155409a3103c0, type: 2}
+  FactionType: 0
   moveSpeed: 5
   rotationSpeed: 10
-  FactionType: 0
-  selectionRing: {fileID: 5364101435558340005}
   currentHealth: 0
   AnimationController: {fileID: 0}
+  currentTarget: {fileID: 0}
+  overrideTarget: {fileID: 0}
+  loseTargetDistance: 20
+  findTargetRange: 15
+  targetFaction: 1
+  findTargetInterval: 1
+  findTargetTimer: 0
   fireballPrefab: {fileID: 5276861210565654749, guid: caaac5cab34bbd8458b44ba81c11e170,
     type: 3}
+  selectionRing: {fileID: 5364101435558340005}
 --- !u!114 &5597733190825379063
 MonoBehaviour:
   m_ObjectHideFlags: 0

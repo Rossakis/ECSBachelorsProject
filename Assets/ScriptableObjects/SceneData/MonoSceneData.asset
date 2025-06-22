@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: MonoSceneData
   m_EditorClassIdentifier: 
   IsObjectPoolingOn: 1
-  WizardsAmountToSpawn: 100
+  WizardsAmountToSpawn: 1
   WizardMaxHealth: 25
   WizardDamage: 20
   IsKnightSpawnInfinite: 0
-  KnightsAmountToSpawn: 100
+  KnightsAmountToSpawn: 1
   KnightMaxHealth: 100
   KnightDamage: 5

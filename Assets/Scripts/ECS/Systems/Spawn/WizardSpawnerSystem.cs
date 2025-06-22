@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.ECS.Authoring.Reference;
+﻿using Assets.Scripts.ECS.Authoring.Movement;
+using Assets.Scripts.ECS.Authoring.Reference;
 using Assets.Scripts.ECS.Authoring.Spawn;
 using Unity.Burst;
 using Unity.Collections;

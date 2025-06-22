@@ -25,13 +25,37 @@ namespace Assets.Scripts.UI
 
 
         private Vector2 selectionStartMousePosition;
+        private bool hasAlreadyDeselected = false;
 
-
-        private void Awake() {
+        private void Awake()
+        {
             Instance = this;
         }
 
         private void Update() {
+
+            if (!hasAlreadyDeselected) //Only deselect at the start of the game run cycle
+            {
+                EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+                EntityQuery entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Selected>().Build(entityManager);
+
+                NativeArray<Entity> entityArray = entityQuery.ToEntityArray(Allocator.Temp);
+                NativeArray<Selected> selectedArray = entityQuery.ToComponentDataArray<Selected>(Allocator.Temp);
+
+                // Deselect all
+                for (int i = 0; i < entityArray.Length; i++)
+                {
+                    entityManager.SetComponentEnabled<Selected>(entityArray[i], false);
+                    Selected selected = selectedArray[i];
+                    selected.onDeselected = true;
+                    entityManager.SetComponentData(entityArray[i], selected);
+                }
+
+                hasAlreadyDeselected = true;
+                OnSelectionAreaEnd?.Invoke(this, EventArgs.Empty);
+                OnSelectedEntitiesChanged?.Invoke(this, EventArgs.Empty);
+            }
+
 
             if (Input.GetMouseButtonUp(0)) {
                 EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -56,9 +80,9 @@ namespace Assets.Scripts.UI
 
                 if (isMultipleSelection) {
                     entityQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<LocalTransform, Unit>().WithPresent<Selected>().Build(entityManager);
-
                     entityArray = entityQuery.ToEntityArray(Allocator.Temp);
                     NativeArray<LocalTransform> localTransformArray = entityQuery.ToComponentDataArray<LocalTransform>(Allocator.Temp);
+                    
                     for (int i = 0; i < localTransformArray.Length; i++) {
                         LocalTransform unitLocalTransform = localTransformArray[i];
                         Vector2 unitScreenPosition = Camera.main.WorldToScreenPoint(unitLocalTransform.Position);
