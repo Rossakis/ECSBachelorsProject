@@ -3,17 +3,24 @@ using UnityEngine;
 
 namespace Assets.Scripts.Monobehaviour.Combat
 {
-    public class UnitTargetManagerMono : MonoBehaviour
+    public class TargetManagerMono : MonoBehaviour
     {
+        public static TargetManagerMono Instance;
         private List<UnitMono> allUnits = new List<UnitMono>();
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+        }
 
         private void Update()
         {
-            float deltaTime = Time.deltaTime;
-
             foreach (var unit in allUnits)
             {
-                unit.findTargetTimer -= deltaTime;
+                unit.findTargetTimer -= Time.deltaTime;
                 if (unit.findTargetTimer > 0f)
                     continue;
 
@@ -83,6 +90,17 @@ namespace Assets.Scripts.Monobehaviour.Combat
                     }
                 }
             }
+        }
+
+        public void RegisterUnit(UnitMono unit)
+        {
+            if (!allUnits.Contains(unit))
+                allUnits.Add(unit);
+        }
+
+        public void UnregisterUnit(UnitMono unit)
+        {
+            allUnits.Remove(unit);
         }
     }
 }

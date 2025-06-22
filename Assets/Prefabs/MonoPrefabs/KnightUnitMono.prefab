@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 3071787887903755385}
   - component: {fileID: -9041739873662556921}
   m_Layer: 6
-  m_Name: KnightUnit
+  m_Name: KnightUnitMono
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,15 +132,18 @@ MonoBehaviour:
   FactionType: 1
   moveSpeed: 3
   rotationSpeed: 7
-  currentHealth: 0
   AnimationController: {fileID: 0}
   currentTarget: {fileID: 0}
   overrideTarget: {fileID: 0}
-  loseTargetDistance: 1
+  loseTargetDistance: 1000
   findTargetRange: 9000
   targetFaction: 0
-  findTargetInterval: 1
+  findTargetInterval: 0.2
   findTargetTimer: 0
+  currentHealth: 0
+  maxHealth: 0
+  healthState: 0
+  meleeRange: 1
 --- !u!114 &-9041739873662556921
 MonoBehaviour:
   m_ObjectHideFlags: 0

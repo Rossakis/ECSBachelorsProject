@@ -1,10 +1,14 @@
 
 using Assets.Scripts.ScriptableObjects.Animation;
+using UnityEngine;
 
 namespace Assets.Scripts.Monobehaviour.Combat
 {
     public class KnightMono : UnitMono
     {
+        [Header("Knight Specific")] 
+        public float meleeRange = 1f;
+        
         void Start()
         {
             currentHealth = sceneData.KnightMaxHealth;

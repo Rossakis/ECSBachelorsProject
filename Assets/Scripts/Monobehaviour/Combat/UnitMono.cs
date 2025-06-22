@@ -16,9 +16,6 @@ namespace Assets.Scripts.Monobehaviour.Combat
         public float moveSpeed = 5f;
         public float rotationSpeed = 10f;
 
-        [Header("Runtime State")]
-        public int currentHealth;
-
         protected static readonly Vector3 NoTarget = new Vector3(float.NaN, float.NaN, float.NaN);
         protected Vector3 targetPos = NoTarget;
 
@@ -34,9 +31,26 @@ namespace Assets.Scripts.Monobehaviour.Combat
         public float findTargetInterval = 1f;
         [HideInInspector] public float findTargetTimer = 0f;
 
+        [Header("Health")]
+        public int currentHealth;
+        public int maxHealth;
+        public HealthState healthState = HealthState.Alive;
+
+        public enum HealthState
+        {
+            Alive,
+            Injured,
+            Dead
+        }
+
         protected virtual void Awake()
         {
             AnimationController = GetComponent<AnimationControllerMono>();
+            TargetManagerMono.Instance?.RegisterUnit(this);
+        }
+        protected virtual void OnDestroy()
+        {
+            TargetManagerMono.Instance?.UnregisterUnit(this);
         }
 
         public bool HasTarget => !float.IsNaN(targetPos.x);
@@ -78,15 +92,6 @@ namespace Assets.Scripts.Monobehaviour.Combat
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotationSpeed * Time.deltaTime);
         }
 
-        public virtual void TakeDamage(int amount)
-        {
-            currentHealth = Mathf.Max(currentHealth - amount, 0);
-            if (currentHealth <= 0)
-            {
-                Die();
-            }
-        }
-
         protected virtual void Die()
         {
             Destroy(gameObject);
@@ -94,6 +99,24 @@ namespace Assets.Scripts.Monobehaviour.Combat
 
         public virtual void Attack(UnitMono target)
         {
+        }
+
+        public virtual void TakeDamage(int amount)
+        {
+            currentHealth = Mathf.Max(currentHealth - amount, 0);
+            if (currentHealth <= 0)
+            {
+                healthState = HealthState.Dead;
+                Die();
+            }
+            else if (currentHealth < maxHealth)
+            {
+                healthState = HealthState.Injured;
+            }
+            else
+            {
+                healthState = HealthState.Alive;
+            }
         }
     }
 }

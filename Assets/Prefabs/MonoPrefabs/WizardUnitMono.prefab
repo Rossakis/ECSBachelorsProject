@@ -454,7 +454,7 @@ GameObject:
   - component: {fileID: 8396892470493898745}
   - component: {fileID: 5597733190825379063}
   m_Layer: 6
-  m_Name: WizardUnit
+  m_Name: WizardUnitMono
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -543,16 +543,18 @@ MonoBehaviour:
   FactionType: 0
   moveSpeed: 5
   rotationSpeed: 10
-  currentHealth: 0
   AnimationController: {fileID: 0}
   currentTarget: {fileID: 0}
   overrideTarget: {fileID: 0}
-  loseTargetDistance: 20
-  findTargetRange: 15
+  loseTargetDistance: 40
+  findTargetRange: 25
   targetFaction: 1
-  findTargetInterval: 1
+  findTargetInterval: 0.2
   findTargetTimer: 0
-  fireballPrefab: {fileID: 5276861210565654749, guid: caaac5cab34bbd8458b44ba81c11e170,
+  currentHealth: 0
+  maxHealth: 0
+  healthState: 0
+  fireballPrefab: {fileID: 5276861210565654749, guid: 3d656c49d43af404da8845fdb21368e1,
     type: 3}
   selectionRing: {fileID: 5364101435558340005}
 --- !u!114 &5597733190825379063
