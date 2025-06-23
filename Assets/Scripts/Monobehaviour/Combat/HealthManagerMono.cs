@@ -11,9 +11,12 @@ namespace Assets.Scripts.Monobehaviour.Combat
         private readonly HashSet<UnitMono> units = new();
         private readonly List<UnitMono> unitBuffer = new();
 
+        private UnityEngine.Camera mainCam;
+
         private void Awake()
         {
             Instance = this;
+            mainCam = UnityEngine.Camera.main;
         }
 
         private void Update()
@@ -21,33 +24,26 @@ namespace Assets.Scripts.Monobehaviour.Combat
             unitBuffer.Clear();
             unitBuffer.AddRange(units);
 
-            UnityEngine.Camera mainCam = UnityEngine.Camera.main;
-            if (mainCam == null) return;
-
             foreach (var unit in unitBuffer)
             {
                 if (unit == null || unit.healthState == UnitMono.HealthState.Dead)
                     continue;
 
-                // Assume each unit has a healthBar GameObject and a fill Transform
                 if (unit.healthBar == null || unit.healthBarFill == null)
                     continue;
 
-                Vector3 camForward = mainCam.transform.forward;
-                unit.healthBar.transform.forward = camForward;
+                // Make health bar face the camera
+                unit.healthBar.transform.forward = mainCam.transform.forward;
 
-                // Health normalization
                 float healthNormalized = (float)unit.currentHealth / Mathf.Max(1, unit.maxHealth);
+                healthNormalized = Mathf.Clamp01(healthNormalized);
 
-                // Show/hide health bar based on health
-                unit.healthBar.SetActive(healthNormalized < 1f && unit.currentHealth > 0);
-
-                // Update fill (scale X)
                 Vector3 fillScale = unit.healthBarFill.localScale;
-                fillScale.x = Mathf.Clamp01(healthNormalized);
+                fillScale.x = healthNormalized; 
                 unit.healthBarFill.localScale = fillScale;
             }
         }
+
 
         public void RegisterUnit(UnitMono unit)
         {

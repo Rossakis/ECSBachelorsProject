@@ -10,7 +10,6 @@ namespace Assets.Scripts.Monobehaviour.Units
         public GameObject fireballPrefab;
         public bool IsFiringAlready = false;
 
-
         protected override void Start()
         {
             base.Start();

@@ -216,6 +216,7 @@ namespace Assets.Scripts.Monobehaviour.Units
         public virtual void TakeDamage(int amount)
         {
             currentHealth = Mathf.Max(currentHealth - amount, 0);
+
             if (currentHealth <= 0)
             {
                 healthState = HealthState.Dead;
