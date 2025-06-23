@@ -1,7 +1,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-namespace Assets.Scripts.ECS.Authoring.Combat
+namespace Assets.Scripts.ECS.Authoring.Units
 {
     public class KnightAuthoring : MonoBehaviour {
     

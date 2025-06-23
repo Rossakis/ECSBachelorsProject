@@ -1,7 +1,8 @@
+using Assets.Scripts.Monobehaviour.Combat;
 using Assets.Scripts.ScriptableObjects.Animation;
 using UnityEngine;
 
-namespace Assets.Scripts.Monobehaviour.Combat
+namespace Assets.Scripts.Monobehaviour.Units
 {
     public class WizardMono : UnitMono
     {

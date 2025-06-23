@@ -536,7 +536,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9195451261725825794}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 45cb4f0857b9cd040920ca8bec4f4b84, type: 3}
+  m_Script: {fileID: 11500000, guid: 155acef060c13714cafb439436580a2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sceneData: {fileID: 11400000, guid: 7cfa0e00b140a704b94155409a3103c0, type: 2}
@@ -550,7 +550,7 @@ MonoBehaviour:
   loseTargetDistance: 40
   findTargetRange: 25
   targetFaction: 1
-  findTargetInterval: 0.2
+  findTargetInterval: 1
   findTargetTimer: 0
   currentHealth: 0
   maxHealth: 0

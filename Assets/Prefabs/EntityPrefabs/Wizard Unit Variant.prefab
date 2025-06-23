@@ -166,7 +166,9 @@ PrefabInstance:
       propertyPath: healthAmountMax
       value: 25
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8565024703566377447, guid: af8d0caa312f74541b4a546c1872f3b6, type: 3}
+    - {fileID: 7177176340492928703, guid: af8d0caa312f74541b4a546c1872f3b6, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3322482028285335940, guid: af8d0caa312f74541b4a546c1872f3b6,
@@ -186,6 +188,14 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1573652663258162417}
+    - targetCorrespondingSourceObject: {fileID: 4726026043245154819, guid: af8d0caa312f74541b4a546c1872f3b6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8078622876510304044}
+    - targetCorrespondingSourceObject: {fileID: 4726026043245154819, guid: af8d0caa312f74541b4a546c1872f3b6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5779548819270385316}
   m_SourcePrefab: {fileID: 100100000, guid: af8d0caa312f74541b4a546c1872f3b6, type: 3}
 --- !u!1 &2951046017725574267 stripped
 GameObject:
@@ -233,6 +243,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3790fcf0360af2d4184bdfaf290a1fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8078622876510304044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2951046017725574267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed4307f272c484647ac1a42eb744e18a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5779548819270385316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2951046017725574267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b978955a61bf404ebe05a5a639f9ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &5150390501292337148 stripped

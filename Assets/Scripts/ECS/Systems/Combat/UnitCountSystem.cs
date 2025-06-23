@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.ECS.Authoring.Combat;
+using Assets.Scripts.ECS.Authoring.Units;
 using Unity.Burst;
 using Unity.Entities;
 

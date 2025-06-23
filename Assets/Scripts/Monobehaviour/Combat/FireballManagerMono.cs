@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Assets.Scripts.Monobehaviour.Units;
 using UnityEngine;
 using Assets.Scripts.ScriptableObjects.Animation;
 using Assets.Scripts.ScriptableObjects.Scene;
@@ -102,7 +103,7 @@ namespace Assets.Scripts.Monobehaviour.Combat
                         fireball = Instantiate(wizard.fireballPrefab, spawnPos, spawnRot);
                     }
 
-                    var fireballController = fireball.GetComponent<FireballController>();
+                    var fireballController = fireball.GetComponent<FireballControllerMono>();
                     if (fireballController != null)
                     {
                         fireballController.target = wizard.currentTarget;

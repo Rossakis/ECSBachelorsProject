@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Assets.Scripts.Monobehaviour.Units;
 using UnityEngine;
 
 namespace Assets.Scripts.Monobehaviour.Combat
@@ -55,6 +56,7 @@ namespace Assets.Scripts.Monobehaviour.Combat
                 foreach (var hit in hitColliders)
                 {
                     UnitMono targetUnit = hit.GetComponent<UnitMono>();
+
                     if (targetUnit == null || targetUnit.FactionType != unit.targetFaction)
                         continue;
 

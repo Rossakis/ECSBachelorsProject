@@ -126,14 +126,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4726026043245154819}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5fd537f1616f244ea324cb64756483c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2abd7a7010c80c94ba25a7b0f95f295a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sceneData: {fileID: 11400000, guid: 7cfa0e00b140a704b94155409a3103c0, type: 2}
   FactionType: 1
   damage: 0
   moveSpeed: 3
-  rotationSpeed: 7
+  rotationSpeed: 10
   AnimationController: {fileID: 0}
   currentTarget: {fileID: 0}
   overrideTarget: {fileID: 0}
@@ -147,6 +147,7 @@ MonoBehaviour:
   healthState: 0
   healthBar: {fileID: 5140760345757811089}
   healthBarFill: {fileID: 2804295398178222894}
+  selectionRing: {fileID: 0}
   attackDistance: 1
   attackCooldown: 1
 --- !u!114 &-9041739873662556921

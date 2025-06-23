@@ -1,8 +1,8 @@
-
+using Assets.Scripts.Monobehaviour.Combat;
 using Assets.Scripts.ScriptableObjects.Animation;
 using UnityEngine;
 
-namespace Assets.Scripts.Monobehaviour.Combat
+namespace Assets.Scripts.Monobehaviour.Units
 {
     public class KnightMono : UnitMono
     {
@@ -10,18 +10,13 @@ namespace Assets.Scripts.Monobehaviour.Combat
         public float attackDistance = 1f;
         public float attackCooldown = 1f;
 
-        protected override void Awake()
-        {
-            base.Awake();
-            MeleeAttackManagerMono.Instance?.RegisterKnight(this);
-            AnimationController.RequestAnimation(AnimationDataSO.AnimationType.KnightIdle);
-        }
-
         protected override void Start()
         {
-            base.Awake();
+            base.Start();
             currentHealth = sceneData.KnightMaxHealth;
             damage = sceneData.KnightDamage;
+            AnimationController.RequestAnimation(AnimationDataSO.AnimationType.KnightIdle);
+            MeleeAttackManagerMono.Instance?.RegisterKnight(this);
         }
 
         protected override void OnDestroy()

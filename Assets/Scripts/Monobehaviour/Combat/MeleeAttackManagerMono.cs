@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.ScriptableObjects.Animation;
 using Assets.Scripts.Monobehaviour.Movement;
+using Assets.Scripts.Monobehaviour.Units;
 using Assets.Scripts.ScriptableObjects.Scene;
 
 namespace Assets.Scripts.Monobehaviour.Combat

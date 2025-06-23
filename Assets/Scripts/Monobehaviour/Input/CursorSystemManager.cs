@@ -1,5 +1,6 @@
 using Assets.Scripts.ECS.Authoring.Combat;
 using Assets.Scripts.ECS.Authoring.Movement;
+using Assets.Scripts.ECS.Authoring.Units;
 using Assets.Scripts.Monobehaviour.Assets;
 using CursorSystemPRO.Scripts;
 using Unity.Collections;

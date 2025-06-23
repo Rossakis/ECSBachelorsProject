@@ -1,10 +1,12 @@
 using Assets.Scripts.Monobehaviour.Animation;
+using Assets.Scripts.Monobehaviour.Combat;
 using Assets.Scripts.Monobehaviour.Movement;
+using Assets.Scripts.Monobehaviour.Navigation;
 using Assets.Scripts.ScriptableObjects.Animation;
 using Assets.Scripts.ScriptableObjects.Scene;
 using UnityEngine;
 
-namespace Assets.Scripts.Monobehaviour.Combat
+namespace Assets.Scripts.Monobehaviour.Units
 {
     public abstract class UnitMono : MonoBehaviour
     {

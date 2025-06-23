@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using Assets.Scripts.Monobehaviour.Combat;
+using Assets.Scripts.Monobehaviour.Navigation;
+using Assets.Scripts.Monobehaviour.Units;
 using Assets.Scripts.ScriptableObjects.Animation;
 using UnityEngine;
 

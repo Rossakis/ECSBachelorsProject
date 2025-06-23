@@ -2,6 +2,7 @@ using System;
 using Assets.Scripts.ECS.Authoring.Combat;
 using Assets.Scripts.ECS.Authoring.Movement;
 using Assets.Scripts.ECS.Authoring.Navigation;
+using Assets.Scripts.ECS.Authoring.Units;
 using Assets.Scripts.Monobehaviour.Assets;
 using Assets.Scripts.Monobehaviour.Input;
 using Unity.Collections;

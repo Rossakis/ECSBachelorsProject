@@ -1,30 +1,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlowFieldManagerMono : MonoBehaviour
+namespace Assets.Scripts.Monobehaviour.Navigation
 {
-    public static FlowFieldManagerMono Instance { get; private set; }
-    public FlowFieldGridMono grid;
-    private Dictionary<Vector2Int, FlowFieldGridMono> cachedFields = new();
-
-    private void Awake()
+    public class FlowFieldManagerMono : MonoBehaviour
     {
-        Instance = this;
-        grid.Initialize();
-    }
+        public static FlowFieldManagerMono Instance { get; private set; }
+        public FlowFieldGridMono grid;
+        private Dictionary<Vector2Int, FlowFieldGridMono> cachedFields = new();
 
-    public FlowFieldGridMono RequestFlowField(Vector3 targetWorldPos)
-    {
-        Vector2Int targetGrid = new Vector2Int(
-            Mathf.FloorToInt(targetWorldPos.x / grid.nodeSize),
-            Mathf.FloorToInt(targetWorldPos.z / grid.nodeSize)
-        );
-        if (!cachedFields.TryGetValue(targetGrid, out var field))
+        private void Awake()
         {
-            grid.CalculateFlowField(targetGrid);
-            cachedFields[targetGrid] = grid;
-            field = grid;
+            Instance = this;
+            grid.Initialize();
         }
-        return field;
+
+        public FlowFieldGridMono RequestFlowField(Vector3 targetWorldPos)
+        {
+            Vector2Int targetGrid = new Vector2Int(
+                Mathf.FloorToInt(targetWorldPos.x / grid.nodeSize),
+                Mathf.FloorToInt(targetWorldPos.z / grid.nodeSize)
+            );
+            if (!cachedFields.TryGetValue(targetGrid, out var field))
+            {
+                grid.CalculateFlowField(targetGrid);
+                cachedFields[targetGrid] = grid;
+                field = grid;
+            }
+            return field;
+        }
     }
 }

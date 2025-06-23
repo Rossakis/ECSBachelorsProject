@@ -1,9 +1,10 @@
+using Assets.Scripts.Monobehaviour.Units;
 using Assets.Scripts.ScriptableObjects.Scene;
 using UnityEngine;
 
 namespace Assets.Scripts.Monobehaviour.Combat
 {
-    public class FireballController : MonoBehaviour
+    public class FireballControllerMono : MonoBehaviour
     {
         public MonoSceneDataSO sceneData;
         public float speed = 40f;

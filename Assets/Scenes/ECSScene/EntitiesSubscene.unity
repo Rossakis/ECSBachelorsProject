@@ -1299,7 +1299,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 485397518}
-  - component: {fileID: 485397517}
+  - component: {fileID: 485397519}
   m_Layer: 0
   m_Name: UnitCount
   m_TagString: Untagged
@@ -1307,18 +1307,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &485397517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 485397516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b45cf213e87a4f7294e86a38d8347f63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &485397518
 Transform:
   m_ObjectHideFlags: 0
@@ -1334,6 +1322,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &485397519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485397516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca1b9c3682a527458967226bfdf8bef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &503267980
 GameObject:
   m_ObjectHideFlags: 0
@@ -1455,9 +1455,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d95acfa5444c24b80211377c4e43cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 0.01
   timerMax: 0.05
-  nearbyKnightAmountDistance: 4
   minDistanceBetweenUnits: 0.4
   spawnRadiusMultiplier: 10
   minSpawnRadius: 1
