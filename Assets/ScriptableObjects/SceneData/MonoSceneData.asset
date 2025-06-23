@@ -16,7 +16,7 @@ MonoBehaviour:
   WizardsAmountToSpawn: 100
   WizardMaxHealth: 25
   WizardDamage: 25
-  IsKnightSpawnInfinite: 0
+  IsKnightSpawnInfinite: 1
   KnightsAmountToSpawn: 300
   KnightMaxHealth: 100
   KnightDamage: 5

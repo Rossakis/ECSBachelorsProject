@@ -11,8 +11,6 @@ namespace Assets.Scripts.ECS.Systems.Combat
 {
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     partial struct HealthBarSystem : ISystem {
-
-
         private ComponentLookup<LocalTransform> localTransformComponentLookup;
         private ComponentLookup<Health> healthComponentLookup;
         private ComponentLookup<PostTransformMatrix> postTransformMatrixComponentLookup;
@@ -83,12 +81,7 @@ namespace Assets.Scripts.ECS.Systems.Combat
                     barVisualPostTransformMatrix.ValueRW.Value = float4x4.Scale(healthNormalized, 1, 1);
                 }
             }
-        
-        
-        
         }
-
-
     }
 
 

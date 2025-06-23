@@ -7,37 +7,22 @@ namespace Assets.Scripts.Monobehaviour.Combat
     {
         [Header("Wizard Specific")]
         public GameObject fireballPrefab;
-        public GameObject selectionRing;
-        void Start()
+        public bool IsFiringAlready = false;
+
+
+        protected override void Start()
         {
+            base.Start();
             currentHealth = sceneData.WizardMaxHealth;
             damage = sceneData.WizardDamage;
             AnimationController.RequestAnimation(AnimationDataSO.AnimationType.WizardIdle);
             FireballManagerMono.Instance.RegisterWizard(this);
         }
 
-        void OnDisable()
+        protected override void OnDestroy()
         {
+            base.OnDestroy();
             FireballManagerMono.Instance.UnregisterWizard(this);
-        }
-
-        void Update()
-        {
-        
-        }
-
-        public override void Attack(UnitMono target)
-        {
-            //TODO:
-            if (fireballPrefab != null && target != null)
-            {
-               
-            }
-        }
-        public virtual void SetSelected(bool selected)
-        {
-            if (selectionRing != null)
-                selectionRing.SetActive(selected);
         }
     }
 }

@@ -8,12 +8,14 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
 namespace Assets.Scripts.ECS.Systems.Spawn
 {
     partial struct KnightSpawnerSystem : ISystem
     {
+
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
@@ -44,35 +46,6 @@ namespace Assets.Scripts.ECS.Systems.Spawn
 
                     knightSpawner.ValueRW.timer = knightSpawner.ValueRO.timerMax;
 
-                    // Count nearby knights using collision world
-                    var distanceHitList = new NativeList<DistanceHit>(Allocator.Temp);
-                    CollisionFilter collisionFilter = new CollisionFilter
-                    {
-                        BelongsTo = ~0u,
-                        CollidesWith = 1u << GameAssets.UNITS_LAYER,
-                        GroupIndex = 0,
-                    };
-
-                    int nearbyKnightAmount = 0;
-                    if (collisionWorld.OverlapSphere(
-                            localTransform.ValueRO.Position,
-                            knightSpawner.ValueRO.nearbyKnightAmountDistance,
-                            ref distanceHitList,
-                            collisionFilter))
-                    {
-                        foreach (DistanceHit hit in distanceHitList)
-                        {
-                            if (!SystemAPI.Exists(hit.Entity)) continue;
-                            if (SystemAPI.HasComponent<Unit>(hit.Entity) && SystemAPI.HasComponent<Knight>(hit.Entity))
-                                nearbyKnightAmount++;
-                        }
-                    }
-                    distanceHitList.Dispose();
-
-                    if (nearbyKnightAmount >= knightSpawner.ValueRO.nearbyKnightAmountMax)
-                        continue;
-
-                    // Try to find a good spawn position
                     float3 origin = localTransform.ValueRO.Position;
                     Random random = Random.CreateFromIndex((uint)origin.GetHashCode() + (uint)UnityEngine.Random.Range(1, 100000));
 
@@ -170,9 +143,9 @@ namespace Assets.Scripts.ECS.Systems.Spawn
                     }
 
                     spawner.ValueRW.hasSpawned = true;
-                    ecb.DestroyEntity(spawnerEntity); // cleanup
-
                     spawnPositions.Dispose();
+
+                    ecb.DestroyEntity(spawnerEntity); // cleanup
                 }
             }
         }

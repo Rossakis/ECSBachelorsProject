@@ -32,6 +32,10 @@ namespace Assets.Scripts.Monobehaviour.Combat
                     continue;
                 }
 
+                // When assigning targets, skip units with IsMoveOverrideActive == true
+                if (unit.IsMoveOverrideActive)
+                    continue;
+
                 Collider[] hitColliders = Physics.OverlapSphere(
                     unit.transform.position,
                     unit.findTargetRange,

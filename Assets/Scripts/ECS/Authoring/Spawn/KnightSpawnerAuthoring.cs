@@ -7,10 +7,7 @@ namespace Assets.Scripts.ECS.Authoring.Spawn
     {
 
         [Header("Infinite Spawn Settings")]
-        [SerializeField] private float timer;
         [SerializeField] private float timerMax;
-        [SerializeField] private int nearbyKnightAmountMax;
-        [SerializeField] private float nearbyKnightAmountDistance;
     
         [Header("One-shot Spawn Settings")]
         [SerializeField] private float minDistanceBetweenUnits;
@@ -22,10 +19,8 @@ namespace Assets.Scripts.ECS.Authoring.Spawn
             public override void Bake(KnightSpawnerAuthoring authoring) {
                 Entity entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new KnightSpawner {
-                    timer = authoring.timer,
+                    timer = authoring.timerMax,
                     timerMax = authoring.timerMax,
-                    nearbyKnightAmountMax = authoring.nearbyKnightAmountMax,
-                    nearbyKnightAmountDistance = authoring.nearbyKnightAmountDistance,
                     hasSpawned = false,
                     minDistanceBetweenUnits = authoring.minDistanceBetweenUnits,
                     spawnRadiusMultiplier = authoring.spawnRadiusMultiplier,
@@ -41,8 +36,6 @@ namespace Assets.Scripts.ECS.Authoring.Spawn
         // Infinite spawn
         public float timer;
         public float timerMax;
-        public int nearbyKnightAmountMax;
-        public float nearbyKnightAmountDistance;
     
         //One - time spawn
         public bool hasSpawned;

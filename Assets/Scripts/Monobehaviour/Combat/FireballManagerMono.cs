@@ -40,6 +40,7 @@ namespace Assets.Scripts.Monobehaviour.Combat
             }
         }
 
+
         private void Update()
         {
             wizardBuffer.Clear();
@@ -77,7 +78,11 @@ namespace Assets.Scripts.Monobehaviour.Combat
                     wizard.transform.rotation = Quaternion.Slerp(wizard.transform.rotation, lookRot, wizard.rotationSpeed * Time.deltaTime);
                 }
 
-                wizard.AnimationController?.RequestAnimation(AnimationDataSO.AnimationType.WizardCastFireball);
+                if(!wizard.IsFiringAlready)
+                {
+                    wizard.AnimationController?.RequestAnimation(AnimationDataSO.AnimationType.WizardCastFireball);
+                    wizard.IsFiringAlready = true;
+                }
 
                 if (wizard.fireballPrefab != null)
                 {
@@ -101,6 +106,7 @@ namespace Assets.Scripts.Monobehaviour.Combat
                     if (fireballController != null)
                     {
                         fireballController.target = wizard.currentTarget;
+                        fireballController.ownerWizard = wizard;
                     }
                 }
 

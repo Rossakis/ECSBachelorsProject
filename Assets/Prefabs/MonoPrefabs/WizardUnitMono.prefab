@@ -541,6 +541,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneData: {fileID: 11400000, guid: 7cfa0e00b140a704b94155409a3103c0, type: 2}
   FactionType: 0
+  damage: 0
   moveSpeed: 5
   rotationSpeed: 10
   AnimationController: {fileID: 0}
@@ -554,9 +555,12 @@ MonoBehaviour:
   currentHealth: 0
   maxHealth: 0
   healthState: 0
+  healthBar: {fileID: 8582776529162940177}
+  healthBarFill: {fileID: 644857059045107550}
+  selectionRing: {fileID: 5364101435558340005}
   fireballPrefab: {fileID: 5276861210565654749, guid: 3d656c49d43af404da8845fdb21368e1,
     type: 3}
-  selectionRing: {fileID: 5364101435558340005}
+  IsFiringAlready: 0
 --- !u!114 &5597733190825379063
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -8,7 +8,7 @@ namespace Assets.Scripts.Monobehaviour.Combat
         public MonoSceneDataSO sceneData;
         public float speed = 40f;
         public UnitMono target;
-
+        public WizardMono ownerWizard;
         private int damage;
 
         private void Start()
@@ -37,6 +37,8 @@ namespace Assets.Scripts.Monobehaviour.Combat
 
         private void DespawnOrDestroy()
         {
+            ownerWizard.IsFiringAlready = false;
+
             if (sceneData != null && sceneData.IsObjectPoolingOn)
             {
                 FireballManagerMono.Instance?.ReturnFireballToPool(gameObject);

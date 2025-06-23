@@ -15,9 +15,7 @@ namespace Assets.Scripts.Monobehaviour.Spawn
         public float minSpawnRadius = 1f;
 
         [Header("Infinite Spawn Settings")]
-        public float timerMax = 2f;
-        public int nearbyKnightAmountMax = 10;
-        public float nearbyKnightAmountDistance = 5f;
+        public float timerMax = 0.05f;
 
         private float timer;
         private readonly HashSet<GameObject> spawnedKnights = new HashSet<GameObject>();
@@ -42,19 +40,7 @@ namespace Assets.Scripts.Monobehaviour.Spawn
                 return;
 
             timer = timerMax;
-
-            // Count nearby knights
-            int nearbyCount = 0;
             Vector3 origin = transform.position;
-            foreach (var knight in spawnedKnights)
-            {
-                if (knight == null) continue;
-                if (Vector3.Distance(knight.transform.position, origin) < nearbyKnightAmountDistance)
-                    nearbyCount++;
-            }
-
-            if (nearbyCount >= nearbyKnightAmountMax)
-                return;
 
             // Try to find a good spawn position
             float radius = Mathf.Max(spawnRadiusMultiplier * sceneData.KnightsAmountToSpawn / 100f, minSpawnRadius);

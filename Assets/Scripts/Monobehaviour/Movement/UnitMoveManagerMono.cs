@@ -26,10 +26,52 @@ namespace Assets.Scripts.Monobehaviour.Movement
             //We use a pre-allocated list as a "scratch buffer" to avoid allocations in Update
             foreach (var unit in unitBuffer)
             {
-                if (unit.FactionType == FactionType.Wizard)
-                    unit.Move(AnimationDataSO.AnimationType.WizardWalk, AnimationDataSO.AnimationType.WizardIdle);
+                if (unit == null) 
+                    continue; 
+
+                if (unit.IsFollowingFlowField)
+                {
+                    Vector2Int gridPos = FlowFieldManagerMono.Instance.grid.GetGridPosition(unit.transform.position);
+                    Vector2 dir = FlowFieldManagerMono.Instance.grid.flowField[gridPos.x, gridPos.y];
+                    if (dir == Vector2.zero)
+                    {
+                        unit.StopFollowingFlowField();
+                        continue;
+                    }
+
+                    int nextX = Mathf.Clamp(gridPos.x + Mathf.RoundToInt(dir.x), 0, FlowFieldManagerMono.Instance.grid.width - 1);
+                    int nextY = Mathf.Clamp(gridPos.y + Mathf.RoundToInt(dir.y), 0, FlowFieldManagerMono.Instance.grid.height - 1);
+
+                    Vector3 moveTarget = FlowFieldManagerMono.Instance.grid.GetWorldCenterPosition(nextX, nextY);
+                    unit.SetTargetPosition(moveTarget);
+
+                    if (Vector3.Distance(unit.transform.position, unit.FlowFieldTarget) < FlowFieldManagerMono.Instance.grid.nodeSize)
+                    {
+                        unit.StopFollowingFlowField();
+                    }
+
+                    if (unit.FactionType == FactionType.Wizard)
+                        unit.Move(AnimationDataSO.AnimationType.WizardWalk, AnimationDataSO.AnimationType.WizardIdle);
+                    else
+                        unit.Move(AnimationDataSO.AnimationType.KnightWalk, AnimationDataSO.AnimationType.KnightIdle);
+
+                }
                 else
-                    unit.Move(AnimationDataSO.AnimationType.KnightWalk, AnimationDataSO.AnimationType.KnightIdle);
+                {
+                    // Try direct movement first
+                    if (unit.FactionType == FactionType.Wizard)
+                        unit.Move(AnimationDataSO.AnimationType.WizardWalk, AnimationDataSO.AnimationType.WizardIdle);
+                    else
+                        unit.Move(AnimationDataSO.AnimationType.KnightWalk, AnimationDataSO.AnimationType.KnightIdle);
+
+                    // If direct path is blocked, start following flow field
+                    if (unit.NeedsFlowField() && unit.currentTarget != null)
+                    {
+                        Vector2Int targetGrid = FlowFieldManagerMono.Instance.grid.GetGridPosition(unit.currentTarget.transform.position);
+                        FlowFieldManagerMono.Instance.grid.CalculateFlowField(targetGrid);
+                        unit.StartFollowingFlowField(unit.currentTarget.transform.position);
+                    }
+                }
             }
         }
 

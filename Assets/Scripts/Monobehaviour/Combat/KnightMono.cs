@@ -7,27 +7,27 @@ namespace Assets.Scripts.Monobehaviour.Combat
     public class KnightMono : UnitMono
     {
         [Header("Knight Specific")] 
-        public float meleeRange = 1f;
-        
-        void Start()
+        public float attackDistance = 1f;
+        public float attackCooldown = 1f;
+
+        protected override void Awake()
         {
-            currentHealth = sceneData.KnightMaxHealth;
-            damage = sceneData.KnightDamage;
+            base.Awake();
+            MeleeAttackManagerMono.Instance?.RegisterKnight(this);
             AnimationController.RequestAnimation(AnimationDataSO.AnimationType.KnightIdle);
         }
 
-        void Update()
+        protected override void Start()
         {
-        
+            base.Awake();
+            currentHealth = sceneData.KnightMaxHealth;
+            damage = sceneData.KnightDamage;
         }
 
-        public override void Attack(UnitMono target)
+        protected override void OnDestroy()
         {
-            if (target != null)
-            {
-                target.TakeDamage(damage);
-                // Play melee attack animation, etc.
-            }
+            base.OnDestroy();
+            MeleeAttackManagerMono.Instance?.UnregisterKnight(this);
         }
     }
 }

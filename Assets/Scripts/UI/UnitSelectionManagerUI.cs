@@ -33,7 +33,6 @@ namespace Assets.Scripts.UI
 
         private void UnitSelectionManager_OnSelectionAreaStart(object sender, System.EventArgs e) {
             selectionAreaRectTransform.gameObject.SetActive(true);
-
             UpdateVisual();
         }
 
