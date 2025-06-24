@@ -4,6 +4,9 @@ namespace Assets.Scripts.ScriptableObjects.Scene
 {
     public class SceneDataSO : ScriptableObject
     {
+        [Header("Mode Selection")]
+        public bool IsBenchMarkMode= false;
+
         [Header("Performance Settings")]
         public bool IsObjectPoolingOn = true;
 

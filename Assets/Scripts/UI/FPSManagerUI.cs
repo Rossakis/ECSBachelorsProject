@@ -4,9 +4,8 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.UI
 {
-    public class FPSManager : MonoBehaviour
+    public class FPSManagerUI : MonoBehaviour
     {
-        public static float CurrentFPS { get; private set; }
         public static bool IsVsyncOn => QualitySettings.vSyncCount > 0;
 
         public float updateInterval = 0.1f;
@@ -47,8 +46,6 @@ namespace Assets.Scripts.UI
                 accumulated = 0f;
                 frames = 0;
             }
-
-            CurrentFPS = fps;
         }
 
         private void SynchronizeVsync()

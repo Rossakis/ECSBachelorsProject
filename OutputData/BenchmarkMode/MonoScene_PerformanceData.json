@@ -1,0 +1,19 @@
+{
+    "SceneName": "MonoScene",
+    "LowestFPS": 4.047355651855469,
+    "HighestFPS": 239.58396911621095,
+    "AverageFPS": 176.18092346191407,
+    "WizardUnitsAmount": 100,
+    "KnightUnitsAmount": 75,
+    "FPSAtTimeOfLeave": 0,
+    "DeviceModel": "System Product Name (ASUS)",
+    "DeviceType": "Desktop",
+    "OperatingSystem": "Windows 11  (10.0.26100) 64bit",
+    "ProcessorType": "Intel(R) Core(TM) i9-14900K",
+    "ProcessorCount": 32,
+    "SystemMemoryMB": 32484,
+    "GraphicsDeviceName": "AMD Radeon RX 7900 XTX",
+    "GraphicsDeviceType": "Direct3D12",
+    "GraphicsMemoryMB": 24560,
+    "Timestamp": "Tue, 24 Jun 2025 14:10:56"
+}

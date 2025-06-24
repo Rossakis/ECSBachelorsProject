@@ -1,0 +1,19 @@
+{
+    "SceneName": "ECSScene",
+    "LowestFPS": 3.4028234663852887e38,
+    "HighestFPS": -3.4028234663852887e38,
+    "AverageFPS": 0.0,
+    "WizardUnitsAmount": 0,
+    "KnightUnitsAmount": 0,
+    "FPSAtTimeOfLeave": 0,
+    "DeviceModel": "System Product Name (ASUS)",
+    "DeviceType": "Desktop",
+    "OperatingSystem": "Windows 11  (10.0.26100) 64bit",
+    "ProcessorType": "Intel(R) Core(TM) i9-14900K",
+    "ProcessorCount": 32,
+    "SystemMemoryMB": 32484,
+    "GraphicsDeviceName": "AMD Radeon RX 7900 XTX",
+    "GraphicsDeviceType": "Direct3D12",
+    "GraphicsMemoryMB": 24560,
+    "Timestamp": "Tue, 24 Jun 2025 14:11:35"
+}

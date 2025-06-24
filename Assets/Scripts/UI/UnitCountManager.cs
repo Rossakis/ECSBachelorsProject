@@ -10,6 +10,7 @@ namespace Assets.Scripts.UI
 {
     public class UnitCountManager : MonoBehaviour
     {
+        public static UnitCountManager Instance { get; private set; }
         public TMP_Text wizardsText;
         public TMP_Text knightsText;
 
@@ -18,29 +19,33 @@ namespace Assets.Scripts.UI
         private EntityManager _entityManager;
         private Entity _singletonEntity;
 
+        public int ECSWizardsCount { get; private set; }
+        public int ECSKnightsCount { get; private set; }
+        public int MonoWizardsCount { get; private set; }
+        public int MonoKnightsCount { get; private set; }
 
-        void Start()
+        private void Awake()
         {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
             if (IsECSScene)
             {
-                _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
-                // Find the singleton entity manually by checking for UnitCountData
-                var query = _entityManager.CreateEntityQuery(typeof(UnitCount));
-
-                if (query.CalculateEntityCount() == 1)
-                {
-                    _singletonEntity = query.GetSingletonEntity();
-                }
-                else
-                {
-                    Debug.LogError("UnitCountData singleton not found or multiple exist.");
-                }
+                _singletonEntity = Entity.Null; // Reset singleton entity
             }
-            
         }
 
-        void Update()
+        private void Update()
         {
             if (IsECSScene)
             {
@@ -62,6 +67,10 @@ namespace Assets.Scripts.UI
                 if (_entityManager.Exists(_singletonEntity))
                 {
                     UnitCount countData = _entityManager.GetComponentData<UnitCount>(_singletonEntity);
+
+                    ECSWizardsCount = countData.WizardCount;
+                    ECSKnightsCount = countData.KnightCount;
+
                     wizardsText.text = "Wizards: " + countData.WizardCount;
                     knightsText.text = "Knights: " + countData.KnightCount;
                 }
@@ -71,6 +80,9 @@ namespace Assets.Scripts.UI
                 // Find all active WizardMono and KnightMono in the scene
                 int wizardCount = Object.FindObjectsByType<WizardMono>(FindObjectsSortMode.None).Length;
                 int knightCount = Object.FindObjectsByType<KnightMono>(FindObjectsSortMode.None).Length;
+
+                MonoWizardsCount = wizardCount;
+                MonoKnightsCount = knightCount;
 
                 wizardsText.text = "Wizards: " + wizardCount;
                 knightsText.text = "Knights: " + knightCount;

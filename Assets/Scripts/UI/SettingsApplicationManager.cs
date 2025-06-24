@@ -53,7 +53,7 @@ namespace Assets.Scripts.UI
         }
 
         #region ECS
-        public void ApplyECSSettings()
+        public void ApplyECSSettings(bool isBenchMarkMode)
         {
             // Wizards
             if (!int.TryParse(ECSWizardsAmountInputField.text, out int wizardAmount) || wizardAmount <= 0)
@@ -98,6 +98,8 @@ namespace Assets.Scripts.UI
                 panelSwitchManager.SwitchToErrorPanel(errorMsg);
                 return;
             }
+
+            ECSSceneDataSO.IsBenchMarkMode = isBenchMarkMode;
 
             ECSSceneDataSO.IsJobSystemOn = ECSIsJobsSystemOn.isOn;
             ECSSceneDataSO.IsObjectPoolingOn = ECSIsObjectPoolingOn.isOn;
@@ -145,7 +147,7 @@ namespace Assets.Scripts.UI
         #endregion
 
         #region Monobehaviour Settings
-        public void ApplyMonoSettings()
+        public void ApplyMonoSettings(bool isBenchMarkMode)
         {
             // Wizards
             if (!int.TryParse(MonoAmountInputField.text, out int wizardAmount) || wizardAmount <= 0)
@@ -190,6 +192,8 @@ namespace Assets.Scripts.UI
                 panelSwitchManager.SwitchToErrorPanel(errorMsg);
                 return;
             }
+
+            MonoSceneDataSO.IsBenchMarkMode = isBenchMarkMode;
 
             MonoSceneDataSO.IsObjectPoolingOn = MonoIsObjectPoolingOn.isOn;
 
