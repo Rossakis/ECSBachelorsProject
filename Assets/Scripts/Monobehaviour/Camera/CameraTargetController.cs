@@ -1,17 +1,43 @@
+using Assets.Scripts.ScriptableObjects.Scene;
 using UnityEngine;
 
 namespace Assets.Scripts.Monobehaviour.Camera
 {
     public class CameraTargetController : MonoBehaviour
     {
+        public EcsSceneDataSO ecsSceneData;
+        public MonoSceneDataSO monoSceneData;
+        public bool isECSScene = false;
+
         [SerializeField]
         private float normalMoveSpeed = 3.0f;
     
         [SerializeField]
         private float shiftMoveSpeed = 6.0f;
-    
+
+        private bool isControllable = true;
+
+        private CameraZoomAndTilt cameraZoomAndTilt;
+
+        private void Start()
+        {
+            if ((isECSScene && ecsSceneData.IsBenchMarkMode) || (!isECSScene && monoSceneData.IsBenchMarkMode))
+            {
+                isControllable = false;
+            }
+
+            cameraZoomAndTilt = GetComponent<CameraZoomAndTilt>();
+        }
+
         void Update()
         {
+            if (!isControllable)
+            {
+                cameraZoomAndTilt.RotateCameraInfinite();
+                return;
+            }
+
+            cameraZoomAndTilt.TiltCamera();
             float moveSpeed = UnityEngine.Input.GetKey(KeyCode.LeftShift) ? shiftMoveSpeed : normalMoveSpeed;
 
             // Get input

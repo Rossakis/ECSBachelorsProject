@@ -18,6 +18,13 @@ namespace Assets.Scripts.Monobehaviour.Camera
         private CinemachineFollow transposer;
         private CinemachinePanTilt tilt;
 
+        // Cirlce
+        public float radius = 20f;     // Radius of the circular path
+        public float angularSpeed = 30f; // Degrees per second
+
+        private float angle; // Current angle in degrees
+        public GameObject centerPoint; // Center point of the circular path
+
         void Start()
         {
             if (virtualCamera != null)
@@ -27,9 +34,9 @@ namespace Assets.Scripts.Monobehaviour.Camera
             }
         }
 
-        void Update()
+        public void TiltCamera()
         {
-            if (transposer == null || tilt == null) 
+            if (transposer == null || tilt == null)
                 return;
 
             float scroll = UnityEngine.Input.GetAxis("Mouse ScrollWheel");
@@ -49,6 +56,26 @@ namespace Assets.Scripts.Monobehaviour.Camera
                 {
                     tilt.PanAxis.Value += mouseDeltaX * tiltSpeed;
                 }
+            }
+        }
+
+        public void RotateCameraInfinite()
+        {
+            angle += angularSpeed * Time.deltaTime;
+            float radians = angle * Mathf.Deg2Rad;
+
+            // Calculate new position around the center point
+            Vector3 newPosition = centerPoint.transform.position + new Vector3(
+                Mathf.Cos(radians) * radius,
+                0f,
+                Mathf.Sin(radians) * radius
+            );
+
+            transform.position = newPosition;
+
+            if(angle >= 360f)
+            {
+                angle -= 360f; // Reset angle to prevent overflow
             }
         }
     }

@@ -1,9 +1,10 @@
-using System;
-using System.Collections.Generic;
 using Assets.Scripts.Monobehaviour.Combat;
 using Assets.Scripts.Monobehaviour.Input;
 using Assets.Scripts.Monobehaviour.Movement;
 using Assets.Scripts.Monobehaviour.Units;
+using Assets.Scripts.ScriptableObjects.Scene;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Object = UnityEngine.Object;
@@ -12,6 +13,10 @@ namespace Assets.Scripts.Monobehaviour.UI
 {
     public class UnitSelectionManagerMono : MonoBehaviour
     {
+        public EcsSceneDataSO ecsSceneData;
+        public MonoSceneDataSO monoSceneData;
+        public bool isECSScene = false;
+
         public float ringSize = 1f;
         public LayerMask unitLayerMask;
         public static UnitSelectionManagerMono Instance { get; private set; }
@@ -23,15 +28,28 @@ namespace Assets.Scripts.Monobehaviour.UI
 
         public event EventHandler OnSelectionAreaStart;
         public event EventHandler OnSelectionAreaEnd;
-        public event EventHandler OnSelectedEntitiesChanged;
+        public event EventHandler OnSelectedEntitiesChanged; 
+        
+        private bool canSelect = true; // Can't select if the scene is in benchmark mode
 
         private void Awake()
         {
             Instance = this;
         }
 
+        private void Start()
+        {
+            if ((isECSScene && ecsSceneData.IsBenchMarkMode) || (!isECSScene && monoSceneData.IsBenchMarkMode))
+            {
+                canSelect = false;
+            }
+        }
+
         private void Update()
         {
+            if (!canSelect)
+                return;
+
             // Only block selection start if over UI
             if (UnityEngine.Input.GetMouseButtonDown(0))
             {

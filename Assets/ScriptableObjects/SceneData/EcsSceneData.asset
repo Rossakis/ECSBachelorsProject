@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb70fd7df70f41442848b5df22971e12, type: 3}
   m_Name: EcsSceneData
   m_EditorClassIdentifier: 
+  IsBenchMarkMode: 1
   IsObjectPoolingOn: 1
   WizardsAmountToSpawn: 100
   WizardMaxHealth: 25

@@ -101,7 +101,7 @@ namespace Assets.Scripts.Monobehaviour.Units
                     return;
                 }
 
-                if (!IsMovingAlready)
+                i f (!IsMovingAlready)
                 {
                     AnimationManagerMono.Instance.PlayAnimationForUnits(this, moveAnimation);
                     IsMovingAlready = true;

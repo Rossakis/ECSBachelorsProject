@@ -1,10 +1,11 @@
-using System;
 using Assets.Scripts.ECS.Authoring.Combat;
 using Assets.Scripts.ECS.Authoring.Movement;
 using Assets.Scripts.ECS.Authoring.Navigation;
 using Assets.Scripts.ECS.Authoring.Units;
 using Assets.Scripts.Monobehaviour.Assets;
 using Assets.Scripts.Monobehaviour.Input;
+using Assets.Scripts.ScriptableObjects.Scene;
+using System;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -17,6 +18,10 @@ namespace Assets.Scripts.UI
 {
     public class UnitSelectionManager : MonoBehaviour {
 
+        public EcsSceneDataSO ecsSceneData;
+        public MonoSceneDataSO monoSceneData;
+        public bool isECSScene = false;
+
         public static UnitSelectionManager Instance { get; private set; }
         public float ringSize = 1f;
 
@@ -28,12 +33,25 @@ namespace Assets.Scripts.UI
         private Vector2 selectionStartMousePosition;
         private bool hasAlreadyDeselected = false;
 
+        private bool canSelect = true; // Can't select if the scene is in benchmark mode
+
         private void Awake()
         {
             Instance = this;
         }
 
+        private void Start() {
+            if ((isECSScene && ecsSceneData.IsBenchMarkMode) || (!isECSScene && monoSceneData.IsBenchMarkMode))
+            {
+                canSelect = false;
+            }
+        }
+
         private void Update() {
+
+            if(!canSelect) {
+                return;
+            }
 
             if (!hasAlreadyDeselected) //Only deselect at the start of the game run cycle
             {

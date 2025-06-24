@@ -35,6 +35,8 @@ namespace Assets.Scripts.DataTracking
         private int fpsAtTimeOfLeave;
         private UnitCountManager unitCountManager;
 
+        private float lowFpsDuration = 0f; 
+
         private void Awake()
         {
             wizardAmount = 0;
@@ -70,11 +72,23 @@ namespace Assets.Scripts.DataTracking
             totalFPS += currentFPS;
             frameCount++;
 
-            if (isSceneReady && currentFPS < minFPS)
+            // Only trigger scene change if FPS is below threshold for more than 1 second
+            if (isSceneReady)
             {
-                fpsAtTimeOfLeave = Mathf.RoundToInt(currentFPS);
-                SceneManager.LoadScene(0);
-                Debug.LogWarning($"FPS dropped below minimum threshold: {currentFPS} FPS in scene {currentSceneName}");
+                if (currentFPS < minFPS)
+                {
+                    lowFpsDuration += Time.unscaledDeltaTime;
+                    if (lowFpsDuration > 1f)
+                    {
+                        fpsAtTimeOfLeave = Mathf.RoundToInt(currentFPS);
+                        SceneManager.LoadScene(0);
+                        Debug.LogWarning($"FPS dropped below minimum threshold for over 1 second: {currentFPS} FPS in scene {currentSceneName}");
+                    }
+                }
+                else
+                {
+                    lowFpsDuration = 0f;
+                }
             }
 
             if (unitCountManager.IsECSScene)
@@ -116,6 +130,7 @@ namespace Assets.Scripts.DataTracking
             highestFPS = float.MinValue;
             totalFPS = 0f;
             frameCount = 0;
+            lowFpsDuration = 0f;
         }
 
         private void ExportData()
