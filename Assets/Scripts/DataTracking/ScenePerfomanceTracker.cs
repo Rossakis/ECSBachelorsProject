@@ -29,7 +29,7 @@ namespace Assets.Scripts.DataTracking
 
         // Benchmark Mode
         private bool isBenchMarkMode;
-        private static float minFPS = 15f; // Minimum FPS threshold for performance tracking
+        private static float minFPS = 25f; // Minimum FPS threshold for performance tracking
         private int wizardAmount;
         private int knightAmount;
         private int fpsAtTimeOfLeave;

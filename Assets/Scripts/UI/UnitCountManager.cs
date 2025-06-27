@@ -29,12 +29,6 @@ namespace Assets.Scripts.UI
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
-            }
-            else
-            {
-                Destroy(gameObject);
-                return;
             }
 
             _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;

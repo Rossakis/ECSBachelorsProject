@@ -1456,7 +1456,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36d95acfa5444c24b80211377c4e43cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timerMax: 0.05
+  timerMax: 0.001
   minDistanceBetweenUnits: 0.4
   spawnRadiusMultiplier: 10
   minSpawnRadius: 1

@@ -6784,7 +6784,7 @@ MonoBehaviour:
   minDistanceBetweenUnits: 0.4
   spawnRadiusMultiplier: 10
   minSpawnRadius: 1
-  timerMax: 0.05
+  timerMax: 0.001
 --- !u!4 &2129545582
 Transform:
   m_ObjectHideFlags: 0
