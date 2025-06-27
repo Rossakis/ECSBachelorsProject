@@ -35,7 +35,9 @@ namespace Assets.Scripts.DataTracking
         private int fpsAtTimeOfLeave;
         private UnitCountManager unitCountManager;
 
-        private float lowFpsDuration = 0f; 
+        private float lowFpsDuration = 0f;
+        private float simulationStartTime;
+        private float simulationEndTime;
 
         private void Awake()
         {
@@ -43,6 +45,7 @@ namespace Assets.Scripts.DataTracking
             knightAmount = 0;
             currentSceneName = SceneManager.GetActiveScene().name;
             SceneManager.activeSceneChanged += OnSceneChanged;
+            simulationStartTime = Time.realtimeSinceStartup;
         }
 
         private void Start()
@@ -52,6 +55,20 @@ namespace Assets.Scripts.DataTracking
             isBenchMarkMode = isECSScene ? ecsSceneDataSO.IsBenchMarkMode : monoSceneDataSO.IsBenchMarkMode;
 
             StartCoroutine(SetSceneReadyAfterDelay());
+        }
+
+        private void OnApplicationQuit()
+        {
+            SceneManager.activeSceneChanged -= OnSceneChanged;
+            simulationEndTime = Time.realtimeSinceStartup;
+            ExportData();
+        }
+
+        private void OnDisable()
+        {
+            SceneManager.activeSceneChanged -= OnSceneChanged;
+            simulationEndTime = Time.realtimeSinceStartup;
+            ExportData();
         }
 
         private System.Collections.IEnumerator SetSceneReadyAfterDelay()
@@ -104,24 +121,16 @@ namespace Assets.Scripts.DataTracking
             
         }
 
-        private void OnApplicationQuit()
-        {
-            SceneManager.activeSceneChanged -= OnSceneChanged;
-            ExportData();
-        }
-
-        private void OnDisable()
-        {
-            SceneManager.activeSceneChanged -= OnSceneChanged;
-            ExportData();
-        }
+        
 
         private void OnSceneChanged(Scene oldScene, Scene newScene)
         {
+            simulationEndTime = Time.realtimeSinceStartup;
             ExportData();
             ResetStats();
             currentSceneName = newScene.name;
             isSceneReady = false; // Reset on scene change
+            simulationStartTime = Time.realtimeSinceStartup;
         }
 
         private void ResetStats()
@@ -143,7 +152,9 @@ namespace Assets.Scripts.DataTracking
             }
 
             float averageFPS = totalFPS / frameCount;
-
+            float totalDuration = (simulationEndTime > simulationStartTime)
+                ? simulationEndTime - simulationStartTime
+                : Time.realtimeSinceStartup - simulationStartTime;
 
             var data = new ScenePerformanceData
             {
@@ -166,13 +177,14 @@ namespace Assets.Scripts.DataTracking
                 GraphicsDeviceType = SystemInfo.graphicsDeviceType.ToString(),
                 GraphicsMemoryMB = SystemInfo.graphicsMemorySize,
                 Timestamp = DateTime.Now.ToString("ddd, dd MMM yyyy HH:mm:ss"),
+                TotalDuration = totalDuration
             };
 
             string json = JsonUtility.ToJson(data, true);
 
             string folderPath;
 
-            if(!isBenchMarkMode)
+            if (!isBenchMarkMode)
                 folderPath = Path.Combine(Application.dataPath, "../OutputData/FreeCameraMode/");
             else
                 folderPath = Path.Combine(Application.dataPath, "../OutputData/BenchmarkMode/");
@@ -195,6 +207,7 @@ namespace Assets.Scripts.DataTracking
             public float LowestFPS;
             public float HighestFPS;
             public float AverageFPS;
+            public float TotalDuration;
 
             // Bench Mark Mode specific
             public int WizardUnitsAmount;
