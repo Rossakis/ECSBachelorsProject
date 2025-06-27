@@ -44,6 +44,17 @@ namespace Assets.Scripts.UI
         private PanelSwitchManager panelSwitchManager;
         private SceneLoader sceneLoader;
 
+        // Default Values 
+        private const bool defaultJobsSystemOn = true;
+        private const bool defaultObjectPoolingOn = true;
+        private const int defaultWizardsAmount = 100;
+        private const int defaultWizardsHP = 25;
+        private const int defaultWizardsDamage = 20;
+        private const bool defaultInfiniteKnightSpawn = true;
+        private const int defaultKnightsAmount = 300;
+        private const int defaultKnightsHP = 100;
+        private const int defaultKnightsDamage = 5;
+
         private void Awake()
         {
             panelSwitchManager = GetComponent<PanelSwitchManager>();
@@ -118,31 +129,31 @@ namespace Assets.Scripts.UI
         
         public void LoadDefaultECSSettings()
         {
-            //UI changes
-            ECSIsJobsSystemOn.isOn = true;
-            ECSIsObjectPoolingOn.isOn = true;
-            
-            ECSWizardsAmountInputField.text = "100";
-            ECSWizardsHPInputField.text = "25";
-            ECSWizardsDamageInputField.text = "20";
+            // UI changes
+            ECSIsJobsSystemOn.isOn = defaultJobsSystemOn;
+            ECSIsObjectPoolingOn.isOn = defaultObjectPoolingOn;
 
-            ECSIsInfiniteKnightSpawnOn.isOn = false;
-            ECSKnightsInputField.text = "300";
-            ECSKnightsHPInputField.text = "100";
-            ECSKnightsDamageInputField.text = "5";
-            
-            //SceneData changes
-            ECSSceneDataSO.IsJobSystemOn = true;
-            ECSSceneDataSO.IsObjectPoolingOn = true;
-            
-            ECSSceneDataSO.WizardsAmountToSpawn = 100;
-            ECSSceneDataSO.WizardMaxHealth = 25;
-            ECSSceneDataSO.WizardDamage = 20;
-            
-            ECSSceneDataSO.IsKnightSpawnInfinite = false;
-            ECSSceneDataSO.KnightsAmountToSpawn = 300;
-            ECSSceneDataSO.KnightMaxHealth = 100;
-            ECSSceneDataSO.KnightDamage = 5;
+            ECSWizardsAmountInputField.text = defaultWizardsAmount.ToString();
+            ECSWizardsHPInputField.text = defaultWizardsHP.ToString();
+            ECSWizardsDamageInputField.text = defaultWizardsDamage.ToString();
+
+            ECSIsInfiniteKnightSpawnOn.isOn = defaultInfiniteKnightSpawn;
+            ECSKnightsInputField.text = defaultKnightsAmount.ToString();
+            ECSKnightsHPInputField.text = defaultKnightsHP.ToString();
+            ECSKnightsDamageInputField.text = defaultKnightsDamage.ToString();
+
+            // SceneData changes
+            ECSSceneDataSO.IsJobSystemOn = defaultJobsSystemOn;
+            ECSSceneDataSO.IsObjectPoolingOn = defaultObjectPoolingOn;
+
+            ECSSceneDataSO.WizardsAmountToSpawn = defaultWizardsAmount;
+            ECSSceneDataSO.WizardMaxHealth = defaultWizardsHP;
+            ECSSceneDataSO.WizardDamage = defaultWizardsDamage;
+
+            ECSSceneDataSO.IsKnightSpawnInfinite = defaultInfiniteKnightSpawn;
+            ECSSceneDataSO.KnightsAmountToSpawn = defaultKnightsAmount;
+            ECSSceneDataSO.KnightMaxHealth = defaultKnightsHP;
+            ECSSceneDataSO.KnightDamage = defaultKnightsDamage;
         }
         #endregion
 
@@ -212,28 +223,28 @@ namespace Assets.Scripts.UI
         public void LoadDefaultMonoSettings()
         {
             // UI changes
-            MonoIsObjectPoolingOn.isOn = true;
+            MonoIsObjectPoolingOn.isOn = defaultObjectPoolingOn;
 
-            MonoAmountInputField.text = "100";
-            MonoHPInputField.text = "25";
-            MonoDamageInputField.text = "20";
+            MonoAmountInputField.text = defaultWizardsAmount.ToString();
+            MonoHPInputField.text = defaultWizardsHP.ToString();
+            MonoDamageInputField.text = defaultWizardsDamage.ToString();
 
-            MonoIsInfiniteKnightSpawnOn.isOn = false;
-            MonoKnightsInputField.text = "300";
-            MonoKnightsHPInputField.text = "100";
-            MonoKnightsDamageInputField.text = "5";
+            MonoIsInfiniteKnightSpawnOn.isOn = defaultInfiniteKnightSpawn;
+            MonoKnightsInputField.text = defaultKnightsAmount.ToString();
+            MonoKnightsHPInputField.text = defaultKnightsHP.ToString();
+            MonoKnightsDamageInputField.text = defaultKnightsDamage.ToString();
 
             // SceneData changes
-            MonoSceneDataSO.IsObjectPoolingOn = true;
+            MonoSceneDataSO.IsObjectPoolingOn = defaultObjectPoolingOn;
 
-            MonoSceneDataSO.WizardsAmountToSpawn = 100;
-            MonoSceneDataSO.WizardMaxHealth = 25;
-            MonoSceneDataSO.WizardDamage = 20;
+            MonoSceneDataSO.WizardsAmountToSpawn = defaultWizardsAmount;
+            MonoSceneDataSO.WizardMaxHealth = defaultWizardsHP;
+            MonoSceneDataSO.WizardDamage = defaultWizardsDamage;
 
-            MonoSceneDataSO.IsKnightSpawnInfinite = false;
-            MonoSceneDataSO.KnightsAmountToSpawn = 300;
-            MonoSceneDataSO.KnightMaxHealth = 100;
-            MonoSceneDataSO.KnightDamage = 5;
+            MonoSceneDataSO.IsKnightSpawnInfinite = defaultInfiniteKnightSpawn;
+            MonoSceneDataSO.KnightsAmountToSpawn = defaultKnightsAmount;
+            MonoSceneDataSO.KnightMaxHealth = defaultKnightsHP;
+            MonoSceneDataSO.KnightDamage = defaultKnightsDamage;
         }
 
         #endregion

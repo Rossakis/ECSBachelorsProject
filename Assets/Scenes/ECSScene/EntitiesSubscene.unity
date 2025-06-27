@@ -1460,6 +1460,7 @@ MonoBehaviour:
   minDistanceBetweenUnits: 0.4
   spawnRadiusMultiplier: 10
   minSpawnRadius: 1
+  sceneData: {fileID: 11400000, guid: 35367ddac073a0e4bb9c134de317f2a5, type: 2}
 --- !u!4 &515415619
 Transform:
   m_ObjectHideFlags: 0

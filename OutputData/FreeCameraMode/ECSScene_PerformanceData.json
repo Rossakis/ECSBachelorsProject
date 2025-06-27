@@ -1,10 +1,11 @@
 {
     "SceneName": "ECSScene",
-    "LowestFPS": 3.4028234663852887e38,
-    "HighestFPS": -3.4028234663852887e38,
-    "AverageFPS": 0.0,
-    "WizardUnitsAmount": 0,
-    "KnightUnitsAmount": 0,
+    "LowestFPS": 0.4916501045227051,
+    "HighestFPS": 349.93231201171877,
+    "AverageFPS": 236.2763214111328,
+    "TotalDuration": -21.20096778869629,
+    "WizardUnitsAmount": 39,
+    "KnightUnitsAmount": 978,
     "FPSAtTimeOfLeave": 0,
     "DeviceModel": "System Product Name (ASUS)",
     "DeviceType": "Desktop",
@@ -15,5 +16,5 @@
     "GraphicsDeviceName": "AMD Radeon RX 7900 XTX",
     "GraphicsDeviceType": "Direct3D12",
     "GraphicsMemoryMB": 24560,
-    "Timestamp": "Fri, 27 Jun 2025 12:48:24"
+    "Timestamp": "Fri, 27 Jun 2025 21:45:40"
 }

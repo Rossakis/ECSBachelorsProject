@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb70fd7df70f41442848b5df22971e12, type: 3}
   m_Name: EcsSceneData
   m_EditorClassIdentifier: 
-  IsBenchMarkMode: 1
+  IsBenchMarkMode: 0
   IsObjectPoolingOn: 1
-  WizardsAmountToSpawn: 100
+  WizardsAmountToSpawn: 20
   WizardMaxHealth: 25
   WizardDamage: 300
-  IsKnightSpawnInfinite: 1
-  KnightsAmountToSpawn: 300
+  IsKnightSpawnInfinite: 0
+  KnightsAmountToSpawn: 200
   KnightMaxHealth: 100
   KnightDamage: 5
   IsJobSystemOn: 1

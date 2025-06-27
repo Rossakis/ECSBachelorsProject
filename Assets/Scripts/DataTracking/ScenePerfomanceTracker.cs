@@ -2,6 +2,7 @@ using Assets.Scripts.UI;
 using System;
 using System.IO;
 using Assets.Scripts.ScriptableObjects.Scene;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
@@ -19,6 +20,11 @@ namespace Assets.Scripts.DataTracking
         public bool isECSScene;
         public float sceneReadyDelay = 4.0f;
         private bool isSceneReady = false; // Flag to check if the scene is ready for performance tracking (e.g., after Start() has been called)
+
+        [Header("UI")] 
+        public GameObject ResultPanel;
+        public TMP_Text totalDuration;
+        public TMP_Text unitCount;
 
         private float lowestFPS = float.MaxValue;
         private float highestFPS = float.MinValue;
@@ -46,6 +52,7 @@ namespace Assets.Scripts.DataTracking
             currentSceneName = SceneManager.GetActiveScene().name;
             SceneManager.activeSceneChanged += OnSceneChanged;
             simulationStartTime = Time.realtimeSinceStartup;
+            ResultPanel.SetActive(false);
         }
 
         private void Start()
@@ -98,7 +105,7 @@ namespace Assets.Scripts.DataTracking
                     if (lowFpsDuration > 1f)
                     {
                         fpsAtTimeOfLeave = Mathf.RoundToInt(currentFPS);
-                        SceneManager.LoadScene(0);
+                        ShowPopup();
                         Debug.LogWarning($"FPS dropped below minimum threshold for over 1 second: {currentFPS} FPS in scene {currentSceneName}");
                     }
                 }
@@ -121,7 +128,31 @@ namespace Assets.Scripts.DataTracking
             
         }
 
-        
+        public void ShowPopup()
+        {
+            ExportData();
+            ResultPanel.SetActive(true);
+            Time.timeScale = 0f;
+
+            // Calculate total duration
+            float duration = (simulationEndTime > simulationStartTime)
+                ? simulationEndTime - simulationStartTime
+                : Time.realtimeSinceStartup - simulationStartTime;
+
+            // Update UI text fields
+            if (totalDuration != null)
+                totalDuration.text = $"Time Duration: {duration:F2} s";
+            if (unitCount != null)
+                unitCount.text = $"Total Unit Count: {wizardAmount + knightAmount}";
+        }
+
+        // Called when the player clicks the "Leave Scene" button in the UI
+        public void LoadMainMenu()
+        {
+            ResultPanel.SetActive(false);
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(0);
+        }
 
         private void OnSceneChanged(Scene oldScene, Scene newScene)
         {

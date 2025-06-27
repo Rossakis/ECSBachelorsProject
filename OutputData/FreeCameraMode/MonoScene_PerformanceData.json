@@ -1,10 +1,11 @@
 {
     "SceneName": "MonoScene",
-    "LowestFPS": 3.4028234663852887e38,
-    "HighestFPS": -3.4028234663852887e38,
-    "AverageFPS": 0.0,
-    "WizardUnitsAmount": 0,
-    "KnightUnitsAmount": 0,
+    "LowestFPS": 2.1865057945251467,
+    "HighestFPS": 181.557373046875,
+    "AverageFPS": 62.37194061279297,
+    "TotalDuration": 4.641498565673828,
+    "WizardUnitsAmount": 100,
+    "KnightUnitsAmount": 991,
     "FPSAtTimeOfLeave": 0,
     "DeviceModel": "System Product Name (ASUS)",
     "DeviceType": "Desktop",
@@ -15,5 +16,5 @@
     "GraphicsDeviceName": "AMD Radeon RX 7900 XTX",
     "GraphicsDeviceType": "Direct3D12",
     "GraphicsMemoryMB": 24560,
-    "Timestamp": "Fri, 27 Jun 2025 12:48:46"
+    "Timestamp": "Fri, 27 Jun 2025 19:49:00"
 }

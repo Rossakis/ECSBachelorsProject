@@ -12,10 +12,10 @@ EditorBuildSettings:
     path: Assets/Scenes/ECSScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/Scenes/MonoScene.unity
-    guid: 8f2f43f30bff18d43897560d581c743b
-  - enabled: 1
     path: Assets/Scenes/ECSScene/EntitiesSubscene.unity
     guid: 98191cce23f53384eb3cd378c5d8b2ab
+  - enabled: 1
+    path: Assets/Scenes/MonoScene.unity
+    guid: 230030f80e6dd6f44821565a97ce4d1e
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
