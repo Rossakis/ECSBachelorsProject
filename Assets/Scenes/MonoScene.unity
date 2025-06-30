@@ -4589,6 +4589,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 7cfa0e00b140a704b94155409a3103c0,
         type: 2}
+    - target: {fileID: 2644195721989655760, guid: 0b2ffa07cd4066b4b881fc73a1a6d98b,
+        type: 3}
+      propertyPath: sceneReadyDelay
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2998335409761946785, guid: 0b2ffa07cd4066b4b881fc73a1a6d98b,
         type: 3}
       propertyPath: m_AnchoredPosition.y

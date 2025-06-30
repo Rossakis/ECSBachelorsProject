@@ -6,7 +6,6 @@ namespace Assets.Scripts.ECS.Authoring.Spawn
 {
     public class WizardSpawnerAuthoring : MonoBehaviour
     {
-        public EcsSceneDataSO sceneData;
         public float spawnRadius;
         public float minDistanceBetweenUnits;
         
@@ -16,7 +15,6 @@ namespace Assets.Scripts.ECS.Authoring.Spawn
             {
                 Entity entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new WizardSpawner() {
-                    maxUnitsToSpawn = authoring.sceneData.WizardsAmountToSpawn,
                     spawnRadius = authoring.spawnRadius,
                     minDistanceBetweenUnits = authoring.minDistanceBetweenUnits,
                     hasSpawned = false
@@ -28,10 +26,8 @@ namespace Assets.Scripts.ECS.Authoring.Spawn
     
     public struct WizardSpawner : IComponentData {
         
-        public int maxUnitsToSpawn;
         public float spawnRadius;
         public float minDistanceBetweenUnits;
         public bool hasSpawned;
-
     }
 }

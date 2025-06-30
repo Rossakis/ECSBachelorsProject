@@ -17,6 +17,7 @@ namespace Assets.Scripts.ECS.Systems.Spawn
         {
             state.RequireForUpdate<WizardSpawner>();
             state.RequireForUpdate<EntitiesReferences>();
+            state.RequireForUpdate<SceneDataReference>();
         }
 
         [BurstCompile]
@@ -25,6 +26,8 @@ namespace Assets.Scripts.ECS.Systems.Spawn
             EntityCommandBuffer ecb = 
                 SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
                     .CreateCommandBuffer(state.WorldUnmanaged);
+
+            SceneDataReference sceneData = SystemAPI.GetSingleton<SceneDataReference>();
 
             foreach ((RefRW<WizardSpawner> spawner, RefRO<LocalTransform> transform, Entity spawnerEntity) in
                      SystemAPI.Query<RefRW<WizardSpawner>, RefRO<LocalTransform>>().WithEntityAccess())
@@ -42,7 +45,7 @@ namespace Assets.Scripts.ECS.Systems.Spawn
                 int attempts = 0;
                 int spawnedCount = 0;
 
-                while (spawnedCount < spawner.ValueRO.maxUnitsToSpawn && attempts < 1000)
+                while (spawnedCount < sceneData.WizardsAmountToSpawn && attempts < 1000)
                 {
                     float2 randomOffset2D = random.NextFloat2Direction() * random.NextFloat(0, spawner.ValueRO.spawnRadius);
                     float3 candidatePos = origin + new float3(randomOffset2D.x, 0, randomOffset2D.y);

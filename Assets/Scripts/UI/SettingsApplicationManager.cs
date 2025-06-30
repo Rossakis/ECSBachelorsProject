@@ -117,7 +117,7 @@ namespace Assets.Scripts.UI
             
             ECSSceneDataSO.WizardsAmountToSpawn = wizardAmount;
             ECSSceneDataSO.WizardMaxHealth = wizardHP;
-            ECSSceneDataSO.WizardDamage = knightsAmount;
+            ECSSceneDataSO.WizardDamage = wizardDamage;
             
             ECSSceneDataSO.IsKnightSpawnInfinite = ECSIsInfiniteKnightSpawnOn.isOn;
             ECSSceneDataSO.KnightsAmountToSpawn = knightsAmount;
@@ -205,7 +205,6 @@ namespace Assets.Scripts.UI
             }
 
             MonoSceneDataSO.IsBenchMarkMode = isBenchMarkMode;
-
             MonoSceneDataSO.IsObjectPoolingOn = MonoIsObjectPoolingOn.isOn;
 
             MonoSceneDataSO.WizardsAmountToSpawn = wizardAmount;
